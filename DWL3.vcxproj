@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{CDEEAE52-009B-41D5-9F2F-77CF4844349E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DWL3</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(PlatformShortName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(PlatformShortName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(PlatformShortName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(PlatformShortName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="DAnimacion.h" />
+    <ClInclude Include="DApp.h" />
+    <ClInclude Include="DArbolEx.h" />
+    <ClInclude Include="DArbolEx_Nodo.h" />
+    <ClInclude Include="DBarraDesplazamientoEx.h" />
+    <ClInclude Include="DBarraProgresoEx.h" />
+    <ClInclude Include="DBarraScrollEx.h" />
+    <ClInclude Include="DBarraTareas.h" />
+    <ClInclude Include="DBotonEx.h" />
+    <ClInclude Include="DConsola.h" />
+    <ClInclude Include="DControl.h" />
+    <ClInclude Include="DControlDesplegableEx.h" />
+    <ClInclude Include="DControlEx.h" />
+    <ClInclude Include="DDesplegableEx (DEPRECATED).h" />
+    <ClInclude Include="DDesplegableEx_ExplorarDirectoriosEx (DEPRECATED).h" />
+    <ClInclude Include="DDirectoriosWindows.h" />
+    <ClInclude Include="DDlgAbrir.h" />
+    <ClInclude Include="DDlgDirectorios.h" />
+    <ClInclude Include="DEdicionTextoEx.h" />
+    <ClInclude Include="DEtiquetaEx.h" />
+    <ClInclude Include="DEventoMouse.h" />
+    <ClInclude Include="DEventoMouseRueda.h" />
+    <ClInclude Include="DEventoTeclado.h" />
+    <ClInclude Include="DExplorarDirectoriosEx.h" />
+    <ClInclude Include="DFuente.h" />
+    <ClInclude Include="DGDI.h" />
+    <ClInclude Include="DhWnd.h" />
+    <ClInclude Include="DIcono.h" />
+    <ClInclude Include="DListaDesplegableEx.h" />
+    <ClInclude Include="DListaEx.h" />
+    <ClInclude Include="DListaEx_Columna.h" />
+    <ClInclude Include="DListaEx_Item.h" />
+    <ClInclude Include="DListaEx_SubItem.h" />
+    <ClInclude Include="DMarcaEx.h" />
+    <ClInclude Include="DMensajesWnd.h" />
+    <ClInclude Include="DMenuEx.h" />
+    <ClInclude Include="DMouse.h" />
+    <ClInclude Include="DRegistro.h" />
+    <ClInclude Include="DStringUtils.h" />
+    <ClInclude Include="DTemporizador.h" />
+    <ClInclude Include="DToolTipEx.h" />
+    <ClInclude Include="DUnidadesDisco.h" />
+    <ClInclude Include="DVentana.h" />
+    <ClInclude Include="DWL_Configuracion.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="DWL_Skin.h" />
+    <ClInclude Include="DWL_SkinVisualStudio.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DAnimacion.cpp" />
+    <ClCompile Include="DApp.cpp" />
+    <ClCompile Include="DArbolEx.cpp" />
+    <ClCompile Include="DArbolEx_Nodo.cpp" />
+    <ClCompile Include="DBarraDesplazamientoEx.cpp" />
+    <ClCompile Include="DBarraProgresoEx.cpp" />
+    <ClCompile Include="DBarraScrollEx.cpp" />
+    <ClCompile Include="DBarraTareas.cpp" />
+    <ClCompile Include="DBotonEx.cpp" />
+    <ClCompile Include="DConsola.cpp" />
+    <ClCompile Include="DControl.cpp" />
+    <ClCompile Include="DControlDesplegableEx.cpp" />
+    <ClCompile Include="DControlEx.cpp" />
+    <ClCompile Include="DDesplegableEx (DEPRECATED).cpp" />
+    <ClCompile Include="DDesplegableEx_ExplorarDirectoriosEx (DEPRECATED).cpp" />
+    <ClCompile Include="DDlgAbrir.cpp" />
+    <ClCompile Include="DDlgDirectorios.cpp" />
+    <ClCompile Include="DEdicionTextoEx.cpp" />
+    <ClCompile Include="DEtiquetaEx.cpp" />
+    <ClCompile Include="DExplorarDirectoriosEx.cpp" />
+    <ClCompile Include="DFuente.cpp" />
+    <ClCompile Include="DGDI.cpp" />
+    <ClCompile Include="DhWnd.cpp" />
+    <ClCompile Include="DIcono.cpp" />
+    <ClCompile Include="DListaDesplegableEx.cpp" />
+    <ClCompile Include="DListaEx.cpp" />
+    <ClCompile Include="DListaEx_Columna.cpp" />
+    <ClCompile Include="DListaEx_Item.cpp" />
+    <ClCompile Include="DListaEx_SubItem.cpp" />
+    <ClCompile Include="DMarcaEx.cpp" />
+    <ClCompile Include="DMenuEx.cpp" />
+    <ClCompile Include="DMouse.cpp" />
+    <ClCompile Include="DRegistro.cpp" />
+    <ClCompile Include="DStringUtils.cpp" />
+    <ClCompile Include="DTemporizador.cpp" />
+    <ClCompile Include="DToolTipEx.cpp" />
+    <ClCompile Include="DUnidadesDisco.cpp" />
+    <ClCompile Include="DVentana.cpp" />
+    <ClCompile Include="DWL3.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
