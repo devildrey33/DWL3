@@ -96,4 +96,7 @@
 	#define DWL_MENUEX_CLICK								WM_USER + 350
 	#define DWL_MENUEX_BARRA_CAMBIADO						WM_USER + 351
 	#define DWL_MENUEX_BARRA_CAMBIANDO						WM_USER + 352
+
+	// DDlgDirectorios //////////////////////////////////////////////////////
+	#define DWL_DLGDIRECTORIOS_POSTAM_CAMBIADO				WM_USER + 360
 #endif

@@ -27,6 +27,9 @@
 #include "DEventoTeclado.h"*/
 #include "DMensajesWnd.h"
 
+#define WPARAM_TO_HWND(WP) (HWND)WP
+#define HWND_TO_WPARAM(DE) (WPARAM)DE
+
 
 namespace DWL {
 

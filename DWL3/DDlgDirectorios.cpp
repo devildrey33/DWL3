@@ -13,7 +13,7 @@ namespace DWL {
 	#define MIN_DLGDIRECTORIOS_ANCHO 300
 	#define MIN_DLGDIRECTORIOS_ALTO  300
 
-	DDlgDirectorios::DDlgDirectorios(void) {
+	DDlgDirectorios::DDlgDirectorios(void) : _Padre(NULL), _Terminado(FALSE){
 	}
 
 
@@ -22,6 +22,7 @@ namespace DWL {
 
 
 	const BOOL DDlgDirectorios::Mostrar(DhWnd *nPadre, std::wstring &rPath, const int cX, const int cY, const int cAncho, const int cAlto, const int ID_Icono) {
+		_Padre = nPadre;
 		_Terminado = FALSE;
 		// Creo la ventana
 		CrearVentana(nPadre, L"DDlgDirectorio", L"Selecciona un Directorio", cX, cY, cAncho, cAlto, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME, WS_EX_APPWINDOW, NULL, NULL, NULL, ID_Icono);
@@ -165,10 +166,11 @@ namespace DWL {
 				return 0;
 
 			case WM_EXITSIZEMOVE:
-				RECT RCWMS2;
-				GetWindowRect(hWnd(), &RCWMS2);
+//				RECT RCWMS2;
+//				GetWindowRect(hWnd(), &RCWMS2);
 //				App.BD.Opciones_GuardarPosTamDlgDirectorios(RCWMS2);
 				Debug_Escribir_Varg(L"DDlgDirectorios::WM_EXITSIZEMOVE %d, %d\n", wParam, lParam);
+				SendMessage(_Padre->hWnd(), DWL_DLGDIRECTORIOS_POSTAM_CAMBIADO, HWND_TO_WPARAM(_hWnd), 0);
 				return 0;
 			case WM_SIZE:
 				RECT RCWMS;

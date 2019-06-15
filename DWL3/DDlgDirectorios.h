@@ -11,8 +11,8 @@ namespace DWL {
 
 	class DDlgDirectorios : public DWL::DVentana {
 	  public:
-									DDlgDirectorios();
-		                           ~DDlgDirectorios();
+									DDlgDirectorios(void);
+		                           ~DDlgDirectorios(void);
 
 		const BOOL					Mostrar(DhWnd *nPadre, std::wstring &Path, const int cX, const int cY, const int cAncho, const int cAlto, const int ID_Icono);
 
@@ -31,6 +31,7 @@ namespace DWL {
 		void                       _AjustarControles(RECT &RW);
 		void                       _ActualizarAceptar(void);
 		BOOL                       _Terminado;
+		DhWnd                     *_Padre;
 	};
 
 };
