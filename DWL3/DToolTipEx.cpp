@@ -6,20 +6,20 @@
 #define ID_TEMPORIZADOR_OCULTAR	1000
 
 namespace DWL {
-
-	COLORREF     DToolTipEx_Skin::Fondo				= COLOR_TOOLTIP_FONDO;
-	COLORREF     DToolTipEx_Skin::FondoError		= COLOR_TOOLTIP_FONDO_ERROR;	// SOLO SE USA EN LOS ToolTipInfo
-	COLORREF     DToolTipEx_Skin::Texto				= COLOR_TOOLTIP_TEXTO;
-	COLORREF     DToolTipEx_Skin::TextoSombra		= COLOR_TOOLTIP_TEXTO_SOMBRA;
-	COLORREF     DToolTipEx_Skin::Borde				= COLOR_TOOLTIP_BORDE;
-	// Fuente
-	int			 DToolTipEx_Skin::FuenteTam			= FUENTE_NORMAL;
-	std::wstring DToolTipEx_Skin::FuenteNombre		= FUENTE_NOMBRE;
-	BOOL         DToolTipEx_Skin::FuenteNegrita		= FALSE;
-	BOOL         DToolTipEx_Skin::FuenteCursiva		= FALSE;
-	BOOL         DToolTipEx_Skin::FuenteSubrayado	= FALSE;
-	BOOL		 DToolTipEx_Skin::FuenteSombraTexto	= FALSE;
-
+	DToolTipEx_Skin::DToolTipEx_Skin(void) :
+		Fondo				(COLOR_TOOLTIP_FONDO),
+		FondoError			(COLOR_TOOLTIP_FONDO_ERROR),	// SOLO SE USA EN LOS ToolTipInfo
+		Texto				(COLOR_TOOLTIP_TEXTO),
+		TextoSombra			(COLOR_TOOLTIP_TEXTO_SOMBRA),
+		Borde				(COLOR_TOOLTIP_BORDE),
+		// Fuente
+		FuenteTam			(FUENTE_NORMAL),
+		FuenteNombre		(FUENTE_NOMBRE),
+		FuenteNegrita		(FALSE),
+		FuenteCursiva		(FALSE),
+		FuenteSubrayado		(FALSE),
+		FuenteSombraTexto	(FALSE) {
+	}
 
 
 	DToolTipEx::DToolTipEx(void) : Padre(NULL) {
@@ -38,7 +38,7 @@ namespace DWL {
 		}
 		MARGINS Margen = { 0, 0, 0, 1 };
 		DwmExtendFrameIntoClientArea(_hWnd, &Margen);
-		_Fuente.CrearFuente(DToolTipEx_Skin::FuenteTam, DToolTipEx_Skin::FuenteNombre.c_str(), DToolTipEx_Skin::FuenteNegrita, DToolTipEx_Skin::FuenteCursiva, DToolTipEx_Skin::FuenteSubrayado);
+		_Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		return hWnd();
 	}
 
@@ -114,11 +114,11 @@ namespace DWL {
 		HBITMAP Bmp			= CreateCompatibleBitmap(DC, RC.right, RC.bottom);
 		HBITMAP BmpViejo	= static_cast<HBITMAP>(SelectObject(Buffer, Bmp));
 
-		HBRUSH BrochaBorde = CreateSolidBrush(DToolTipEx_Skin::Borde);
+		HBRUSH BrochaBorde = CreateSolidBrush(Skin.Borde);
 		FrameRect(Buffer, &RC, BrochaBorde);
 		DeleteObject(BrochaBorde);
 
-		HBRUSH BrochaFondo = CreateSolidBrush(DToolTipEx_Skin::Fondo);
+		HBRUSH BrochaFondo = CreateSolidBrush(Skin.Fondo);
 		FillRect(Buffer, &RCF, BrochaFondo);
 		DeleteObject(BrochaFondo);
 
@@ -126,13 +126,13 @@ namespace DWL {
 
 		HFONT vFuente = static_cast<HFONT>(SelectObject(Buffer, _Fuente()));
 		
-		if (DToolTipEx_Skin::FuenteSombraTexto == TRUE) {
+		if (Skin.FuenteSombraTexto == TRUE) {
 			RECT RCTS = { RCT.left + 1, RCT.top + 1, RCT.right + 1, RCT.bottom + 1 };
-			SetTextColor(Buffer, DToolTipEx_Skin::TextoSombra);
+			SetTextColor(Buffer, Skin.TextoSombra);
 			DrawText(Buffer, _Str.c_str(), static_cast<int>(_Str.size()), &RCTS, DT_CENTER);
 		}
 
-		SetTextColor(Buffer, DToolTipEx_Skin::Texto);
+		SetTextColor(Buffer, Skin.Texto);
 		DrawText(Buffer, _Str.c_str(), static_cast<int>(_Str.size()), &RCT, DT_CENTER);
 
 		//TextOut(Buffer, DTOOLTIPEX_PADDING, DTOOLTIPEX_PADDING, _Str.c_str(), static_cast<int>(_Str.size()));

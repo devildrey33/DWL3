@@ -20,39 +20,40 @@
 
 namespace DWL {
 
+	DArbolEx_Skin::DArbolEx_Skin(void) :
+		FondoNodoResaltado					(COLOR_ARBOL_FONDO_RESALTADO),
+		FondoNodoSeleccionado				(COLOR_ARBOL_SELECCION),
+		FondoNodoSeleccionadoResaltado		(COLOR_ARBOL_SELECCION_RESALTADO),
+		FondoNodoSubSeleccionado			(COLOR_ARBOL_SUBSELECCION),
+		FondoNodoSubSeleccionadoResaltado	(COLOR_ARBOL_SUBSELECCION_RESALTADO),
+		FondoNodoPresionado					(COLOR_ARBOL_SELECCION_PRESIONADO),
 
-	COLORREF     DArbolEx_Skin::FondoNodoResaltado					= COLOR_ARBOL_FONDO_RESALTADO;
-	COLORREF     DArbolEx_Skin::FondoNodoSeleccionado				= COLOR_ARBOL_SELECCION;
-	COLORREF     DArbolEx_Skin::FondoNodoSeleccionadoResaltado		= COLOR_ARBOL_SELECCION_RESALTADO;
-	COLORREF     DArbolEx_Skin::FondoNodoSubSeleccionado			= COLOR_ARBOL_SUBSELECCION;
-	COLORREF     DArbolEx_Skin::FondoNodoSubSeleccionadoResaltado	= COLOR_ARBOL_SUBSELECCION_RESALTADO;
-	COLORREF     DArbolEx_Skin::FondoNodoPresionado					= COLOR_ARBOL_SELECCION_PRESIONADO;
+		BordeNodoMarcado					(COLOR_ARBOL_NODO_MARCA),
 
-	COLORREF     DArbolEx_Skin::BordeNodoMarcado					= COLOR_ARBOL_NODO_MARCA;
+		ExpansorNormal						(COLOR_ARBOL_EXPANSOR_NORMAL),
+		ExpansorResaltado					(COLOR_ARBOL_EXPANSOR_RESALTADO),
+		ExpansorPresionado					(COLOR_ARBOL_EXPANSOR_PRESIONADO),
 
-	COLORREF     DArbolEx_Skin::ExpansorNormal						= COLOR_ARBOL_EXPANSOR_NORMAL;
-	COLORREF     DArbolEx_Skin::ExpansorResaltado					= COLOR_ARBOL_EXPANSOR_RESALTADO;
-	COLORREF     DArbolEx_Skin::ExpansorPresionado					= COLOR_ARBOL_EXPANSOR_PRESIONADO;
+		TextoNodoNormal						(COLOR_ARBOL_TEXTO),
+		TextoNodoResaltado					(COLOR_ARBOL_TEXTO_RESALTADO),
+		TextoNodoDesactivado				(COLOR_ARBOL_TEXTO_DESACTIVADO),
+		TextoNodoSombra						(COLOR_ARBOL_TEXTO_SOMBRA),
+		TextoNodoSeleccionado				(COLOR_ARBOL_SELECCION_TEXTO),
+		TextoNodoSeleccionadoSombra			(COLOR_ARBOL_SELECCION_TEXTO_SOMBRA),
+		TextoNodoSeleccionadoResaltado		(COLOR_ARBOL_SELECCION_TEXTO_RESALTADO),
+		TextoNodoSubSeleccionado			(COLOR_ARBOL_SUBSELECCION_TEXTO),
+		TextoNodoSubSeleccionadoSombra		(COLOR_ARBOL_SUBSELECCION_TEXTO_SOMBRA),
+		TextoNodoSubSeleccionadoResaltado	(COLOR_ARBOL_SUBSELECCION_TEXTO_RESALTADO),
+		TextoNodoPresionado					(COLOR_ARBOL_SELECCION_TEXTO_RESALTADO),
 
-	COLORREF     DArbolEx_Skin::TextoNodoNormal						= COLOR_ARBOL_TEXTO;
-	COLORREF     DArbolEx_Skin::TextoNodoResaltado					= COLOR_ARBOL_TEXTO_RESALTADO;
-	COLORREF     DArbolEx_Skin::TextoNodoDesactivado				= COLOR_ARBOL_TEXTO_DESACTIVADO;
-	COLORREF     DArbolEx_Skin::TextoNodoSombra						= COLOR_ARBOL_TEXTO_SOMBRA;
-	COLORREF     DArbolEx_Skin::TextoNodoSeleccionado				= COLOR_ARBOL_SELECCION_TEXTO;
-	COLORREF     DArbolEx_Skin::TextoNodoSeleccionadoSombra			= COLOR_ARBOL_SELECCION_TEXTO_SOMBRA;
-	COLORREF     DArbolEx_Skin::TextoNodoSeleccionadoResaltado		= COLOR_ARBOL_SELECCION_TEXTO_RESALTADO;
-	COLORREF     DArbolEx_Skin::TextoNodoSubSeleccionado			= COLOR_ARBOL_SUBSELECCION_TEXTO;
-	COLORREF     DArbolEx_Skin::TextoNodoSubSeleccionadoSombra		= COLOR_ARBOL_SUBSELECCION_TEXTO_SOMBRA;
-	COLORREF     DArbolEx_Skin::TextoNodoSubSeleccionadoResaltado	= COLOR_ARBOL_SUBSELECCION_TEXTO_RESALTADO;
-	COLORREF     DArbolEx_Skin::TextoNodoPresionado					= COLOR_ARBOL_SELECCION_TEXTO_RESALTADO;
-
-	// Fuente
-	int			 DArbolEx_Skin::FuenteTam							= FUENTE_NORMAL;
-	std::wstring DArbolEx_Skin::FuenteNombre						= FUENTE_NOMBRE;
-	BOOL         DArbolEx_Skin::FuenteNegrita						= FALSE;
-	BOOL         DArbolEx_Skin::FuenteCursiva						= FALSE;
-	BOOL         DArbolEx_Skin::FuenteSubrayado						= FALSE;
-	BOOL		 DArbolEx_Skin::FuenteSombraTexto					= FALSE;
+		// Fuente
+		FuenteTam							(FUENTE_NORMAL),
+		FuenteNombre						(FUENTE_NOMBRE),
+		FuenteNegrita						(FALSE),
+		FuenteCursiva						(FALSE),
+		FuenteSubrayado						(FALSE),
+		FuenteSombraTexto					(FALSE) {
+}
 
 
 	DArbolEx::DArbolEx(void) : DBarraScrollEx(),
@@ -82,7 +83,7 @@ namespace DWL {
 		}
 		
 		_hWnd = CrearControlEx(nPadre, L"DArbolEx", L"", cID, cX, cY, cAncho, cAlto, nEstilos, NULL, CS_DBLCLKS);  // CS_DBLCLKS (el control recibe notificaciones de doble click)
-		Fuente.CrearFuente(DArbolEx_Skin::FuenteTam, DArbolEx_Skin::FuenteNombre.c_str(), DArbolEx_Skin::FuenteNegrita, DArbolEx_Skin::FuenteCursiva, DArbolEx_Skin::FuenteSubrayado);
+		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		_Repintar = TRUE;
 		return hWnd();
 	}
@@ -133,6 +134,11 @@ namespace DWL {
 
 		// Asigno el arbol padre
 		nNodo->_Arbol = this;		
+		nNodo->_ColorExpansor		= Skin.ExpansorNormal;
+		nNodo->_ColorTexto			= Skin.TextoNodoNormal;
+		nNodo->_ColorTextoSombra	= Skin.TextoNodoSombra;
+		nNodo->_ColorFondo			= SkinScroll.FondoNormal;
+
 
 		// Asigno el texto
 		nNodo->Texto = nTexto;
@@ -372,7 +378,7 @@ namespace DWL {
 						SPresionado + ((DARBOLEX_PADDING * 2) + nNodo->_Fuente.Alto()) - DARBOLEX_MARGEN_Y_SELECCION };
 
 		// Pinto el fondo del texto del nodo (si no es del mismo color que el fondo normal / resaltado)
-		if (nNodo->_ColorFondo != DBarraScrollEx_Skin::FondoNormal && nNodo->_ColorFondo != DBarraScrollEx_Skin::FondoResaltado) {
+		if (nNodo->_ColorFondo != SkinScroll.FondoNormal && nNodo->_ColorFondo != SkinScroll.FondoResaltado) {
 			HBRUSH BrochaFondoTexto = CreateSolidBrush(nNodo->_ColorFondo);
 			FillRect(_BufferNodo, &RFondo, BrochaFondoTexto);
 			DeleteObject(BrochaFondoTexto);
@@ -387,7 +393,7 @@ namespace DWL {
 						SPresionado + AnchoOcupado + nNodo->_AnchoTexto			+1,
 						SPresionado + DARBOLEX_PADDING + nNodo->_Fuente.Alto()	+1 };
 		// Pinto la sombra del texto
-		if (DArbolEx_Skin::FuenteSombraTexto == TRUE) {
+		if (Skin.FuenteSombraTexto == TRUE) {
 			SetTextColor(_BufferNodo, nNodo->_ColorTextoSombra);
 			DrawText(_BufferNodo, nNodo->Texto.c_str(), static_cast<int>(nNodo->Texto.size()), &RTexto, DT_LEFT | DT_NOPREFIX);
 		}
@@ -405,7 +411,7 @@ namespace DWL {
 		// Pinto la marca del nodo (si es el _NodoMarcado) 
 		if (_NodoMarcado == nNodo) {
 			//int AnchoExpansorIcono = ARBOLEX_PADDING + ARBOLEX_TAMEXPANSOR + ARBOLEX_PADDING + ARBOLEX_TAMICONO + ARBOLEX_PADDING;
-			HBRUSH BrochaMarcaNodo = CreateSolidBrush(DArbolEx_Skin::BordeNodoMarcado);
+			HBRUSH BrochaMarcaNodo = CreateSolidBrush(Skin.BordeNodoMarcado);
 			FrameRect(_BufferNodo, &RFondo, BrochaMarcaNodo);
 			DeleteObject(BrochaMarcaNodo);
 		}
@@ -949,16 +955,16 @@ namespace DWL {
 		if (sNodo->Activado() == FALSE) return;
 
 		sNodo->Seleccionado = nSeleccionado;
-		if (nSeleccionado == TRUE)			{	sNodo->_AsignarColores(DArbolEx_Skin::TextoNodoSeleccionado		, DArbolEx_Skin::TextoNodoSeleccionadoSombra	, DArbolEx_Skin::FondoNodoSeleccionado);	}
-		else								{	sNodo->_AsignarColores(DArbolEx_Skin::TextoNodoNormal			, DArbolEx_Skin::TextoNodoSombra				, DBarraScrollEx_Skin::FondoNormal);		}
+		if (nSeleccionado == TRUE)			{	sNodo->_AsignarColores(Skin.TextoNodoSeleccionado	, Skin.TextoNodoSeleccionadoSombra	, Skin.FondoNodoSeleccionado);	}
+		else								{	sNodo->_AsignarColores(Skin.TextoNodoNormal			, Skin.TextoNodoSombra				, SkinScroll.FondoNormal);		}
 
 		if (SubSeleccion == TRUE && sNodo->_Hijos.size() > 0) {
 			DArbolEx_Nodo *Tmp = sNodo->_Hijos[0];
 			while (Tmp != NULL) {
 				if (Tmp->Activado() == TRUE) {
 					Tmp->_SubSeleccionado = nSeleccionado;
-					if (nSeleccionado == TRUE)	{ Tmp->_AsignarColores(DArbolEx_Skin::TextoNodoSubSeleccionado	, DArbolEx_Skin::TextoNodoSubSeleccionadoSombra	, DArbolEx_Skin::FondoNodoSubSeleccionado);	}
-					else						{ Tmp->_AsignarColores(DArbolEx_Skin::TextoNodoNormal			, DArbolEx_Skin::TextoNodoSombra				, DBarraScrollEx_Skin::FondoNormal);  		}
+					if (nSeleccionado == TRUE)	{ Tmp->_AsignarColores(Skin.TextoNodoSubSeleccionado, Skin.TextoNodoSubSeleccionadoSombra	, Skin.FondoNodoSubSeleccionado);	}
+					else						{ Tmp->_AsignarColores(Skin.TextoNodoNormal			, Skin.TextoNodoSombra					, SkinScroll.FondoNormal);  		}
 				}
 				Tmp = BuscarNodoSiguiente(Tmp, FALSE, sNodo);
 			}
@@ -1211,8 +1217,8 @@ namespace DWL {
 		while (dNodo != NULL) {
 			dNodo->Seleccionado			= FALSE;
 			dNodo->_SubSeleccionado		= FALSE;
-			if (dNodo->Activado() == TRUE)	dNodo->_AsignarColores(DArbolEx_Skin::TextoNodoNormal	  , DArbolEx_Skin::TextoNodoSombra, DBarraScrollEx_Skin::FondoNormal);
-			else                            dNodo->_AsignarColores(DArbolEx_Skin::TextoNodoDesactivado, DArbolEx_Skin::TextoNodoSombra, DBarraScrollEx_Skin::FondoNormal);
+			if (dNodo->Activado() == TRUE)	dNodo->_AsignarColores(Skin.TextoNodoNormal		, Skin.TextoNodoSombra, SkinScroll.FondoNormal);
+			else                            dNodo->_AsignarColores(Skin.TextoNodoDesactivado, Skin.TextoNodoSombra, SkinScroll.FondoNormal);
 			dNodo = BuscarNodoSiguiente(dNodo, FALSE);
 		}
 	}

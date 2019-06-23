@@ -11,25 +11,25 @@ namespace DWL {
 
 	class DMenuEx_Skin {
 	  public:
-							DMenuEx_Skin(void) { };
-							// Colores por defecto
-		static COLORREF     FondoNormal;
-		static COLORREF     FondoResaltado;
-		static COLORREF     FondoPresionado;
-		static COLORREF     TextoNormal;
-		static COLORREF     TextoResaltado;
-		static COLORREF     TextoPresionado;
-		static COLORREF     TextoDesactivado;
-		static COLORREF     TextoSombra;
-		static COLORREF     Borde;
-		static COLORREF     Separador;
-							// Fuente
-		static int			FuenteTam;
-		static std::wstring FuenteNombre;
-		static BOOL         FuenteNegrita;
-		static BOOL         FuenteCursiva;
-		static BOOL         FuenteSubrayado;
-		static BOOL			FuenteSombraTexto;
+						DMenuEx_Skin(void);
+						// Colores por defecto
+		COLORREF		FondoNormal;
+		COLORREF		FondoResaltado;
+		COLORREF		FondoPresionado;
+		COLORREF		TextoNormal;
+		COLORREF		TextoResaltado;
+		COLORREF		TextoPresionado;
+		COLORREF		TextoDesactivado;
+		COLORREF		TextoSombra;
+		COLORREF		Borde;
+		COLORREF		Separador;
+						// Fuente (Una vez creado el control, utilizar el miembro Fuente)
+		int				FuenteTam;
+		std::wstring	FuenteNombre;
+		BOOL			FuenteNegrita;
+		BOOL			FuenteCursiva;
+		BOOL			FuenteSubrayado;
+		BOOL			FuenteSombraTexto;
 	};
 
 	#define DMENUEX_MOSTRARDEBUG	FALSE
@@ -131,8 +131,10 @@ namespace DWL {
 
 		DFuente                 Fuente;
 
-								// Variable para almacenar un parametro
+								// Variable para almacenar un parámetro personalizado para este menú
 		INT64					Parametro;
+
+		DMenuEx_Skin			Skin;
 	  protected:
 								// Constructor menú tipo texto (interno AgregarBarra)
 								DMenuEx(DMenuEx *nPadre, DMenuEx_Tipo nTipo, DhWnd *nhWndPadre, const INT_PTR nID, const wchar_t *nTexto, const INT_PTR nIconoRecursos, const BOOL nActivado, const float nMinimo, const float nMaximo, const float nValor);

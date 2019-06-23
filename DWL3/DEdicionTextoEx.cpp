@@ -20,38 +20,40 @@ namespace DWL {
 	 |_____/|______\__,_|_|\___|_|\___/|_| |_|_|\___/_/\_\\__\___/|______/_/\_\
                                                                           																		  
 */
-	// Colores por defecto
-	COLORREF     DEdicionTextoEx_Skin::FondoNormal				= COLOR_EDICION_FONDO;
-	COLORREF     DEdicionTextoEx_Skin::FondoResaltado			= COLOR_EDICION_FONDO_RESALTADO;
-	COLORREF     DEdicionTextoEx_Skin::FondoPresionado			= COLOR_EDICION_FONDO_PRESIONADO;
-	COLORREF     DEdicionTextoEx_Skin::FondoDesactivado			= COLOR_EDICION_FONDO_DESACTIVADO;
-	COLORREF     DEdicionTextoEx_Skin::Texto					= COLOR_EDICION_TEXTO;
-	COLORREF     DEdicionTextoEx_Skin::TextoSombra				= COLOR_EDICION_TEXTO_SOMBRA;
-	COLORREF     DEdicionTextoEx_Skin::TextoResaltado			= COLOR_EDICION_TEXTO_RESALTADO;
-	COLORREF     DEdicionTextoEx_Skin::TextoResaltadoSombra		= COLOR_EDICION_TEXTO_RESALTADO_SOMBRA;
-	COLORREF     DEdicionTextoEx_Skin::TextoPresionado			= COLOR_EDICION_TEXTO_PRESIONADO;
-	COLORREF     DEdicionTextoEx_Skin::TextoPresionadoSombra	= COLOR_EDICION_TEXTO_PRESIONADO_SOMBRA;
-	COLORREF     DEdicionTextoEx_Skin::TextoDesactivado			= COLOR_EDICION_TEXTO_DESACTIVADO;
-	COLORREF     DEdicionTextoEx_Skin::TextoDesactivadoSombra   = COLOR_EDICION_TEXTO_DESACTIVADO_SOMBRA;
-//	COLORREF     DEdicionTextoEx_Skin::TextoDesactivadoSombra	= COLOR_EDICION_TEXTO_DESACTIVADO_SOMBRA;
-	COLORREF     DEdicionTextoEx_Skin::BordeNormal				= COLOR_EDICION_BORDE;
-	COLORREF     DEdicionTextoEx_Skin::BordeResaltado			= COLOR_EDICION_BORDE_RESALTADO;
-	COLORREF     DEdicionTextoEx_Skin::BordePresionado			= COLOR_EDICION_BORDE_PRESIONADO;
-	COLORREF     DEdicionTextoEx_Skin::Cursor					= COLOR_EDICION_CURSOR;
-	// TODO : IMPLEMENTAR LA SELECCIÓN DEL TEXTO (Teclado y mouse)
-	COLORREF     DEdicionTextoEx_Skin::Seleccion				= COLOR_EDICION_SELECCION;
-	COLORREF     DEdicionTextoEx_Skin::SeleccionTexto			= COLOR_EDICION_SELECCION_TEXTO;
-	COLORREF     DEdicionTextoEx_Skin::SeleccionTextoSombra		= COLOR_EDICION_SELECCION_TEXTO_SOMBRA;
+	DEdicionTextoEx_Skin::DEdicionTextoEx_Skin(void) :
+		// Colores por defecto
+		FondoNormal				(COLOR_EDICION_FONDO),
+		FondoResaltado			(COLOR_EDICION_FONDO_RESALTADO),
+		FondoPresionado			(COLOR_EDICION_FONDO_PRESIONADO),
+		FondoDesactivado		(COLOR_EDICION_FONDO_DESACTIVADO),
+		Texto					(COLOR_EDICION_TEXTO),
+		TextoSombra				(COLOR_EDICION_TEXTO_SOMBRA),
+		TextoResaltado			(COLOR_EDICION_TEXTO_RESALTADO),
+		TextoResaltadoSombra	(COLOR_EDICION_TEXTO_RESALTADO_SOMBRA),
+		TextoPresionado			(COLOR_EDICION_TEXTO_PRESIONADO),
+		TextoPresionadoSombra	(COLOR_EDICION_TEXTO_PRESIONADO_SOMBRA),
+		TextoDesactivado		(COLOR_EDICION_TEXTO_DESACTIVADO),
+		TextoDesactivadoSombra  (COLOR_EDICION_TEXTO_DESACTIVADO_SOMBRA),
+	//	TextoDesactivadoSombra	(COLOR_EDICION_TEXTO_DESACTIVADO_SOMBRA),
+		BordeNormal				(COLOR_EDICION_BORDE),
+		BordeResaltado			(COLOR_EDICION_BORDE_RESALTADO),
+		BordePresionado			(COLOR_EDICION_BORDE_PRESIONADO),
+		Cursor					(COLOR_EDICION_CURSOR),
+		// TODO : IMPLEMENTAR LA SELECCIÓN DEL TEXTO (Teclado y mouse)
+		Seleccion				(COLOR_EDICION_SELECCION),
+		SeleccionTexto			(COLOR_EDICION_SELECCION_TEXTO),
+		SeleccionTextoSombra	(COLOR_EDICION_SELECCION_TEXTO_SOMBRA),
 
-	// Fuente por defecto
-	int			 DEdicionTextoEx_Skin::FuenteTam				= FUENTE_NORMAL;
-	std::wstring DEdicionTextoEx_Skin::FuenteNombre				= FUENTE_NOMBRE;
-	BOOL         DEdicionTextoEx_Skin::FuenteNegrita			= FALSE;
-	BOOL         DEdicionTextoEx_Skin::FuenteCursiva			= FALSE;
-	BOOL         DEdicionTextoEx_Skin::FuenteSubrayado			= FALSE;
-	BOOL		 DEdicionTextoEx_Skin::FuenteSombraTexto		= TRUE;
+		// Fuente por defecto
+		FuenteTam				(FUENTE_NORMAL),
+		FuenteNombre			(FUENTE_NOMBRE),
+		FuenteNegrita			(FALSE),
+		FuenteCursiva			(FALSE),
+		FuenteSubrayado			(FALSE),
+		FuenteSombraTexto		(TRUE) {
+	}
 
-	DEdicionTextoEx::DEdicionTextoEx(void) : DControlEx(), Entrada(DEdicionTextoEx_Entrada_Texto), Alineacion(DEdicionTextoEx_Alineacion_Izquierda), _Presionado(FALSE), _PosCursor(0), _ColorTexto(DEdicionTextoEx_Skin::Texto), _ColorTextoSombra(DEdicionTextoEx_Skin::TextoSombra),  _ColorFondo(DEdicionTextoEx_Skin::FondoNormal), _ColorBorde(DEdicionTextoEx_Skin::BordeNormal), _ColorCursor(DEdicionTextoEx_Skin::FondoNormal) {
+	DEdicionTextoEx::DEdicionTextoEx(void) : DControlEx(), Entrada(DEdicionTextoEx_Entrada_Texto), Alineacion(DEdicionTextoEx_Alineacion_Izquierda), _Presionado(FALSE), _PosCursor(0), _ColorTexto(Skin.Texto), _ColorTextoSombra(Skin.TextoSombra),  _ColorFondo(Skin.FondoNormal), _ColorBorde(Skin.BordeNormal), _ColorCursor(Skin.FondoNormal) {
 	}
 
 
@@ -61,14 +63,14 @@ namespace DWL {
 	HWND DEdicionTextoEx::CrearEdicionTextoEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, DIcono *nIcono, const long Estilos) {
 //		if (hWnd()) { Debug_Escribir(L"DEdicionTextoEx::CrearEdicionTextoEx() Error : ya se ha creado el control...\n"); return hWnd(); }
 		_hWnd = CrearControlEx(nPadre, L"DEdicionTextoEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL, CS_HREDRAW | CS_VREDRAW);
-		Fuente.CrearFuente(DEdicionTextoEx_Skin::FuenteTam, DEdicionTextoEx_Skin::FuenteNombre.c_str(), DEdicionTextoEx_Skin::FuenteNegrita, DEdicionTextoEx_Skin::FuenteCursiva, DEdicionTextoEx_Skin::FuenteSubrayado);
+		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		_Texto				= nTxt;
 		_PosCursor			= _Texto.size();		
-		_ColorTexto			= DEdicionTextoEx_Skin::Texto;
-		_ColorTextoSombra	= DEdicionTextoEx_Skin::TextoSombra;
-		_ColorFondo			= DEdicionTextoEx_Skin::FondoNormal;
-		_ColorBorde			= DEdicionTextoEx_Skin::BordeNormal;
-		_ColorCursor		= DEdicionTextoEx_Skin::FondoNormal; // Inicialmente el color del cursor es el del fondo, y tiene que llegar con una animación a COLOR_EDICION_CURSOR;
+		_ColorTexto			= Skin.Texto;
+		_ColorTextoSombra	= Skin.TextoSombra;
+		_ColorFondo			= Skin.FondoNormal;
+		_ColorBorde			= Skin.BordeNormal;
+		_ColorCursor		= Skin.FondoNormal; // Inicialmente el color del cursor es el del fondo, y tiene que llegar con una animación a COLOR_EDICION_CURSOR;
 		Icono(nIcono, FALSE);
 		return hWnd();
 	}
@@ -129,7 +131,7 @@ namespace DWL {
 		RECT RSombra = { RTexto.left + 1, RTexto.top + 1, RTexto.right + 1, RTexto.bottom + 1 };
 
 		SetBkMode(Buffer, TRANSPARENT);
-		if (DEdicionTextoEx_Skin::FuenteSombraTexto == TRUE) {
+		if (Skin.FuenteSombraTexto == TRUE) {
 			// Pinto la sombra del texto
 			SetTextColor(Buffer, _ColorTextoSombra);
 			DrawText(Buffer, _Texto.c_str(), static_cast<int>(_Texto.size()), &RSombra, static_cast<DWORD>(Alineacion) | DT_VCENTER | DT_SINGLELINE | DT_PATH_ELLIPSIS);
@@ -361,7 +363,7 @@ namespace DWL {
 			static BOOL CursorVisible = FALSE;
 			COLORREF	Hasta;
 			// Asigno el color final del cursor
-			if (CursorVisible == FALSE) Hasta = DEdicionTextoEx_Skin::Cursor;
+			if (CursorVisible == FALSE) Hasta = Skin.Cursor;
 			else						Hasta = _ColorFondo;
 			_AniCursor.Terminar();
 			_AniCursor.Iniciar(_ColorCursor, Hasta, 400, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
@@ -384,28 +386,28 @@ namespace DWL {
 		COLORREF FondoHasta = 0, BordeHasta = 0, TextoHasta = 0, TextoSombraHasta = 0;
 		switch (nTransicion) {
 			case DMarcaEx_Transicion_Normal:
-				FondoHasta		 = DEdicionTextoEx_Skin::FondoNormal;
-				BordeHasta		 = DEdicionTextoEx_Skin::BordeNormal;
-				TextoHasta	 	 = DEdicionTextoEx_Skin::Texto;
-				TextoSombraHasta = DEdicionTextoEx_Skin::TextoSombra;
+				FondoHasta		 = Skin.FondoNormal;
+				BordeHasta		 = Skin.BordeNormal;
+				TextoHasta	 	 = Skin.Texto;
+				TextoSombraHasta = Skin.TextoSombra;
 				break;
 			case DMarcaEx_Transicion_Resaltado:
-				FondoHasta		 = DEdicionTextoEx_Skin::FondoResaltado;
-				BordeHasta		 = DEdicionTextoEx_Skin::BordeResaltado;
-				TextoHasta		 = DEdicionTextoEx_Skin::TextoResaltado;
-				TextoSombraHasta = DEdicionTextoEx_Skin::TextoResaltadoSombra;
+				FondoHasta		 = Skin.FondoResaltado;
+				BordeHasta		 = Skin.BordeResaltado;
+				TextoHasta		 = Skin.TextoResaltado;
+				TextoSombraHasta = Skin.TextoResaltadoSombra;
 				break;
 			case DMarcaEx_Transicion_Presionado:
-				FondoHasta		 = DEdicionTextoEx_Skin::FondoPresionado;
-				BordeHasta	 	 = DEdicionTextoEx_Skin::BordePresionado;
-				TextoHasta		 = DEdicionTextoEx_Skin::TextoPresionado;
-				TextoSombraHasta = DEdicionTextoEx_Skin::TextoPresionadoSombra;
+				FondoHasta		 = Skin.FondoPresionado;
+				BordeHasta	 	 = Skin.BordePresionado;
+				TextoHasta		 = Skin.TextoPresionado;
+				TextoSombraHasta = Skin.TextoPresionadoSombra;
 				break;
 			case DMarcaEx_Transicion_Desactivado:
-				FondoHasta		 = DEdicionTextoEx_Skin::FondoDesactivado;
-				BordeHasta		 = DEdicionTextoEx_Skin::BordeNormal;
-				TextoHasta		 = DEdicionTextoEx_Skin::TextoDesactivado;
-				TextoSombraHasta = DEdicionTextoEx_Skin::TextoDesactivadoSombra;
+				FondoHasta		 = Skin.FondoDesactivado;
+				BordeHasta		 = Skin.BordeNormal;
+				TextoHasta		 = Skin.TextoDesactivado;
+				TextoSombraHasta = Skin.TextoDesactivadoSombra;
 				break;
 		}
 

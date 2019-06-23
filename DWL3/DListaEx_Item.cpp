@@ -4,7 +4,7 @@
 
 namespace DWL {
 	
-	DListaEx_Item::DListaEx_Item() : _Lista(NULL), _ColorTexto(DListaEx_Skin::TextoItemNormal), _ColorTextoSombra(DListaEx_Skin::TextoItemSombra), _ColorFondo(DListaEx_Skin::FondoItemNormal), Seleccionado(FALSE) {
+	DListaEx_Item::DListaEx_Item() : _Lista(NULL), _ColorTexto(0), _ColorTextoSombra(0), _ColorFondo(0), Seleccionado(FALSE) {
 	}
 	
 	/*
@@ -17,7 +17,7 @@ namespace DWL {
 
 	*/
 
-	DListaEx_Item::~DListaEx_Item()	{
+	DListaEx_Item::~DListaEx_Item(void)	{
 		for (size_t i = 0; i < _SubItems.size(); i++) {
 			delete _SubItems[i];
 		}
@@ -46,42 +46,42 @@ namespace DWL {
 		COLORREF TextoHasta = 0, SombraHasta = 0, FondoHasta = 0;
 		switch (nTransicion) {
 			case DListaEx_TransicionItem_Normal:
-				TextoHasta  = DListaEx_Skin::TextoItemNormal;
-				SombraHasta = DListaEx_Skin::TextoItemSombra;
-				if (_Lista->_MouseDentro == TRUE) FondoHasta  = DBarraScrollEx_Skin::FondoResaltado;
-				else                              FondoHasta  = DBarraScrollEx_Skin::FondoNormal;
+				TextoHasta  = _Lista->Skin.TextoItemNormal;
+				SombraHasta = _Lista->Skin.TextoItemSombra;
+				if (_Lista->_MouseDentro == TRUE) FondoHasta  = _Lista->SkinScroll.FondoResaltado;
+				else                              FondoHasta  = _Lista->SkinScroll.FondoNormal;
 				#if DLISTAEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DListaEx_Item::_Transicion('%s' -> Normal)\n", _SubItems[0]->Texto.c_str());
 				#endif			
 				break;
 			case DListaEx_TransicionItem_Resaltado:
-				TextoHasta  = DListaEx_Skin::TextoItemResaltado;
-				SombraHasta = DListaEx_Skin::TextoItemSombra;
-				FondoHasta  = DListaEx_Skin::FondoItemResaltado;
+				TextoHasta  = _Lista->Skin.TextoItemResaltado;
+				SombraHasta = _Lista->Skin.TextoItemSombra;
+				FondoHasta  = _Lista->Skin.FondoItemResaltado;
 				#if DLISTAEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DListaEx_Item::_Transicion('%s' -> Resaltado)\n", _SubItems[0]->Texto.c_str());
 				#endif
 				break;
 			case DListaEx_TransicionItem_Seleccionado:
-				TextoHasta  = DListaEx_Skin::TextoItemSeleccionado;
-				SombraHasta = DListaEx_Skin::TextoItemSeleccionadoSombra;
-				FondoHasta  = DListaEx_Skin::FondoItemSeleccionado;
+				TextoHasta  = _Lista->Skin.TextoItemSeleccionado;
+				SombraHasta = _Lista->Skin.TextoItemSeleccionadoSombra;
+				FondoHasta  = _Lista->Skin.FondoItemSeleccionado;
 				#if DLISTAEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DListaEx_Item::_Transicion('%s' -> Seleccionado)\n", _SubItems[0]->Texto.c_str());
 				#endif
 				break;
 			case DListaEx_TransicionItem_SeleccionadoResaltado :
-				TextoHasta  = DListaEx_Skin::TextoItemSeleccionadoResaltado;
-				SombraHasta = DListaEx_Skin::TextoItemSeleccionadoSombra;
-				FondoHasta  = DListaEx_Skin::FondoItemSeleccionadoResaltado;
+				TextoHasta  = _Lista->Skin.TextoItemSeleccionadoResaltado;
+				SombraHasta = _Lista->Skin.TextoItemSeleccionadoSombra;
+				FondoHasta  = _Lista->Skin.FondoItemSeleccionadoResaltado;
 				#if DLISTAEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DListaEx_Item::_Transicion('%s' -> Seleccionado resaltado)\n", _SubItems[0]->Texto.c_str());
 				#endif
 				break;
 			case DListaEx_TransicionItem_Presionado :
-				TextoHasta  = DListaEx_Skin::TextoItemPresionado;
-				SombraHasta = DListaEx_Skin::TextoItemSeleccionadoSombra;
-				FondoHasta  = DListaEx_Skin::FondoItemPresionado;
+				TextoHasta  = _Lista->Skin.TextoItemPresionado;
+				SombraHasta = _Lista->Skin.TextoItemSeleccionadoSombra;
+				FondoHasta  = _Lista->Skin.FondoItemPresionado;
 				#if DLISTAEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DListaEx_Item::_Transicion('%s' -> Seleccionado presionado)\n", _SubItems[0]->Texto.c_str());
 				#endif

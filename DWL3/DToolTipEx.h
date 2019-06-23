@@ -10,20 +10,20 @@ namespace DWL {
 
 	class DToolTipEx_Skin {
 	  public:
-							DToolTipEx_Skin(void) { }
-							// Colores para el fondo (OJO los colores del fondo y del borde del control están en DBarraSroll_Skin)
-		static COLORREF     Fondo;
-		static COLORREF     FondoError;
-		static COLORREF     Texto;
-		static COLORREF     TextoSombra;
-		static COLORREF     Borde;
-							// Fuente
-		static int			FuenteTam;
-		static std::wstring	FuenteNombre;
-		static BOOL         FuenteNegrita;
-		static BOOL         FuenteCursiva;
-		static BOOL         FuenteSubrayado;
-		static BOOL			FuenteSombraTexto;
+						DToolTipEx_Skin(void);
+						// Colores para el fondo (OJO los colores del fondo y del borde del control están en DBarraSroll_Skin)
+		COLORREF		Fondo;
+		COLORREF		FondoError;
+		COLORREF		Texto;
+		COLORREF		TextoSombra;
+		COLORREF		Borde;
+						// Fuente
+		int				FuenteTam;
+		std::wstring	FuenteNombre;
+		BOOL			FuenteNegrita;
+		BOOL			FuenteCursiva;
+		BOOL			FuenteSubrayado;
+		BOOL			FuenteSombraTexto;
 	};
 
 
@@ -43,6 +43,7 @@ namespace DWL {
 		LRESULT CALLBACK	GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		HWND                Padre;
 
+		DToolTipEx_Skin		Skin;
 	  protected:
 		std::wstring	   _Str;
 		DFuente            _Fuente;

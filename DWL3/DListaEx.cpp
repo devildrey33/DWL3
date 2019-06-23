@@ -11,31 +11,32 @@ namespace DWL {
 
 	#define MILISEGUNDOS_TIMER_DRAG 200
 
+	DListaEx_Skin::DListaEx_Skin(void) :
+		// Colores para el fondo (OJO los colores del fondo y del borde del control están en DBarraSroll_Skin)
+		FondoItemNormal						(COLOR_LISTA_FONDO),
+		FondoItemResaltado					(COLOR_LISTA_FONDO_RESALTADO),
+		FondoItemSeleccionado				(COLOR_LISTA_SELECCION),
+		FondoItemSeleccionadoResaltado		(COLOR_LISTA_SELECCION_RESALTADO),
+		FondoItemPresionado					(COLOR_LISTA_SELECCION_PRESIONADO),
+		// Color para el borde del item marcado
+		BordeItemMarcado					(COLOR_LISTA_MARCA_ITEM),
+		// Colores para el texto
+		TextoItemNormal						(COLOR_LISTA_TEXTO),
+		TextoItemResaltado					(COLOR_LISTA_TEXTO_RESALTADO),
+		TextoItemSombra						(COLOR_LISTA_TEXTO_SOMBRA),
+		TextoItemSeleccionado				(COLOR_LISTA_SELECCION_TEXTO),
+		TextoItemSeleccionadoSombra			(COLOR_LISTA_SELECCION_TEXTO_SOMBRA),
+		TextoItemSeleccionadoResaltado		(COLOR_LISTA_SELECCION_TEXTO_RESALTADO),
+		TextoItemPresionado					(COLOR_LISTA_SELECCION_TEXTO_PRESIONADO),
 
-	// Colores para el fondo (OJO los colores del fondo y del borde del control están en DBarraSroll_Skin)
-	COLORREF     DListaEx_Skin::FondoItemNormal						= COLOR_LISTA_FONDO;
-	COLORREF     DListaEx_Skin::FondoItemResaltado					= COLOR_LISTA_FONDO_RESALTADO;
-	COLORREF     DListaEx_Skin::FondoItemSeleccionado				= COLOR_LISTA_SELECCION;
-	COLORREF     DListaEx_Skin::FondoItemSeleccionadoResaltado		= COLOR_LISTA_SELECCION_RESALTADO;
-	COLORREF     DListaEx_Skin::FondoItemPresionado					= COLOR_LISTA_SELECCION_PRESIONADO;
-	// Color para el borde del item marcado
-	COLORREF     DListaEx_Skin::BordeItemMarcado					= COLOR_LISTA_MARCA_ITEM;
-	// Colores para el texto
-	COLORREF     DListaEx_Skin::TextoItemNormal						= COLOR_LISTA_TEXTO;
-	COLORREF     DListaEx_Skin::TextoItemResaltado					= COLOR_LISTA_TEXTO_RESALTADO;
-	COLORREF     DListaEx_Skin::TextoItemSombra						= COLOR_LISTA_TEXTO_SOMBRA;
-	COLORREF     DListaEx_Skin::TextoItemSeleccionado				= COLOR_LISTA_SELECCION_TEXTO;
-	COLORREF     DListaEx_Skin::TextoItemSeleccionadoSombra			= COLOR_LISTA_SELECCION_TEXTO_SOMBRA;
-	COLORREF     DListaEx_Skin::TextoItemSeleccionadoResaltado		= COLOR_LISTA_SELECCION_TEXTO_RESALTADO;
-	COLORREF     DListaEx_Skin::TextoItemPresionado					= COLOR_LISTA_SELECCION_TEXTO_PRESIONADO;
-
-	// Fuente
-	int			 DListaEx_Skin::FuenteTam							= FUENTE_NORMAL;
-	std::wstring DListaEx_Skin::FuenteNombre						= FUENTE_NOMBRE;
-	BOOL         DListaEx_Skin::FuenteNegrita						= FALSE;		
-	BOOL         DListaEx_Skin::FuenteCursiva						= FALSE;
-	BOOL         DListaEx_Skin::FuenteSubrayado						= FALSE;
-	BOOL		 DListaEx_Skin::FuenteSombraTexto					= FALSE;
+		// Fuente
+		FuenteTam							(FUENTE_NORMAL),
+		FuenteNombre						(FUENTE_NOMBRE),
+		FuenteNegrita						(FALSE),
+		FuenteCursiva						(FALSE),
+		FuenteSubrayado						(FALSE),
+		FuenteSombraTexto					(FALSE) { 
+	}
 
 
 
@@ -57,7 +58,7 @@ namespace DWL {
 	
 	HWND DListaEx::CrearListaEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const DWORD Estilos, const DWORD EstilosExtendidos) {
 //		if (hWnd()) { Debug_Escribir(L"DListaEx::CrearListaEx() Error : ya se ha creado la lista\n"); return hWnd(); }
-		Fuente.CrearFuente(DListaEx_Skin::FuenteTam, DListaEx_Skin::FuenteNombre.c_str(), DListaEx_Skin::FuenteNegrita, DListaEx_Skin::FuenteCursiva, DListaEx_Skin::FuenteSubrayado);
+		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		_hWnd = CrearControlEx(nPadre, L"DListaEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, EstilosExtendidos, CS_DBLCLKS); // CS_DBLCLKS (el control recibe notificaciones de doble click)
 		_Repintar = TRUE;
 		return hWnd();
@@ -73,6 +74,9 @@ namespace DWL {
 
 	DListaEx_Item* DListaEx::_AgregarItem(DListaEx_Item *nItem, DIcono &nIcono, const INT_PTR PosicionItem, std::initializer_list<std::wstring> Textos) {
 		nItem->_Lista = this;
+		nItem->_ColorTexto		 = Skin.TextoItemNormal;
+		nItem->_ColorTextoSombra = Skin.TextoItemSombra;
+		nItem->_ColorFondo		 = Skin.FondoItemNormal;
 		nItem->_Icono = nIcono;
 
 		// Agrego todos los textos de cada columna
@@ -82,7 +86,7 @@ namespace DWL {
 			nItem->_SubItems.push_back(nSubItem);
 		}
 
-		if (PosicionItem == -1)	_Items.push_back(nItem);
+		if		(PosicionItem == -1)	_Items.push_back(nItem);
 		else if (PosicionItem == -2)	_Items.push_back(nItem);	// TODO (-2 es ordenado)
 		else							_Items.insert(_Items.begin() + PosicionItem, nItem);
 
@@ -216,8 +220,8 @@ namespace DWL {
 
 		// Creo la brocha para el fondo (si el color del fondo del nodo es igual al color del fondo normal o resaltado de la barra de scroll, creo la brocha con el color del fondo del control. En caso contrario creo la brocha con el color que especifica el nodo)
 		HBRUSH BrochaFondo = NULL;
-		if (_Items[nPosItem]->_ColorFondo != DBarraScrollEx_Skin::FondoNormal && _Items[nPosItem]->_ColorFondo != DBarraScrollEx_Skin::FondoResaltado) 	BrochaFondo = CreateSolidBrush(_Items[nPosItem]->_ColorFondo);
-		else																																			BrochaFondo = CreateSolidBrush(_ColorFondo); 
+		if (_Items[nPosItem]->_ColorFondo != SkinScroll.FondoNormal && _Items[nPosItem]->_ColorFondo != SkinScroll.FondoResaltado) 	BrochaFondo = CreateSolidBrush(_Items[nPosItem]->_ColorFondo);
+		else																														BrochaFondo = CreateSolidBrush(_ColorFondo); 
 		
 		// Pinto el fondo del buffer
 		RECT EspacioLocal = { 0 , 0, (static_cast<LONG>(_TotalAnchoVisible) > Espacio.right) ? static_cast<LONG>(_TotalAnchoVisible) : Espacio.right, (2 * DLISTAEX_PADDING) + Fuente.Alto() };
@@ -248,7 +252,7 @@ namespace DWL {
 			// Si hay texto lo pinto
 			if (_Items[static_cast<unsigned int>(nPosItem)]->Texto(i).size() > 0) {
 				// Pinto la sombra
-				if (DListaEx_Skin::FuenteSombraTexto == TRUE) {
+				if (Skin.FuenteSombraTexto == TRUE) {
 					SetTextColor(_BufferItem, _Items[nPosItem]->_ColorTextoSombra);
 					DrawText(_BufferItem, _Items[static_cast<unsigned int>(nPosItem)]->Texto(i).c_str(), static_cast<int>(_Items[static_cast<unsigned int>(nPosItem)]->Texto(i).size()), &RCelda, _Columnas[i]->Alineacion | DT_NOPREFIX);
 				}
@@ -265,7 +269,7 @@ namespace DWL {
 
 		if (nPosItem == _ItemMarcado) {
 			// Pinto la marca del foco del teclado
-			HBRUSH BrochaMarcaItem = CreateSolidBrush(DListaEx_Skin::BordeItemMarcado);
+			HBRUSH BrochaMarcaItem = CreateSolidBrush(Skin.BordeItemMarcado);
 			RECT RFondo = { 0, 0, Espacio.right - Espacio.left, Espacio.bottom - Espacio.top };
 			FrameRect(_BufferItem, &RFondo, BrochaMarcaItem);
 			DeleteObject(BrochaMarcaItem);
@@ -379,8 +383,8 @@ namespace DWL {
 /*			_Items[i]->_AniTransicion.Terminar();
 			_Items[i]->Seleccionado = FALSE;
 			_Items[i]->_ColorFondo			= _ColorFondo;
-			_Items[i]->_ColorTexto			= DListaEx_Skin::TextoItemNormal;
-			_Items[i]->_ColorTextoSombra	= DListaEx_Skin::TextoItemSombra;*/
+			_Items[i]->_ColorTexto			= Skin.TextoItemNormal;
+			_Items[i]->_ColorTextoSombra	= Skin.TextoItemSombra;*/
 		}
 	}
 
@@ -891,14 +895,14 @@ namespace DWL {
 		sItem->Seleccionado = nSeleccion;
 		sItem->_AniTransicion.Terminar();
 		if (nSeleccion == TRUE) {
-			sItem->_ColorFondo		 = DListaEx_Skin::FondoItemSeleccionado;
-			sItem->_ColorTexto		 = DListaEx_Skin::TextoItemSeleccionado;
-			sItem->_ColorTextoSombra = DListaEx_Skin::TextoItemSeleccionadoSombra;
+			sItem->_ColorFondo		 = Skin.FondoItemSeleccionado;
+			sItem->_ColorTexto		 = Skin.TextoItemSeleccionado;
+			sItem->_ColorTextoSombra = Skin.TextoItemSeleccionadoSombra;
 		}
 		else {
-			sItem->_ColorFondo		 = DListaEx_Skin::FondoItemNormal;
-			sItem->_ColorTexto		 = DListaEx_Skin::TextoItemNormal;
-			sItem->_ColorTextoSombra = DListaEx_Skin::TextoItemSombra;
+			sItem->_ColorFondo		 = Skin.FondoItemNormal;
+			sItem->_ColorTexto		 = Skin.TextoItemNormal;
+			sItem->_ColorTextoSombra = Skin.TextoItemSombra;
 		}
 	}
 

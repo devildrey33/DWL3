@@ -36,28 +36,28 @@ namespace DWL {
 	// Skin por defecto del boton
 	class DBotonEx_Skin {
 	  public :
-								DBotonEx_Skin(void) { }
-		                       ~DBotonEx_Skin(void) { }
+						DBotonEx_Skin(void);
+		               ~DBotonEx_Skin(void) { }
 								// Colores
-		 static COLORREF		FondoNormal;
-		 static COLORREF		FondoResaltado;
-		 static COLORREF		FondoPresionado;
-		 static COLORREF		FondoMarcado;
-		 static COLORREF		BordeNormal;
-		 static COLORREF		BordeResaltado;
-		 static COLORREF		BordePresionado;
-		 static COLORREF		TextoNormal;
-		 static COLORREF		TextoResaltado;
-		 static COLORREF		TextoPresionado;
-		 static COLORREF		TextoDesactivado;
-		 static COLORREF        TextoSombra;
-								// Fuente
-		 static int				FuenteTam;
-		 static std::wstring	FuenteNombre;
-		 static BOOL            FuenteNegrita;
-		 static BOOL            FuenteCursiva;
-		 static BOOL            FuenteSubrayado;
-		 static BOOL			FuenteSombraTexto;
+		 COLORREF		FondoNormal;
+		 COLORREF		FondoResaltado;
+		 COLORREF		FondoPresionado;
+		 COLORREF		FondoMarcado;
+		 COLORREF		BordeNormal;
+		 COLORREF		BordeResaltado;
+		 COLORREF		BordePresionado;
+		 COLORREF		TextoNormal;
+		 COLORREF		TextoResaltado;
+		 COLORREF		TextoPresionado;
+		 COLORREF		TextoDesactivado;
+		 COLORREF       TextoSombra;
+						// Fuente
+		 int			FuenteTam;
+		 std::wstring	FuenteNombre;
+		 BOOL           FuenteNegrita;
+		 BOOL           FuenteCursiva;
+		 BOOL           FuenteSubrayado;
+		 BOOL			FuenteSombraTexto;
 	};
 
 
@@ -106,6 +106,8 @@ namespace DWL {
 		inline void             Texto(const wchar_t *nTexto) { _Texto = nTexto; Repintar(); };
 								// Función que realiza una transición del estado actual al estado especificado
 		void                    Transicion(const DBotonEx_Transicion nTransicion);
+
+		DBotonEx_Skin           Skin;
 	  protected:
 		void				   _Evento_MouseMovimiento(const WPARAM wParam, const LPARAM lParam);
 		void				   _Evento_MousePresionado(const WPARAM wParam, const LPARAM lParam, const int Boton);

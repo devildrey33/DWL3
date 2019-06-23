@@ -6,34 +6,36 @@
 
 namespace DWL {
 
-	// Valores visuales por defecto del BotonEx
-	// Colores del fondo
-	COLORREF		DBotonEx_Skin::FondoNormal			= COLOR_BOTON;
-	COLORREF		DBotonEx_Skin::FondoResaltado		= COLOR_BOTON_RESALTADO;
-	COLORREF		DBotonEx_Skin::FondoPresionado		= COLOR_BOTON_PRESIONADO;
-	COLORREF		DBotonEx_Skin::FondoMarcado			= COLOR_BOTON_MARCADO;
-	// Colores del borde
-	COLORREF		DBotonEx_Skin::BordeNormal			= COLOR_BOTON_BORDE;
-	COLORREF		DBotonEx_Skin::BordeResaltado		= COLOR_BOTON_BORDE_RESALTADO;
-	COLORREF		DBotonEx_Skin::BordePresionado		= COLOR_BOTON_BORDE_PRESIONADO;
-	// Colores del texto
-	COLORREF		DBotonEx_Skin::TextoNormal			= COLOR_BOTON_TEXTO;
-	COLORREF		DBotonEx_Skin::TextoResaltado		= COLOR_BOTON_TEXTO_RESALTADO;
-	COLORREF		DBotonEx_Skin::TextoPresionado		= COLOR_BOTON_TEXTO_PRESIONADO;
-	COLORREF		DBotonEx_Skin::TextoDesactivado		= COLOR_BOTON_TEXTO_DESACTIVADO;
-	COLORREF		DBotonEx_Skin::TextoSombra			= COLOR_BOTON_TEXTO_SOMBRA;
-	// Tipo de fuente
-	int				DBotonEx_Skin::FuenteTam			= FUENTE_GRANDE;
-	std::wstring	DBotonEx_Skin::FuenteNombre			= FUENTE_NOMBRE;
-	BOOL            DBotonEx_Skin::FuenteNegrita		= TRUE;
-	BOOL            DBotonEx_Skin::FuenteCursiva		= FALSE;
-	BOOL            DBotonEx_Skin::FuenteSubrayado		= FALSE;
+	DBotonEx_Skin::DBotonEx_Skin(void) :
+		// Valores visuales por defecto del BotonEx
+		// Colores del fondo
+		FondoNormal			(COLOR_BOTON),
+		FondoResaltado		(COLOR_BOTON_RESALTADO),
+		FondoPresionado		(COLOR_BOTON_PRESIONADO),
+		FondoMarcado		(COLOR_BOTON_MARCADO),
+		// Colores del borde
+		BordeNormal			(COLOR_BOTON_BORDE),
+		BordeResaltado		(COLOR_BOTON_BORDE_RESALTADO),
+		BordePresionado		(COLOR_BOTON_BORDE_PRESIONADO),
+		// Colores del texto
+		TextoNormal			(COLOR_BOTON_TEXTO),
+		TextoResaltado		(COLOR_BOTON_TEXTO_RESALTADO),
+		TextoPresionado		(COLOR_BOTON_TEXTO_PRESIONADO),
+		TextoDesactivado	(COLOR_BOTON_TEXTO_DESACTIVADO),
+		TextoSombra			(COLOR_BOTON_TEXTO_SOMBRA),
+		// Tipo de fuente
+		FuenteTam			(FUENTE_GRANDE),
+		FuenteNombre		(FUENTE_NOMBRE),
+		FuenteNegrita		(TRUE),
+		FuenteCursiva		(FALSE),
+		FuenteSubrayado		(FALSE),
+		// Sombra para el texto
+		FuenteSombraTexto   (TRUE)	{
+	}
 
-	// Sombra para el texto
-	BOOL			DBotonEx_Skin::FuenteSombraTexto	= TRUE;
 
 
-	DBotonEx::DBotonEx(void) : DControlEx(), _Marcado(FALSE), _PosIconoX(-1), _PosIconoY(-1), _ColorFondo(DBotonEx_Skin::FondoNormal), _ColorBorde(DBotonEx_Skin::BordeNormal), _ColorTexto(DBotonEx_Skin::TextoNormal), _Estado(DBotonEx_Estado_Normal) {
+	DBotonEx::DBotonEx(void) : DControlEx(), _Marcado(FALSE), _PosIconoX(-1), _PosIconoY(-1), _ColorFondo(Skin.FondoNormal), _ColorBorde(Skin.BordeNormal), _ColorTexto(Skin.TextoNormal), _Estado(DBotonEx_Estado_Normal) {
 	}
 
 
@@ -72,13 +74,13 @@ namespace DWL {
 	}
 
 	HWND DBotonEx::_CrearBotonEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
-		_ColorFondo = DBotonEx_Skin::FondoNormal;
-		_ColorBorde = DBotonEx_Skin::BordeNormal;
-		_ColorTexto = DBotonEx_Skin::TextoNormal;
+		_ColorFondo = Skin.FondoNormal;
+		_ColorBorde = Skin.BordeNormal;
+		_ColorTexto = Skin.TextoNormal;
 		_Marcado = FALSE;
 //		if (hWnd()) { Debug_Escribir(L"DBotonEx::CrearBotonEx() Error : ya se ha creado el botón\n"); return hWnd(); }
 		_hWnd = CrearControlEx(nPadre, L"DBotonEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL);
-		Fuente.CrearFuente(DBotonEx_Skin::FuenteTam, DBotonEx_Skin::FuenteNombre.c_str(), DBotonEx_Skin::FuenteNegrita, DBotonEx_Skin::FuenteCursiva, DBotonEx_Skin::FuenteSubrayado);
+		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		_Estado = DBotonEx_Estado_Normal;
 		_MouseDentro = FALSE;
 		return hWnd();
@@ -121,9 +123,9 @@ namespace DWL {
 		// Si tiene texto
 		if (_Texto.size() > 0) {
 			SetBkMode(Buffer, TRANSPARENT);
-			if (DBotonEx_Skin::FuenteSombraTexto == TRUE) {
+			if (Skin.FuenteSombraTexto == TRUE) {
 				// Pinto la sombra del texto
-				SetTextColor(Buffer, DBotonEx_Skin::TextoSombra);
+				SetTextColor(Buffer, Skin.TextoSombra);
 				DrawText(Buffer, _Texto.c_str(), static_cast<int>(_Texto.size()), &RCS, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 			}
 
@@ -166,7 +168,7 @@ namespace DWL {
 		Gdiplus::Color			ColorBorde(GetRValue(_ColorBorde), GetGValue(_ColorBorde), GetBValue(_ColorBorde));
 		Gdiplus::Color			ColorFondo(GetRValue(_ColorFondo), GetGValue(_ColorFondo), GetBValue(_ColorFondo));
 		Gdiplus::Color			ColorTexto(GetRValue(_ColorTexto), GetGValue(_ColorTexto), GetBValue(_ColorTexto));
-		Gdiplus::Color			ColorSombra(GetRValue(DBotonEx_Skin::TextoSombra), GetGValue(DBotonEx_Skin::TextoSombra), GetBValue(DBotonEx_Skin::TextoSombra));
+		Gdiplus::Color			ColorSombra(GetRValue(Skin.TextoSombra), GetGValue(Skin.TextoSombra), GetBValue(Skin.TextoSombra));
 		Gdiplus::Pen			PlumaBorde(ColorBorde, 1.0f);
 		Gdiplus::SolidBrush		BrochaFondo(ColorFondo);
 		Gdiplus::SolidBrush		BrochaTexto(ColorTexto);
@@ -235,29 +237,29 @@ namespace DWL {
 		COLORREF FondoHasta = 0, BordeHasta = 0, TextoHasta = 0;
 		switch (nTransicion) {
 			case DBotonEx_Transicion_Normal:
-				FondoHasta = DBotonEx_Skin::FondoNormal;
-				BordeHasta = DBotonEx_Skin::BordeNormal;
-				TextoHasta = DBotonEx_Skin::TextoNormal;
+				FondoHasta = Skin.FondoNormal;
+				BordeHasta = Skin.BordeNormal;
+				TextoHasta = Skin.TextoNormal;
 				break;
 			case DBotonEx_Transicion_Resaltado:
-				FondoHasta = DBotonEx_Skin::FondoResaltado;
-				BordeHasta = DBotonEx_Skin::BordeResaltado;
-				TextoHasta = DBotonEx_Skin::TextoResaltado;
+				FondoHasta = Skin.FondoResaltado;
+				BordeHasta = Skin.BordeResaltado;
+				TextoHasta = Skin.TextoResaltado;
 				break;
 			case DBotonEx_Transicion_Presionado:
-				FondoHasta = DBotonEx_Skin::FondoPresionado;
-				BordeHasta = DBotonEx_Skin::BordePresionado;
-				TextoHasta = DBotonEx_Skin::TextoPresionado;
+				FondoHasta = Skin.FondoPresionado;
+				BordeHasta = Skin.BordePresionado;
+				TextoHasta = Skin.TextoPresionado;
 				break;
 			case DBotonEx_Transicion_Marcado:
-				FondoHasta = DBotonEx_Skin::FondoMarcado;
-				BordeHasta = DBotonEx_Skin::BordeNormal;
-				TextoHasta = DBotonEx_Skin::TextoNormal;
+				FondoHasta = Skin.FondoMarcado;
+				BordeHasta = Skin.BordeNormal;
+				TextoHasta = Skin.TextoNormal;
 				break;
 			case DBotonEx_Transicion_Desactivado:
-				FondoHasta = DBotonEx_Skin::FondoNormal;
-				BordeHasta = DBotonEx_Skin::BordeNormal;
-				TextoHasta = DBotonEx_Skin::TextoDesactivado;
+				FondoHasta = Skin.FondoNormal;
+				BordeHasta = Skin.BordeNormal;
+				TextoHasta = Skin.TextoDesactivado;
 				break;
 		}
 		_AniTransicion.Iniciar(_ColorFondo, FondoHasta, _ColorBorde, BordeHasta, _ColorTexto, TextoHasta, Duracion, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
@@ -320,7 +322,7 @@ namespace DWL {
 		GetClientRect(_hWnd, &RC);
 		// Miro si el mouse está encima del control, y asigno el color rojo resaltado
 		if (PtInRect(&RC, P) == TRUE) {
-			_ColorFondo = DBotonEx_Skin::FondoResaltado;
+			_ColorFondo = Skin.FondoResaltado;
 //			Transicion(DBotonEx_Transicion_Resaltado); // no se necesita una transición porque el mouse está encima y sigue siendo resaltado
 			_Estado = DBotonEx_Estado_Resaltado;
 		}

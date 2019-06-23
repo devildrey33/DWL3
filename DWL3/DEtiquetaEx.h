@@ -7,23 +7,23 @@ namespace DWL {
 
 	class DEtiquetaEx_Skin {
 	  public:
-							DEtiquetaEx_Skin(void) { };
-		static COLORREF     Fondo;
-		static COLORREF     Texto;
-		static COLORREF     TextoSombra;
-							// Fuente
-		static int			FuenteTam;
-		static std::wstring	FuenteNombre;
-		static BOOL         FuenteNegrita;
-		static BOOL         FuenteCursiva;
-		static BOOL         FuenteSubrayado;
-		static BOOL			FuenteSombraTexto;
+						DEtiquetaEx_Skin(void);
+		COLORREF		Fondo;
+		COLORREF		Texto;
+		COLORREF		TextoSombra;
+						// Fuente
+		int				FuenteTam;
+		std::wstring	FuenteNombre;
+		BOOL			FuenteNegrita;
+		BOOL			FuenteCursiva;
+		BOOL			FuenteSubrayado;
+		BOOL			FuenteSombraTexto;
 	};
 
 	enum DEtiquetaEx_Alineacion {
-		DEtiquetaEx_Alineacion_Izquierda,
-		DEtiquetaEx_Alineacion_Centrado,
-		DEtiquetaEx_Alineacion_Derecha
+		DEtiquetaEx_Alineacion_Izquierda = DT_LEFT,
+		DEtiquetaEx_Alineacion_Centrado  = DT_CENTER,
+		DEtiquetaEx_Alineacion_Derecha   = DT_RIGHT
 	};
 
 	class DEtiquetaEx : public DControlEx {
@@ -36,13 +36,15 @@ namespace DWL {
 		void					Texto(std::wstring &nTexto);
 		LRESULT CALLBACK		GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-		COLORREF                ColorFondo;
+/*		COLORREF                ColorFondo;
 		COLORREF                ColorTexto;
-		COLORREF                ColorTextoSombra;
+		COLORREF                ColorTextoSombra;*/
 	
 		DFuente		            Fuente;
+		DEtiquetaEx_Skin		Skin;
+		DEtiquetaEx_Alineacion  Alineacion;
 	  protected:
-		UINT				   _Formato;
+//		UINT				   _Formato;
 		std::wstring           _Texto;
 	};
 

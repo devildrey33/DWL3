@@ -6,34 +6,36 @@
 
 namespace DWL {
 
-	// Colores para la barra de scroll (para la transición normal / hover / presionado)
-	COLORREF		DBarraEx_Skin::BarraNormal			= COLOR_BARRA;
-	COLORREF		DBarraEx_Skin::BarraResaltado		= COLOR_BARRA_RESALTADO;
-	COLORREF		DBarraEx_Skin::BarraPresionado		= COLOR_BARRA_PRESIONADO;
-	COLORREF		DBarraEx_Skin::BarraDesactivado		= COLOR_BARRA_DESACTIVADO;
-	// Colores del borde del control (para la transición normal / hover / presionado)
-	COLORREF		DBarraEx_Skin::BordeNormal			= COLOR_BORDE;
-	COLORREF		DBarraEx_Skin::BordeResaltado		= COLOR_BORDE_RESALTADO;
-	COLORREF		DBarraEx_Skin::BordePresionado		= COLOR_BORDE_PRESIONADO;
-	// Colores del fondo del control (para la transición normal / hover / presionado)
-	COLORREF		DBarraEx_Skin::FondoNormal			= COLOR_BARRA_FONDO;
-	COLORREF		DBarraEx_Skin::FondoResaltado		= COLOR_BARRA_FONDO_RESALTADO;
-	COLORREF		DBarraEx_Skin::FondoPresionado		= COLOR_BARRA_FONDO_PRESIONADO;
-	COLORREF		DBarraEx_Skin::FondoDesactivado		= COLOR_BARRA_FONDO_DESACTIVADO;
-	// Color del texto	
-	COLORREF		DBarraEx_Skin::Texto				= COLOR_BARRA_TEXTO;
-	COLORREF		DBarraEx_Skin::TextoSombra			= COLOR_BARRA_TEXTO_SOMBRA;
-	// Fuente
-	int				DBarraEx_Skin::FuenteTam			= FUENTE_PEQUE;
-	std::wstring	DBarraEx_Skin::FuenteNombre			= FUENTE_NOMBRE;
-	BOOL            DBarraEx_Skin::FuenteNegrita		= FALSE;
-	BOOL            DBarraEx_Skin::FuenteCursiva		= FALSE;
-//	BOOL            DBarraEx_Skin::FuenteSubrayado		= FALSE;
-	// Pintar sombra al texto
-	BOOL			DBarraEx_Skin::FuenteSombraTexto	= FALSE;
+	DBarraEx_Skin::DBarraEx_Skin(void) :
+		// Colores para la barra de scroll (para la transición normal / hover / presionado)
+		BarraNormal			(COLOR_BARRA),
+		BarraResaltado		(COLOR_BARRA_RESALTADO),
+		BarraPresionado		(COLOR_BARRA_PRESIONADO),
+		BarraDesactivado	(COLOR_BARRA_DESACTIVADO),
+		// Colores del borde del control (para la transición normal / hover / presionado)
+		BordeNormal			(COLOR_BORDE),
+		BordeResaltado		(COLOR_BORDE_RESALTADO),
+		BordePresionado		(COLOR_BORDE_PRESIONADO),
+		// Colores del fondo del control (para la transición normal / hover / presionado)
+		FondoNormal			(COLOR_BARRA_FONDO),
+		FondoResaltado		(COLOR_BARRA_FONDO_RESALTADO),
+		FondoPresionado		(COLOR_BARRA_FONDO_PRESIONADO),
+		FondoDesactivado	(COLOR_BARRA_FONDO_DESACTIVADO),
+		// Color del texto	
+		Texto				(COLOR_BARRA_TEXTO),
+		TextoSombra			(COLOR_BARRA_TEXTO_SOMBRA),
+		// Fuente
+		FuenteTam			(FUENTE_PEQUE),
+		FuenteNombre		(FUENTE_NOMBRE),
+		FuenteNegrita		(FALSE),
+		FuenteCursiva		(FALSE),
+	//	FuenteSubrayado		(FALSE),
+		// Pintar sombra al texto
+		FuenteSombraTexto	(FALSE) { 
+	}
 
 
-	DBarraProgresoEx::DBarraProgresoEx(void) : _Minimo(0), _Maximo(0), _Valor(0), _Estado(DBarraEx_Estado_Normal), _ColorBarra(DBarraEx_Skin::BarraNormal), _ColorFondo(DBarraEx_Skin::FondoNormal), _ColorBorde(DBarraEx_Skin::BordeNormal), _MostrarValor(DBarraEx_MostrarValor_Nada), _Activado(TRUE), _Alineacion(IzquierdaDerecha) {
+	DBarraProgresoEx::DBarraProgresoEx(void) : _Minimo(0), _Maximo(0), _Valor(0), _Estado(DBarraEx_Estado_Normal), _ColorBarra(Skin.BarraNormal), _ColorFondo(Skin.FondoNormal), _ColorBorde(Skin.BordeNormal), _MostrarValor(DBarraEx_MostrarValor_Nada), _Activado(TRUE), _Alineacion(IzquierdaDerecha) {
 	}
 
 
@@ -44,7 +46,7 @@ namespace DWL {
 	HWND DBarraProgresoEx::CrearBarraProgresoEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const INT_PTR cID, const float nMinimo, const float nMaximo, const float nValor, const DBarraEx_Alineacion nAlineacion) {
 //		if (hWnd()) { Debug_Escribir(L"DBarraProgresoEx::CrearBarraProgresoEx() Error : ya se ha creado la barra\n"); return hWnd(); }
 		_hWnd = CrearControlEx(nPadre, L"DBarraProgresoEx", L"", cID, cX, cY, cAncho, cAlto, WS_CHILD | WS_VISIBLE, NULL, CS_HREDRAW | CS_VREDRAW);
-		_Fuente.CrearFuente(DBarraEx_Skin::FuenteTam, DBarraEx_Skin::FuenteNombre.c_str(), DBarraEx_Skin::FuenteNegrita, DBarraEx_Skin::FuenteCursiva);
+		_Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva);
 //		ColorFondo = COLOR_BARRA_FONDO;
 //		ColorBarra = COLOR_BARRA;
 		_Alineacion = nAlineacion;
@@ -52,14 +54,14 @@ namespace DWL {
 		_Maximo = nMaximo;
 		_Valor = nValor;
 		if (_Activado == TRUE) {
-			_ColorBarra = DBarraEx_Skin::BarraNormal;
-			_ColorFondo = DBarraEx_Skin::FondoNormal;
-			_ColorBorde = DBarraEx_Skin::BordeNormal;
+			_ColorBarra = Skin.BarraNormal;
+			_ColorFondo = Skin.FondoNormal;
+			_ColorBorde = Skin.BordeNormal;
 		}
 		else {
-			_ColorBarra = DBarraEx_Skin::BarraDesactivado;
-			_ColorFondo = DBarraEx_Skin::FondoDesactivado;
-			_ColorBorde = DBarraEx_Skin::BordeNormal;
+			_ColorBarra = Skin.BarraDesactivado;
+			_ColorFondo = Skin.FondoDesactivado;
+			_ColorBorde = Skin.BordeNormal;
 			EnableWindow(_hWnd, FALSE);
 		}
 		return hWnd();
@@ -183,13 +185,13 @@ namespace DWL {
 			}
 			Evento_FormatearValor(TxtValor);
 			SetBkMode(DC, TRANSPARENT);
-			if (DBarraEx_Skin::FuenteSombraTexto == TRUE) {
-				SetTextColor(DC, DBarraEx_Skin::TextoSombra);
+			if (Skin.FuenteSombraTexto == TRUE) {
+				SetTextColor(DC, Skin.TextoSombra);
 				RECT RCS = { RC.left + 1, RC.top + 1, RC.right + 1, RC.bottom + 1 };
 				DrawText(DC, TxtValor.c_str(), static_cast<int>(TxtValor.size()), &RCS, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 			}
 
-			SetTextColor(DC, DBarraEx_Skin::Texto);
+			SetTextColor(DC, Skin.Texto);
 			DrawText(DC, TxtValor.c_str(), static_cast<int>(TxtValor.size()), &RC, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 			SelectObject(DC, VFuente);
 		}
@@ -281,24 +283,24 @@ namespace DWL {
 		COLORREF FondoHasta = 0, BordeHasta = 0, BarraHasta = 0;
 		switch (nTransicion) {
 			case DBarraEx_Transicion_Normal:
-				FondoHasta = DBarraEx_Skin::FondoNormal;
-				BarraHasta = DBarraEx_Skin::BarraNormal;
-				BordeHasta = DBarraEx_Skin::BordeNormal;
+				FondoHasta = Skin.FondoNormal;
+				BarraHasta = Skin.BarraNormal;
+				BordeHasta = Skin.BordeNormal;
 				break;
 			case DBarraEx_Transicion_Resaltado:
-				FondoHasta = DBarraEx_Skin::FondoResaltado;
-				BarraHasta = DBarraEx_Skin::BarraResaltado;
-				BordeHasta = DBarraEx_Skin::BordeResaltado;
+				FondoHasta = Skin.FondoResaltado;
+				BarraHasta = Skin.BarraResaltado;
+				BordeHasta = Skin.BordeResaltado;
 				break;
 			case DBarraEx_Transicion_Presionado:
-				FondoHasta = DBarraEx_Skin::FondoPresionado;
-				BarraHasta = DBarraEx_Skin::BarraPresionado;
-				BordeHasta = DBarraEx_Skin::BordePresionado;
+				FondoHasta = Skin.FondoPresionado;
+				BarraHasta = Skin.BarraPresionado;
+				BordeHasta = Skin.BordePresionado;
 				break;
 			case DBarraEx_Transicion_Desactivado:
-				FondoHasta = DBarraEx_Skin::FondoDesactivado;
-				BarraHasta = DBarraEx_Skin::BarraDesactivado;
-				BordeHasta = DBarraEx_Skin::BordeNormal;
+				FondoHasta = Skin.FondoDesactivado;
+				BarraHasta = Skin.BarraDesactivado;
+				BordeHasta = Skin.BordeNormal;
 				break;
 		}
 

@@ -3,20 +3,22 @@
 
 namespace DWL {
 
-	// Colores para la barra de scroll
-	COLORREF	DBarraScrollEx_Skin::FondoScrollNormal		= COLOR_SCROLL_FONDO;
-	COLORREF	DBarraScrollEx_Skin::FondoScrollResaltado	= COLOR_SCROLL_FONDO_RESALTADO;
-	COLORREF	DBarraScrollEx_Skin::FondoScrollPresionado	= COLOR_SCROLL_FONDO_PRESIONADO;
-	COLORREF	DBarraScrollEx_Skin::BarraScrollNormal		= COLOR_SCROLL_BARRA;
-	COLORREF	DBarraScrollEx_Skin::BarraScrollResaltado	= COLOR_SCROLL_BARRA_RESALTADO;
-	COLORREF	DBarraScrollEx_Skin::BarraScrollPresionado	= COLOR_SCROLL_BARRA_PRESIONADO;
-	// Colores del orde del control
-	COLORREF    DBarraScrollEx_Skin::BordeNormal			= COLOR_BORDE;
-	COLORREF    DBarraScrollEx_Skin::BordeResaltado			= COLOR_BORDE_RESALTADO;
-//	COLORREF    DBarraScrollEx_Skin::BordePresionado		= COLOR_BORDE_PRESIONADO;
-	// Colores del fondo del control
-	COLORREF    DBarraScrollEx_Skin::FondoNormal			= COLOR_FONDO_CLARO;
-	COLORREF    DBarraScrollEx_Skin::FondoResaltado			= COLOR_FONDO_CLARO_RESALTADO;
+	DBarraScrollEx_Skin::DBarraScrollEx_Skin(void) :
+		// Colores para la barra de scroll
+		FondoScrollNormal		(COLOR_SCROLL_FONDO),
+		FondoScrollResaltado	(COLOR_SCROLL_FONDO_RESALTADO),
+		FondoScrollPresionado	(COLOR_SCROLL_FONDO_PRESIONADO),
+		BarraScrollNormal		(COLOR_SCROLL_BARRA),
+		BarraScrollResaltado	(COLOR_SCROLL_BARRA_RESALTADO),
+		BarraScrollPresionado	(COLOR_SCROLL_BARRA_PRESIONADO),
+		// Colores del orde del control
+		BordeNormal				(COLOR_BORDE),
+		BordeResaltado			(COLOR_BORDE_RESALTADO),
+	//	COLORREF    DBarraScrollEx_Skin::BordePresionado		= COLOR_BORDE_PRESIONADO;
+		// Colores del fondo del control
+		FondoNormal				(COLOR_FONDO_CLARO),
+		FondoResaltado			(COLOR_FONDO_CLARO_RESALTADO) {
+	}
 
 
 	// Minimo de tamaño para la barra de scroll
@@ -24,11 +26,11 @@ namespace DWL {
 
 	DBarraScrollEx::DBarraScrollEx(void) : DControlEx(),
 											_Scroll_PosPresionado({ 0 ,0 })						, _Scroll_PosInicio(0.0f),
-											_ColorBorde(DBarraScrollEx_Skin::BordeNormal)		, _ColorFondoV(DBarraScrollEx_Skin::FondoScrollNormal),  _ColorFondoH(DBarraScrollEx_Skin::FondoScrollNormal),
-											_ColorBarraV(DBarraScrollEx_Skin::BarraScrollNormal), _ColorBarraH(DBarraScrollEx_Skin::BarraScrollNormal),	 _ColorFondo(DBarraScrollEx_Skin::FondoNormal),
-											_ScrollV_Estado(DBarraScrollEx_Estado_Invisible)	, _ScrollV_Pagina(1.0f),	 _ScrollV_Posicion(0.0f),
-											_ScrollH_Estado(DBarraScrollEx_Estado_Invisible)	, _ScrollH_Pagina(1.0f),	 _ScrollH_Posicion(0.0f)   {
-		_ScrollH_Alto = GetSystemMetrics(SM_CYHSCROLL);	
+											_ColorBorde(SkinScroll.BordeNormal)					, _ColorFondoV(SkinScroll.FondoScrollNormal)	,  _ColorFondoH(SkinScroll.FondoScrollNormal),
+											_ColorBarraV(SkinScroll.BarraScrollNormal)			, _ColorBarraH(SkinScroll.BarraScrollNormal)	,	 _ColorFondo(SkinScroll.FondoNormal),
+											_ScrollV_Estado(DBarraScrollEx_Estado_Invisible)	, _ScrollV_Pagina(1.0f)							,	 _ScrollV_Posicion(0.0f),
+											_ScrollH_Estado(DBarraScrollEx_Estado_Invisible)	, _ScrollH_Pagina(1.0f)							,	 _ScrollH_Posicion(0.0f)   {
+		_ScrollH_Alto  = GetSystemMetrics(SM_CYHSCROLL);	
 		_ScrollV_Ancho = GetSystemMetrics(SM_CXVSCROLL);
 	}
 
@@ -77,7 +79,7 @@ namespace DWL {
 		// Si las dos barras son visibles hay que pintar un recuadro en la parte inferior derecha del control 
 		if (PintarRecuadro == TRUE) {
 			RECT Recuadro = { RCV.left, RCH.top, RCV.right, RCH.bottom };
-			HBRUSH BrochaRecuadro = CreateSolidBrush(DBarraScrollEx_Skin::FondoScrollNormal);
+			HBRUSH BrochaRecuadro = CreateSolidBrush(SkinScroll.FondoScrollNormal);
 			FillRect(hDC, &Recuadro, BrochaRecuadro);
 			DeleteObject(BrochaRecuadro);
 		}
@@ -298,29 +300,29 @@ namespace DWL {
 		COLORREF FondoHasta = 0, BarraHasta = 0;
 		switch (nTransicion) {
 			case DBarraScrollEx_Transicion_Normal:
-				FondoHasta = DBarraScrollEx_Skin::FondoScrollNormal;
-				BarraHasta = DBarraScrollEx_Skin::BarraScrollNormal;
+				FondoHasta = SkinScroll.FondoScrollNormal;
+				BarraHasta = SkinScroll.BarraScrollNormal;
 				#if DBARRASCROLLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DBarraScrollEx::ScrollV_Transicion DBarraScrollEx_Transicion_Normal\n");
 				#endif
 				break;
 			case DBarraScrollEx_Transicion_BarraResaltada:
-				FondoHasta = DBarraScrollEx_Skin::FondoScrollNormal;
-				BarraHasta = DBarraScrollEx_Skin::BarraScrollResaltado;
+				FondoHasta = SkinScroll.FondoScrollNormal;
+				BarraHasta = SkinScroll.BarraScrollResaltado;
 				#if DBARRASCROLLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DBarraScrollEx::ScrollV_Transicion DBarraScrollEx_Transicion_BarraResaltada\n");
 				#endif
 				break;
 			case DBarraScrollEx_Transicion_FondoResaltado:
-				FondoHasta = DBarraScrollEx_Skin::FondoScrollResaltado;
-				BarraHasta = DBarraScrollEx_Skin::BarraScrollNormal;
+				FondoHasta = SkinScroll.FondoScrollResaltado;
+				BarraHasta = SkinScroll.BarraScrollNormal;
 				#if DBARRASCROLLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DBarraScrollEx::ScrollV_Transicion DBarraScrollEx_Transicion_FondoResaltado\n");
 				#endif
 				break;
 			case DBarraScrollEx_Transicion_Presionado:
-				FondoHasta = DBarraScrollEx_Skin::FondoScrollPresionado;
-				BarraHasta = DBarraScrollEx_Skin::BarraScrollPresionado;
+				FondoHasta = SkinScroll.FondoScrollPresionado;
+				BarraHasta = SkinScroll.BarraScrollPresionado;
 				#if DBARRASCROLLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DBarraScrollEx::ScrollV_Transicion DBarraScrollEx_Transicion_Presionado\n");
 				#endif
@@ -347,20 +349,20 @@ namespace DWL {
 		COLORREF FondoHasta = 0, BarraHasta = 0;
 		switch (nTransicion) {
 			case DBarraScrollEx_Transicion_Normal:
-				FondoHasta = DBarraScrollEx_Skin::FondoScrollNormal;
-				BarraHasta = DBarraScrollEx_Skin::BarraScrollNormal;
+				FondoHasta = SkinScroll.FondoScrollNormal;
+				BarraHasta = SkinScroll.BarraScrollNormal;
 				break;
 			case DBarraScrollEx_Transicion_BarraResaltada:
-				FondoHasta = DBarraScrollEx_Skin::FondoScrollNormal;
-				BarraHasta = DBarraScrollEx_Skin::BarraScrollResaltado;
+				FondoHasta = SkinScroll.FondoScrollNormal;
+				BarraHasta = SkinScroll.BarraScrollResaltado;
 				break;
 			case DBarraScrollEx_Transicion_FondoResaltado:
-				FondoHasta = DBarraScrollEx_Skin::FondoScrollResaltado;
-				BarraHasta = DBarraScrollEx_Skin::BarraScrollNormal;
+				FondoHasta = SkinScroll.FondoScrollResaltado;
+				BarraHasta = SkinScroll.BarraScrollNormal;
 				break;
 			case DBarraScrollEx_Transicion_Presionado:
-				FondoHasta = DBarraScrollEx_Skin::FondoScrollPresionado;
-				BarraHasta = DBarraScrollEx_Skin::BarraScrollPresionado;
+				FondoHasta = SkinScroll.FondoScrollPresionado;
+				BarraHasta = SkinScroll.BarraScrollPresionado;
 				break;
 		}
 
@@ -386,12 +388,12 @@ namespace DWL {
 		COLORREF BordeHasta = 0, FondoHasta = 0;
 		switch (nTransicion) {
 			case DBarraScrollEx_Transicion_Borde_Normal:
-				BordeHasta = DBarraScrollEx_Skin::BordeNormal;
-				FondoHasta = DBarraScrollEx_Skin::FondoNormal;
+				BordeHasta = SkinScroll.BordeNormal;
+				FondoHasta = SkinScroll.FondoNormal;
 				break;
 			case DBarraScrollEx_Transicion_Borde_Resaltado:
-				BordeHasta = DBarraScrollEx_Skin::BordeResaltado;
-				FondoHasta = DBarraScrollEx_Skin::FondoResaltado;
+				BordeHasta = SkinScroll.BordeResaltado;
+				FondoHasta = SkinScroll.FondoResaltado;
 				break;
 		}
 

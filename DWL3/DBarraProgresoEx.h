@@ -15,32 +15,32 @@ namespace DWL {
 	// Colores por defecto de un control EX con barra de scroll
 	class DBarraEx_Skin {
 	   public :
-								DBarraEx_Skin(void) { }
-							   ~DBarraEx_Skin(void) { }
-								// Colores para la barra de scroll (para la transición normal / hover / presionado)
-		static COLORREF			BarraNormal;
-		static COLORREF			BarraResaltado;
-		static COLORREF			BarraPresionado;
-		static COLORREF			BarraDesactivado;
-								// Colores del borde del control (para la transición normal / hover / presionado)
-		static COLORREF			BordeNormal;
-		static COLORREF			BordeResaltado;
-		static COLORREF			BordePresionado;
-								// Colores del fondo del control (para la transición normal / hover / presionado)
-		static COLORREF			FondoNormal;
-		static COLORREF			FondoResaltado;
-		static COLORREF			FondoPresionado;
-		static COLORREF			FondoDesactivado;
-								// Color del texto
-		static COLORREF			Texto;
-		static COLORREF			TextoSombra;
-								// Fuente
-		static int				FuenteTam;
-		static std::wstring		FuenteNombre;
-		static BOOL             FuenteNegrita;
-		static BOOL             FuenteCursiva;
-//		static BOOL             FuenteSubrayado;
-		static BOOL				FuenteSombraTexto;
+							DBarraEx_Skin(void);
+						   ~DBarraEx_Skin(void) { }
+							// Colores para la barra de scroll (para la transición normal / hover / presionado)
+		COLORREF			BarraNormal;
+		COLORREF			BarraResaltado;
+		COLORREF			BarraPresionado;
+		COLORREF			BarraDesactivado;
+							// Colores del borde del control (para la transición normal / hover / presionado)
+		COLORREF			BordeNormal;
+		COLORREF			BordeResaltado;
+		COLORREF			BordePresionado;
+							// Colores del fondo del control (para la transición normal / hover / presionado)
+		COLORREF			FondoNormal;
+		COLORREF			FondoResaltado;
+		COLORREF			FondoPresionado;
+		COLORREF			FondoDesactivado;
+							// Color del texto
+		COLORREF			Texto;
+		COLORREF			TextoSombra;
+							// Fuente
+		int					FuenteTam;
+		std::wstring		FuenteNombre;
+		BOOL				FuenteNegrita;
+		BOOL				FuenteCursiva;
+//		BOOL				FuenteSubrayado;
+		BOOL				FuenteSombraTexto;
 
 	};
 
@@ -107,6 +107,8 @@ namespace DWL {
 		inline const DBarraEx_MostrarValor  MostrarValor(void)										{ return _MostrarValor;				}
 
 		void                                Alineacion(const DBarraEx_Alineacion nAlineacion);
+
+		DBarraEx_Skin						Skin;
 	  protected:
 		const float                        _ValorMouse(RECT &RC, int cX, int cY);
 		void				               _Evento_MouseMovimiento(WPARAM wParam, LPARAM lParam);

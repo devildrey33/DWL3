@@ -4,20 +4,23 @@
 
 namespace DWL {
 
-	// Colores por defecto
-	COLORREF     DEtiquetaEx_Skin::Fondo				= COLOR_ETIQUETA_FONDO;
-	COLORREF     DEtiquetaEx_Skin::Texto				= COLOR_ETIQUETA_TEXTO;
-	COLORREF     DEtiquetaEx_Skin::TextoSombra			= COLOR_ETIQUETA_TEXTO_SOMBRA;
-	// Fuente
-	int			 DEtiquetaEx_Skin::FuenteTam			= FUENTE_NORMAL;
-	std::wstring DEtiquetaEx_Skin::FuenteNombre			= FUENTE_NOMBRE;
-	BOOL         DEtiquetaEx_Skin::FuenteNegrita		= FALSE;
-	BOOL         DEtiquetaEx_Skin::FuenteCursiva		= FALSE;
-	BOOL         DEtiquetaEx_Skin::FuenteSubrayado		= FALSE;
-	BOOL		 DEtiquetaEx_Skin::FuenteSombraTexto	= TRUE;
+	DEtiquetaEx_Skin::DEtiquetaEx_Skin(void) :
+		// Colores por defecto
+		Fondo				(COLOR_ETIQUETA_FONDO),
+		Texto				(COLOR_ETIQUETA_TEXTO),
+		TextoSombra			(COLOR_ETIQUETA_TEXTO_SOMBRA),
+		// Fuente
+		FuenteTam			(FUENTE_NORMAL),
+		FuenteNombre		(FUENTE_NOMBRE),
+		FuenteNegrita		(FALSE),
+		FuenteCursiva		(FALSE),
+		FuenteSubrayado		(FALSE),
+		FuenteSombraTexto	(TRUE) {
+
+	}
 
 
-	DEtiquetaEx::DEtiquetaEx(void) : _Formato(DT_LEFT), ColorTexto(DEtiquetaEx_Skin::Texto), ColorTextoSombra(DEtiquetaEx_Skin::TextoSombra), ColorFondo(DEtiquetaEx_Skin::Fondo) {
+	DEtiquetaEx::DEtiquetaEx(void) : Alineacion(DEtiquetaEx_Alineacion_Izquierda) /*, ColorTexto(Skin.Texto), ColorTextoSombra(Skin.TextoSombra), ColorFondo(Skin.Fondo) */ {
 	}
 
 
@@ -26,14 +29,14 @@ namespace DWL {
 
 	HWND DEtiquetaEx::CrearEtiquetaEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const DEtiquetaEx_Alineacion nAlineacion, const long Estilos) {
 		_hWnd = CrearControlEx(nPadre, L"DEtiquetaEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL);
-
-		switch (nAlineacion) {
+		Alineacion = nAlineacion;
+/*		switch (nAlineacion) {
 			case DEtiquetaEx_Alineacion_Izquierda	: _Formato = DT_LEFT;		break;
 			case DEtiquetaEx_Alineacion_Centrado	: _Formato = DT_CENTER;		break;
 			case DEtiquetaEx_Alineacion_Derecha		: _Formato = DT_RIGHT;		break;
-		}
+		}*/
 //		_Formato = (nCentrado == TRUE) ? DT_CENTER : DT_LEFT;
-		Fuente.CrearFuente(DEtiquetaEx_Skin::FuenteTam, DEtiquetaEx_Skin::FuenteNombre.c_str(), DEtiquetaEx_Skin::FuenteNegrita, DEtiquetaEx_Skin::FuenteCursiva, DEtiquetaEx_Skin::FuenteSubrayado);
+		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		_Texto = nTxt;
 		return hWnd();
 	}
@@ -49,7 +52,7 @@ namespace DWL {
 		HBITMAP VTmphDCBmp	= static_cast<HBITMAP>(SelectObject(TmphDC, TmphDCBmp));
 		HFONT	VFont		= static_cast<HFONT>(SelectObject(TmphDC, Fuente()));
 
-		HBRUSH BrochaFondo = CreateSolidBrush(ColorFondo);
+		HBRUSH BrochaFondo = CreateSolidBrush(Skin.Fondo);
 		FillRect(TmphDC, &RC, BrochaFondo);
 		DeleteObject(BrochaFondo);
 
@@ -59,14 +62,14 @@ namespace DWL {
 		RC2.left++; RC2.top++; RC2.right++; RC2.bottom++;
 
 		SetBkMode(TmphDC, TRANSPARENT);
-		if (DEtiquetaEx_Skin::FuenteSombraTexto == TRUE) {
+		if (Skin.FuenteSombraTexto == TRUE) {
 			// Pinto la sombra del texto
-			SetTextColor(TmphDC, ColorTextoSombra);
-			DrawText(TmphDC, _Texto.c_str(), static_cast<int>(_Texto.size()), &RC2, _Formato);
+			SetTextColor(TmphDC, Skin.TextoSombra);
+			DrawText(TmphDC, _Texto.c_str(), static_cast<int>(_Texto.size()), &RC2, static_cast<UINT>(Alineacion));
 		}
 		// Pinto el texto
-		SetTextColor(TmphDC, ColorTexto);
-		DrawText(TmphDC, _Texto.c_str(), static_cast<int>(_Texto.size()), &RC, _Formato);
+		SetTextColor(TmphDC, Skin.Texto);
+		DrawText(TmphDC, _Texto.c_str(), static_cast<int>(_Texto.size()), &RC, static_cast<UINT>(Alineacion));
 
 		RC.right++;	// (vuelvo a poner el right como estaba para el bitblt)
 

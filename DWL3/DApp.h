@@ -10,14 +10,25 @@ namespace DWL {
 	  public :
 										DApp(void) { }
 
+		void							Eventos_Mirar(void);
+	
+		const TCHAR 				   *ObtenerSO(void);
+
+
 										// Evento Tecla soltada general de todas las ventanas
 		virtual void                    Evento_TeclaPresionada(DWL::DEventoTeclado& DatosTeclado) { };
 										// Evento Tecla soltada general de todas las ventanas
 		virtual void                    Evento_TeclaSoltada(DWL::DEventoTeclado& DatosTeclado) { };
 
+										//! Función que devuelve el HINSTANCE de nuestra aplicación.
+										/*! Esta función devuelve el HINSTANCE de nuestra aplicación.
+										    \fn			inline HINSTANCE Instancia(void);
+										    \return		Devuelve el HINSTANCE de nuestra aplicación.
+										*/											
+		inline HINSTANCE				Instancia(void) { return GetModuleHandle(NULL);	};
+
 										// Ventana que muestra una consola al estilo MS-DOS para depuración
 		DConsola						ConsolaDebug;
-
 	};
 
 };

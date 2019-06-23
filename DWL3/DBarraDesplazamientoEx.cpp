@@ -15,20 +15,20 @@ namespace DWL {
 	HWND DBarraDesplazamientoEx::CrearBarraDesplazamientoEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const INT_PTR cID, const float nMinimo, const float nMaximo, const float nValor, const DBarraEx_Alineacion nAlineacion) {
 //		if (hWnd()) { Debug_Escribir(L"DBarraDesplazamientoEx::CrearBarraEx() Error : ya se ha creado la barra\n"); return hWnd(); }
 		_hWnd = CrearControlEx(nPadre, L"DBarraDesplazamientoEx", L"", cID, cX, cY, cAncho, cAlto, WS_CHILD | WS_VISIBLE, NULL, CS_HREDRAW | CS_VREDRAW);
-		_Fuente.CrearFuente(DBarraEx_Skin::FuenteTam, DBarraEx_Skin::FuenteNombre.c_str(), DBarraEx_Skin::FuenteNegrita, DBarraEx_Skin::FuenteCursiva);
+		_Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva);
 		_Alineacion = nAlineacion;
 		_Minimo		= nMinimo;
 		_Maximo		= nMaximo;
 		_Valor		= nValor;
 		if (_Activado == TRUE) {
-			_ColorBarra = DBarraEx_Skin::BarraNormal;
-			_ColorFondo = DBarraEx_Skin::FondoNormal;
-			_ColorBorde = DBarraEx_Skin::BordeNormal;
+			_ColorBarra = Skin.BarraNormal;
+			_ColorFondo = Skin.FondoNormal;
+			_ColorBorde = Skin.BordeNormal;
 		}
 		else {
-			_ColorBarra = DBarraEx_Skin::BarraDesactivado;
-			_ColorFondo = DBarraEx_Skin::FondoDesactivado;
-			_ColorBorde = DBarraEx_Skin::BordeNormal;
+			_ColorBarra = Skin.BarraDesactivado;
+			_ColorFondo = Skin.FondoDesactivado;
+			_ColorBorde = Skin.BordeNormal;
 			EnableWindow(_hWnd, FALSE);
 		}
 

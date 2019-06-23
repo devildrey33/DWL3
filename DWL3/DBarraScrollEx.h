@@ -11,22 +11,23 @@ namespace DWL {
 	// Colores por defecto de un control EX con barra de scroll
 	class DBarraScrollEx_Skin {
 	   public :
-							DBarraScrollEx_Skin(void) { }
-						   ~DBarraScrollEx_Skin(void) { }
-							// Colores para la barra de scroll (para la transición del scroll V/H)
-		static COLORREF		FondoScrollNormal;
-		static COLORREF		FondoScrollResaltado;
-		static COLORREF		FondoScrollPresionado;
-		static COLORREF		BarraScrollNormal;
-		static COLORREF		BarraScrollResaltado;
-		static COLORREF		BarraScrollPresionado;
-							// Colores del borde del control (para la transición hover)
-		static COLORREF     BordeNormal;
-		static COLORREF     BordeResaltado;
-							// colores del fondo del control (para la transición hover)
-		static COLORREF     FondoNormal;
-		static COLORREF     FondoResaltado;
+						DBarraScrollEx_Skin(void);
+					   ~DBarraScrollEx_Skin(void) { }
+						// Colores para la barra de scroll (para la transición del scroll V/H)
+		COLORREF		FondoScrollNormal;
+		COLORREF		FondoScrollResaltado;
+		COLORREF		FondoScrollPresionado;
+		COLORREF		BarraScrollNormal;
+		COLORREF		BarraScrollResaltado;
+		COLORREF		BarraScrollPresionado;
+						// Colores del borde del control (para la transición hover)
+		COLORREF		BordeNormal;
+		COLORREF		BordeResaltado;
+						// colores del fondo del control (para la transición hover)
+		COLORREF		FondoNormal;
+		COLORREF		FondoResaltado;
 	};
+
 
 	enum DBarraScrollEx_Estado {
 		DBarraScrollEx_Estado_Invisible,
@@ -94,6 +95,8 @@ namespace DWL {
 									
 		void                        Scrolls_TransicionBorde(const DBarraScrollEx_Transicion_Borde nTransicion);
 		void                        PintarBorde(RECT *Recta, HDC hDC);
+
+		DBarraScrollEx_Skin			SkinScroll;
 	  protected:
 		void					   _PintarBarraScrollEx(HDC hDC, RECT &RectaScroll, RECT &RectaBarra, const COLORREF pColorBarra, const COLORREF pColorFondo);
 		const float				   _CalcularPosScrollH(const UINT nTam, const int nPos);

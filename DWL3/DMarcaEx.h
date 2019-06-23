@@ -11,30 +11,30 @@ namespace DWL {
 
 	class DMarcaEx_Skin {
 	  public:
-							DMarcaEx_Skin(void) {};
-							// Colores por defecto
-		static COLORREF     FondoNormal;
-		static COLORREF     FondoResaltado;
-		static COLORREF     FondoPresionado;
-		static COLORREF     FondoMarcaNormal;
-		static COLORREF     FondoMarcaResaltado;
-		static COLORREF     FondoMarcaPresionado;
-		static COLORREF     FondoMarcaDesactivado;
-		static COLORREF     BordeNormal;
-		static COLORREF     BordeResaltado;
-		static COLORREF     BordePresionado;
-		static COLORREF     TextoNormal;
-		static COLORREF     TextoResaltado;
-		static COLORREF     TextoPresionado;
-		static COLORREF     TextoDesactivado;
-		static COLORREF     TextoSombra;
-							// Fuente
-		static int			FuenteTam;
-		static std::wstring FuenteNombre;
-		static BOOL         FuenteNegrita;
-		static BOOL         FuenteCursiva;
-		static BOOL         FuenteSubrayado;
-		static BOOL			FuenteSombraTexto;
+						DMarcaEx_Skin(void);
+						// Colores por defecto
+		COLORREF		FondoNormal;
+		COLORREF		FondoResaltado;
+		COLORREF		FondoPresionado;
+		COLORREF		FondoMarcaNormal;
+		COLORREF		FondoMarcaResaltado;
+		COLORREF		FondoMarcaPresionado;
+		COLORREF		FondoMarcaDesactivado;
+		COLORREF		BordeNormal;
+		COLORREF		BordeResaltado;
+		COLORREF		BordePresionado;
+		COLORREF		TextoNormal;
+		COLORREF		TextoResaltado;
+		COLORREF		TextoPresionado;
+		COLORREF		TextoDesactivado;
+		COLORREF		TextoSombra;
+						// Fuente
+		int				FuenteTam;
+		std::wstring	FuenteNombre;
+		BOOL			FuenteNegrita;
+		BOOL			FuenteCursiva;
+		BOOL			FuenteSubrayado;
+		BOOL			FuenteSombraTexto;
 	};
 
 	enum DMarcaEx_Estado {
@@ -71,6 +71,7 @@ namespace DWL {
 								// Inicia una transición desde el estado actual al estado especificado
 		void                    Transicion(const DMarcaEx_Transicion nTransicion);
 		DFuente                 Fuente;
+		DMarcaEx_Skin			Skin;
 	  protected:
 		void			       _Evento_MouseMovimiento(WPARAM wParam, LPARAM lParam);
 		void		           _Evento_MousePresionado(const int Boton, WPARAM wParam, LPARAM lParam);

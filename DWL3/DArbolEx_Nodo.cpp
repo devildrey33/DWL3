@@ -6,7 +6,7 @@
 namespace DWL {
 
 	DArbolEx_Nodo::DArbolEx_Nodo(void) :	_Siguiente(NULL), _Anterior(NULL), _Ancestros(0), _AnchoTexto(0), _Arbol(NULL), _Padre(NULL),
-											_ColorExpansor(DArbolEx_Skin::ExpansorNormal), _ColorTexto(DArbolEx_Skin::TextoNodoNormal), _ColorTextoSombra(DArbolEx_Skin::TextoNodoSombra), _ColorFondo(DBarraScrollEx_Skin::FondoNormal),
+											_ColorExpansor(0), _ColorTexto(0), _ColorTextoSombra(0), _ColorFondo(0),
 											Expandido(FALSE), Seleccionado(FALSE), _SubSeleccionado(FALSE), _MostrarExpansor(DArbolEx_MostrarExpansor_Auto), _Activado(TRUE) {
 	};
 	
@@ -71,13 +71,13 @@ namespace DWL {
 		COLORREF ExpansorHasta = 0;
 		switch (nTransicion) {
 			case DArbolEx_TransicionExpansor_Normal:
-				ExpansorHasta = DArbolEx_Skin::ExpansorNormal;
+				ExpansorHasta = _Arbol->Skin.ExpansorNormal;
 				break;
 			case DArbolEx_TransicionExpansor_Resaltado:
-				ExpansorHasta = DArbolEx_Skin::ExpansorResaltado;
+				ExpansorHasta = _Arbol->Skin.ExpansorResaltado;
 				break;
 			case DArbolEx_TransicionExpansor_Presionado:
-				ExpansorHasta = DArbolEx_Skin::ExpansorPresionado;
+				ExpansorHasta = _Arbol->Skin.ExpansorPresionado;
 				break;
 		}
 
@@ -97,83 +97,83 @@ namespace DWL {
 		COLORREF TextoHasta = 0, SombraHasta = 0, FondoHasta = 0;
 		switch (nTransicion) {
 			case DArbolEx_TransicionNodo_Normal:
-				TextoHasta  = DArbolEx_Skin::TextoNodoNormal;
-				SombraHasta = DArbolEx_Skin::TextoNodoSombra;
-				if (_Arbol->_MouseDentro == TRUE) FondoHasta  = DBarraScrollEx_Skin::FondoResaltado;
-				else                              FondoHasta  = DBarraScrollEx_Skin::FondoNormal;
+				TextoHasta  = _Arbol->Skin.TextoNodoNormal;
+				SombraHasta = _Arbol->Skin.TextoNodoSombra;
+				if (_Arbol->_MouseDentro == TRUE) FondoHasta  = _Arbol->SkinScroll.FondoResaltado;
+				else                              FondoHasta  = _Arbol->SkinScroll.FondoNormal;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Normal)\n", Texto.c_str());
 				#endif			
 				break;
 			case DArbolEx_TransicionNodo_Resaltado:
-				TextoHasta  = DArbolEx_Skin::TextoNodoResaltado;
-				SombraHasta = DArbolEx_Skin::TextoNodoSombra;
-				FondoHasta  = DArbolEx_Skin::FondoNodoResaltado;
+				TextoHasta  = _Arbol->Skin.TextoNodoResaltado;
+				SombraHasta = _Arbol->Skin.TextoNodoSombra;
+				FondoHasta  = _Arbol->Skin.FondoNodoResaltado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Resaltado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_Seleccionado:
-				TextoHasta  = DArbolEx_Skin::TextoNodoSeleccionado;
-				SombraHasta = DArbolEx_Skin::TextoNodoSeleccionadoSombra;
-				FondoHasta  = DArbolEx_Skin::FondoNodoSeleccionado;
+				TextoHasta  = _Arbol->Skin.TextoNodoSeleccionado;
+				SombraHasta = _Arbol->Skin.TextoNodoSeleccionadoSombra;
+				FondoHasta  = _Arbol->Skin.FondoNodoSeleccionado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Seleccionado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_SeleccionadoResaltado :
-				TextoHasta  = DArbolEx_Skin::TextoNodoSeleccionadoResaltado;
-				SombraHasta = DArbolEx_Skin::TextoNodoSeleccionadoSombra;
-				FondoHasta  = DArbolEx_Skin::FondoNodoSeleccionadoResaltado;
+				TextoHasta  = _Arbol->Skin.TextoNodoSeleccionadoResaltado;
+				SombraHasta = _Arbol->Skin.TextoNodoSeleccionadoSombra;
+				FondoHasta  = _Arbol->Skin.FondoNodoSeleccionadoResaltado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Seleccionado resaltado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_SeleccionadoPresionado :
-				TextoHasta  = DArbolEx_Skin::TextoNodoPresionado;
-				SombraHasta = DArbolEx_Skin::TextoNodoSeleccionadoSombra;
-				FondoHasta  = DArbolEx_Skin::FondoNodoPresionado;
+				TextoHasta  = _Arbol->Skin.TextoNodoPresionado;
+				SombraHasta = _Arbol->Skin.TextoNodoSeleccionadoSombra;
+				FondoHasta  = _Arbol->Skin.FondoNodoPresionado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Seleccionado presionado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_SubSeleccionado:
-				TextoHasta  = DArbolEx_Skin::TextoNodoSubSeleccionado;
-				SombraHasta = DArbolEx_Skin::TextoNodoSubSeleccionadoSombra;
-				FondoHasta  = DArbolEx_Skin::FondoNodoSubSeleccionado;
+				TextoHasta  = _Arbol->Skin.TextoNodoSubSeleccionado;
+				SombraHasta = _Arbol->Skin.TextoNodoSubSeleccionadoSombra;
+				FondoHasta  = _Arbol->Skin.FondoNodoSubSeleccionado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 				Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> SubSeleccionado resaltado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_SubSeleccionadoResaltado:
-				TextoHasta  = DArbolEx_Skin::TextoNodoSubSeleccionadoResaltado;
-				SombraHasta = DArbolEx_Skin::TextoNodoSubSeleccionadoSombra;
-				FondoHasta  = DArbolEx_Skin::FondoNodoSubSeleccionadoResaltado;
+				TextoHasta  = _Arbol->Skin.TextoNodoSubSeleccionadoResaltado;
+				SombraHasta = _Arbol->Skin.TextoNodoSubSeleccionadoSombra;
+				FondoHasta  = _Arbol->Skin.FondoNodoSubSeleccionadoResaltado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> SubSeleccionado resaltado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_SubSeleccionadoPresionado:
-				TextoHasta  = DArbolEx_Skin::TextoNodoPresionado;
-				SombraHasta = DArbolEx_Skin::TextoNodoSeleccionadoSombra;
-				FondoHasta  = DArbolEx_Skin::FondoNodoPresionado;
+				TextoHasta  = _Arbol->Skin.TextoNodoPresionado;
+				SombraHasta = _Arbol->Skin.TextoNodoSeleccionadoSombra;
+				FondoHasta  = _Arbol->Skin.FondoNodoPresionado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> SubSeleccionado presionado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_Desactivado:
-				TextoHasta  = DArbolEx_Skin::TextoNodoDesactivado;
-				SombraHasta = DArbolEx_Skin::TextoNodoSombra;
-				if (_Arbol->_MouseDentro == TRUE) FondoHasta  = DBarraScrollEx_Skin::FondoResaltado;
-				else                              FondoHasta  = DBarraScrollEx_Skin::FondoNormal;
+				TextoHasta  = _Arbol->Skin.TextoNodoDesactivado;
+				SombraHasta = _Arbol->Skin.TextoNodoSombra;
+				if (_Arbol->_MouseDentro == TRUE) FondoHasta  = _Arbol->SkinScroll.FondoResaltado;
+				else                              FondoHasta  = _Arbol->SkinScroll.FondoNormal;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Desactivado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_DesactivadoResaltado	:
-				TextoHasta  = DArbolEx_Skin::TextoNodoDesactivado;
-				SombraHasta = DArbolEx_Skin::TextoNodoSombra;
-				FondoHasta  = DArbolEx_Skin::FondoNodoResaltado;
+				TextoHasta  = _Arbol->Skin.TextoNodoDesactivado;
+				SombraHasta = _Arbol->Skin.TextoNodoSombra;
+				FondoHasta  = _Arbol->Skin.FondoNodoResaltado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Desactivado resaltado)\n", Texto.c_str());
 				#endif
@@ -195,25 +195,25 @@ namespace DWL {
 		if (_Activado == TRUE) {
 			if (Seleccionado == TRUE) {
 				if (_SubSeleccionado == TRUE) {					
-					_ColorTexto			= DArbolEx_Skin::TextoNodoSubSeleccionado;
-					_ColorTextoSombra	= DArbolEx_Skin::TextoNodoSubSeleccionadoSombra;
-					_ColorFondo			= DArbolEx_Skin::FondoNodoSubSeleccionado;;
+					_ColorTexto			= _Arbol->Skin.TextoNodoSubSeleccionado;
+					_ColorTextoSombra	= _Arbol->Skin.TextoNodoSubSeleccionadoSombra;
+					_ColorFondo			= _Arbol->Skin.FondoNodoSubSeleccionado;;
 				}
 				else {
-					_ColorTexto			= DArbolEx_Skin::TextoNodoSeleccionado;
-					_ColorTextoSombra	= DArbolEx_Skin::TextoNodoSeleccionadoSombra;
-					_ColorFondo			= DArbolEx_Skin::FondoNodoSeleccionado;
+					_ColorTexto			= _Arbol->Skin.TextoNodoSeleccionado;
+					_ColorTextoSombra	= _Arbol->Skin.TextoNodoSeleccionadoSombra;
+					_ColorFondo			= _Arbol->Skin.FondoNodoSeleccionado;
 				}
 			}
 			else {
-				_ColorTexto			= DArbolEx_Skin::TextoNodoNormal;
-				_ColorTextoSombra	= DArbolEx_Skin::TextoNodoSombra;
+				_ColorTexto			= _Arbol->Skin.TextoNodoNormal;
+				_ColorTextoSombra	= _Arbol->Skin.TextoNodoSombra;
 				_ColorFondo			= _Arbol->_ColorFondo;
 			}
 		}
 		else {
-			_ColorTexto			= DArbolEx_Skin::TextoNodoDesactivado;
-			_ColorTextoSombra	= DArbolEx_Skin::TextoNodoSombra;
+			_ColorTexto			= _Arbol->Skin.TextoNodoDesactivado;
+			_ColorTextoSombra	= _Arbol->Skin.TextoNodoSombra;
 			_ColorFondo			= _Arbol->_ColorFondo;
 		}
 		

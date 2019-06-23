@@ -10,34 +10,34 @@ namespace DWL {
 
 	class DEdicionTextoEx_Skin {
 	  public:
-							DEdicionTextoEx_Skin(void) { };
-		static COLORREF     FondoNormal;
-		static COLORREF     FondoResaltado;
-		static COLORREF     FondoPresionado;
-		static COLORREF     FondoDesactivado;
-		static COLORREF     Texto;
-		static COLORREF     TextoSombra;
-		static COLORREF     TextoResaltado;
-		static COLORREF     TextoResaltadoSombra;
-		static COLORREF     TextoPresionado;
-		static COLORREF     TextoPresionadoSombra;
-		static COLORREF     TextoDesactivado;
-		static COLORREF     TextoDesactivadoSombra;
-		static COLORREF     BordeNormal;
-		static COLORREF     BordeResaltado;
-		static COLORREF     BordePresionado;							
-		static COLORREF     Seleccion;
-		static COLORREF     SeleccionTexto;
-		static COLORREF     SeleccionTextoSombra;
+					 DEdicionTextoEx_Skin(void);
+		COLORREF     FondoNormal;
+		COLORREF     FondoResaltado;
+		COLORREF     FondoPresionado;
+		COLORREF     FondoDesactivado;
+		COLORREF     Texto;
+		COLORREF     TextoSombra;
+		COLORREF     TextoResaltado;
+		COLORREF     TextoResaltadoSombra;
+		COLORREF     TextoPresionado;
+		COLORREF     TextoPresionadoSombra;
+		COLORREF     TextoDesactivado;
+		COLORREF     TextoDesactivadoSombra;
+		COLORREF     BordeNormal;
+		COLORREF     BordeResaltado;
+		COLORREF     BordePresionado;							
+		COLORREF     Seleccion;
+		COLORREF     SeleccionTexto;
+		COLORREF     SeleccionTextoSombra;
 
-		static COLORREF     Cursor;
-							// Fuente
-		static int			FuenteTam;
-		static std::wstring	FuenteNombre;
-		static BOOL         FuenteNegrita;
-		static BOOL         FuenteCursiva;
-		static BOOL         FuenteSubrayado;
-		static BOOL			FuenteSombraTexto;
+		COLORREF     Cursor;
+					 // Fuente
+		int			 FuenteTam;
+		std::wstring FuenteNombre;
+		BOOL         FuenteNegrita;
+		BOOL         FuenteCursiva;
+		BOOL         FuenteSubrayado;
+		BOOL	 	 FuenteSombraTexto;
 	};
 
 
@@ -86,6 +86,7 @@ namespace DWL {
 //		BOOL                        TextoEditable;
 		DEdicionTextoEx_Entrada		Entrada;		// Tipo de entrada permitida para el usuario
 		DEdicionTextoEx_Alineacion	Alineacion;
+		DEdicionTextoEx_Skin        Skin;
 	  protected:
 		const BOOL                 _EntradaPermitida(const wchar_t Caracter); // Determina si el caracter introducido es válido para el tipo de entrada actual
 		void					   _Evento_Pintar(void);

@@ -14,31 +14,32 @@ namespace DWL {
 
 	class DListaEx_Skin {
 	  public:
-							DListaEx_Skin(void) { }
-							// Colores para el fondo (OJO los colores del fondo y del borde del control están en DBarraSroll_Skin)
-		static COLORREF     FondoItemNormal;
-		static COLORREF     FondoItemResaltado;
-		static COLORREF     FondoItemSeleccionado;
-		static COLORREF     FondoItemSeleccionadoResaltado;
-		static COLORREF     FondoItemPresionado;
-							// Color para el borde del item marcado
-		static COLORREF     BordeItemMarcado;
-							// Colores para el texto
-		static COLORREF     TextoItemNormal;
-		static COLORREF     TextoItemResaltado;
-		static COLORREF     TextoItemSombra;
-		static COLORREF     TextoItemSeleccionado;
-		static COLORREF     TextoItemSeleccionadoSombra;
-		static COLORREF     TextoItemSeleccionadoResaltado;
-		static COLORREF     TextoItemPresionado;
-							// Fuente
-		static int			FuenteTam;
-		static std::wstring	FuenteNombre;
-		static BOOL         FuenteNegrita;
-		static BOOL         FuenteCursiva;
-		static BOOL         FuenteSubrayado;
-		static BOOL			FuenteSombraTexto;
+						DListaEx_Skin(void);
+						// Colores para el fondo (OJO los colores del fondo y del borde del control están en DBarraSroll_Skin)
+		COLORREF		FondoItemNormal;
+		COLORREF		FondoItemResaltado;
+		COLORREF		FondoItemSeleccionado;
+		COLORREF		FondoItemSeleccionadoResaltado;
+		COLORREF		FondoItemPresionado;
+						// Color para el borde del item marcado
+		COLORREF		BordeItemMarcado;
+						// Colores para el texto
+		COLORREF		TextoItemNormal;
+		COLORREF		TextoItemResaltado;
+		COLORREF		TextoItemSombra;
+		COLORREF		TextoItemSeleccionado;
+		COLORREF		TextoItemSeleccionadoSombra;
+		COLORREF		TextoItemSeleccionadoResaltado;
+		COLORREF		TextoItemPresionado;
+						// Fuente
+		int				FuenteTam;
+		std::wstring	FuenteNombre;
+		BOOL			FuenteNegrita;
+		BOOL			FuenteCursiva;
+		BOOL			FuenteSubrayado;
+		BOOL			FuenteSombraTexto;
 	};
+
 
 	#define DLISTAEX_MOSTRARDEBUG	FALSE
 
@@ -201,6 +202,7 @@ namespace DWL {
 		LRESULT CALLBACK								GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 		DFuente			                                Fuente;
+		DListaEx_Skin                                   Skin;
 
 	  protected:
 		

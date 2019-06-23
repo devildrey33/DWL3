@@ -24,39 +24,39 @@ namespace DWL {
 
 	class DArbolEx_Skin {
 	  public :
-							DArbolEx_Skin(void) { }
-							// Colores del fondo para los nodos (OJO el color del fondo del arbol está en (DBarraScrollEx_Skin::FondoNormal / DBarraScrollEx_Skin::FondoResaltado)
-		static COLORREF     FondoNodoResaltado;
-		static COLORREF     FondoNodoSeleccionado;
-		static COLORREF     FondoNodoSeleccionadoResaltado;
-		static COLORREF     FondoNodoSubSeleccionado;
-		static COLORREF     FondoNodoSubSeleccionadoResaltado;
-		static COLORREF     FondoNodoPresionado;
-							// Color del borde del nodo marcado
-		static COLORREF     BordeNodoMarcado;
-							// Colores para el expansor
-		static COLORREF     ExpansorNormal;
-		static COLORREF     ExpansorResaltado;
-		static COLORREF     ExpansorPresionado;
-							// Colores para el texto
-		static COLORREF     TextoNodoNormal;
-		static COLORREF     TextoNodoResaltado;
-		static COLORREF     TextoNodoDesactivado;
-		static COLORREF     TextoNodoSombra;
-		static COLORREF     TextoNodoSeleccionado;
-		static COLORREF     TextoNodoSeleccionadoSombra;
-		static COLORREF     TextoNodoSeleccionadoResaltado;
-		static COLORREF     TextoNodoSubSeleccionado;
-		static COLORREF     TextoNodoSubSeleccionadoSombra;
-		static COLORREF     TextoNodoSubSeleccionadoResaltado;
-		static COLORREF     TextoNodoPresionado;
-							// Fuente
-		static int			FuenteTam;
-		static std::wstring	FuenteNombre;
-		static BOOL         FuenteNegrita;
-		static BOOL         FuenteCursiva;
-		static BOOL         FuenteSubrayado;
-		static BOOL			FuenteSombraTexto;
+						DArbolEx_Skin(void);
+						// Colores del fondo para los nodos (OJO el color del fondo del arbol está en (DBarraScrollEx_Skin::FondoNormal / DBarraScrollEx_Skin::FondoResaltado)
+		COLORREF		FondoNodoResaltado;
+		COLORREF		FondoNodoSeleccionado;
+		COLORREF		FondoNodoSeleccionadoResaltado;
+		COLORREF		FondoNodoSubSeleccionado;
+		COLORREF		FondoNodoSubSeleccionadoResaltado;
+		COLORREF		FondoNodoPresionado;
+						// Color del borde del nodo marcado
+		COLORREF		BordeNodoMarcado;
+						// Colores para el expansor
+		COLORREF		ExpansorNormal;
+		COLORREF		ExpansorResaltado;
+		COLORREF		ExpansorPresionado;
+						// Colores para el texto
+		COLORREF		TextoNodoNormal;
+		COLORREF		TextoNodoResaltado;
+		COLORREF		TextoNodoDesactivado;
+		COLORREF		TextoNodoSombra;
+		COLORREF		TextoNodoSeleccionado;
+		COLORREF		TextoNodoSeleccionadoSombra;
+		COLORREF		TextoNodoSeleccionadoResaltado;
+		COLORREF		TextoNodoSubSeleccionado;
+		COLORREF		TextoNodoSubSeleccionadoSombra;
+		COLORREF		TextoNodoSubSeleccionadoResaltado;
+		COLORREF		TextoNodoPresionado;
+						// Fuente
+		int				FuenteTam;
+		std::wstring	FuenteNombre;
+		BOOL			FuenteNegrita;
+		BOOL			FuenteCursiva;
+		BOOL			FuenteSubrayado;
+		BOOL			FuenteSombraTexto;
 	};
 
 	enum DArbolEx_PosicionNodo {
@@ -203,6 +203,7 @@ namespace DWL {
 
 		LRESULT CALLBACK								GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+		DArbolEx_Skin									Skin;
 	  protected:		
 		DArbolEx_Expansor							   _ExpansorPorDefecto;
 														// Valor que determina si hay que recalcular los tamaños antes de pintar
