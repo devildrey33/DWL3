@@ -282,7 +282,24 @@ namespace DWL {
 		#endif*/
 	};
 
-
+	void DArbolEx::ActualizarSkin(void) {
+		DBarraScrollEx::ActualizarSkin();
+		DArbolEx_Nodo *Tmp = &_Raiz;
+		while (Tmp != NULL) {
+			Tmp->_ColorExpansor = Skin.ExpansorNormal;
+			if (Tmp->Seleccionado == FALSE) {
+				Tmp->_ColorTexto		= Skin.TextoNodoNormal;
+				Tmp->_ColorTextoSombra	= Skin.TextoNodoSombra;
+				Tmp->_ColorFondo		= SkinScroll.FondoNormal;
+			}
+			else {
+				Tmp->_ColorTexto		= Skin.TextoNodoSeleccionado;
+				Tmp->_ColorTextoSombra	= Skin.TextoNodoSeleccionadoSombra;
+				Tmp->_ColorFondo		= Skin.FondoNodoSeleccionado;
+			}
+			Tmp = BuscarNodoSiguiente(Tmp);
+		}
+	}
 
 	void DArbolEx::Pintar(HDC hDC) {
 		// Compruebo si hay que recalcular los valores del arbol antes de pintar

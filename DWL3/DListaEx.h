@@ -203,7 +203,7 @@ namespace DWL {
 
 		DFuente			                                Fuente;
 		DListaEx_Skin                                   Skin;
-
+		void                                            ActualizarSkin(void);
 	  protected:
 		
 														// Eventos internos

@@ -204,6 +204,7 @@ namespace DWL {
 		LRESULT CALLBACK								GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 		DArbolEx_Skin									Skin;
+		void                                            ActualizarSkin(void);
 	  protected:		
 		DArbolEx_Expansor							   _ExpansorPorDefecto;
 														// Valor que determina si hay que recalcular los tamaños antes de pintar

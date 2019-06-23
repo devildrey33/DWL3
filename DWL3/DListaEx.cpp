@@ -141,6 +141,23 @@ namespace DWL {
 		return Ret;
 	}
 
+	void DListaEx::ActualizarSkin(void) {
+		DBarraScrollEx::ActualizarSkin();
+		for (size_t i = 0; i < _Items.size(); i++) {
+			if (_Items[i]->Seleccionado == TRUE) {
+				_Items[i]->_ColorTexto			= Skin.TextoItemSeleccionado;
+				_Items[i]->_ColorTextoSombra	= Skin.TextoItemSeleccionadoSombra;
+				_Items[i]->_ColorFondo			= Skin.FondoItemSeleccionado;
+			}
+			else {
+				_Items[i]->_ColorTexto			= Skin.TextoItemNormal;
+				_Items[i]->_ColorTextoSombra	= Skin.TextoItemSombra;
+				_Items[i]->_ColorFondo			= Skin.FondoItemNormal;
+			}
+		}
+	}
+
+
 	void DListaEx::Repintar(const BOOL nForzar) {
 		if (_Repintar == FALSE)	_Repintar = nForzar;
 		if (IsWindowVisible(_hWnd) == FALSE) return;

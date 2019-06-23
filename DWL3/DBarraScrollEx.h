@@ -97,6 +97,8 @@ namespace DWL {
 		void                        PintarBorde(RECT *Recta, HDC hDC);
 
 		DBarraScrollEx_Skin			SkinScroll;
+		virtual void                ActualizarSkin(void);
+
 	  protected:
 		void					   _PintarBarraScrollEx(HDC hDC, RECT &RectaScroll, RECT &RectaBarra, const COLORREF pColorBarra, const COLORREF pColorFondo);
 		const float				   _CalcularPosScrollH(const UINT nTam, const int nPos);

@@ -12,12 +12,12 @@ namespace DWL {
 		BarraScrollResaltado	(COLOR_SCROLL_BARRA_RESALTADO),
 		BarraScrollPresionado	(COLOR_SCROLL_BARRA_PRESIONADO),
 		// Colores del orde del control
-		BordeNormal				(COLOR_BORDE),
-		BordeResaltado			(COLOR_BORDE_RESALTADO),
+		BordeNormal				(COLOR_SCROLL_BORDE),
+		BordeResaltado			(COLOR_SCROLL_BORDE_RESALTADO),
 	//	COLORREF    DBarraScrollEx_Skin::BordePresionado		= COLOR_BORDE_PRESIONADO;
 		// Colores del fondo del control
-		FondoNormal				(COLOR_FONDO_CLARO),
-		FondoResaltado			(COLOR_FONDO_CLARO_RESALTADO) {
+		FondoNormal				(COLOR_SCROLL_CONTROL_FONDO),
+		FondoResaltado			(COLOR_SCROLL_CONTROL_FONDO_RESALTADO) {
 	}
 
 
@@ -36,6 +36,15 @@ namespace DWL {
 
 
 	DBarraScrollEx::~DBarraScrollEx(void) {
+	}
+
+	void DBarraScrollEx::ActualizarSkin(void) {
+		_ColorBorde  = SkinScroll.BordeNormal;
+		_ColorFondoV = SkinScroll.FondoScrollNormal;
+		_ColorFondoH = SkinScroll.FondoScrollNormal;
+		_ColorBarraV = SkinScroll.BarraScrollNormal;
+		_ColorBarraH = SkinScroll.BarraScrollNormal;
+		_ColorFondo  = SkinScroll.FondoNormal;
 	}
 
 	void DBarraScrollEx::PintarBorde(RECT *Recta, HDC hDC) {
