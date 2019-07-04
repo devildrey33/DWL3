@@ -10,8 +10,8 @@
 #include "DEventoTeclado.h"
 #include "DEventoMouseRueda.h"
 
-namespace DWL {
 
+namespace DWL {
 	class DListaEx_Skin {
 	  public:
 						DListaEx_Skin(void);
@@ -102,52 +102,16 @@ namespace DWL {
 															return nItem;
 														};
 
-		/*
-														// Agrega un item personalizado (por defecto es del tipo DListaEx_Item) para iconos de los recursos
-		template <class TItem = DListaEx_Item> TItem   *AgregarItem(const INT_PTR nIconoRecursos, const INT_PTR PosicionFila = DLISTAEX_POSICION_FIN, const TCHAR *nTxt = NULL, ...) {
-															TItem  *nItem = new TItem();
-															DWL::DIcono Ico(nIconoRecursos, DLISTAEX_TAMICONO, DLISTAEX_TAMICONO);
-															//DListaIconos_Icono *TmpIco = DListaIconos::AgregarIconoRecursos(nIconoRecursos, DLISTAEX_TAMICONO, DLISTAEX_TAMICONO);
-															va_list Marker;
-															va_start(Marker, nTxt);
-															_AgregarItem(nItem, Ico, PosicionFila, nTxt, Marker);
-															va_end(Marker);
-															return nItem;
-														};
-
-														// Agrega un item personalizado (por defecto es del tipo DListaEx_Item) para iconos del sistema
-		template <class TItem = DListaEx_Item> TItem   *AgregarItem(const GUID nIconoKnownFolder, const INT_PTR PosicionFila = DLISTAEX_POSICION_FIN, const TCHAR *nTxt = NULL, ...) {
-															TItem  *nItem = new TItem();
-															DWL::DIcono Ico(nIconoKnownFolder, DLISTAEX_TAMICONO, DLISTAEX_TAMICONO);
-															//DListaIconos_Icono *TmpIco = DListaIconos::AgregarIconoKnownFolder(nIconoKnownFolder, DLISTAEX_TAMICONO, DLISTAEX_TAMICONO);
-															va_list Marker;
-															va_start(Marker, nTxt);
-															_AgregarItem(nItem, Ico, PosicionFila, nTxt, Marker);
-															va_end(Marker);
-															return nItem;
-														};
-
-														// Agrega un item personalizado (por defecto es del tipo DListaEx_Item) para iconos especificos de un path
-		template <class TItem = DListaEx_Item> TItem   *AgregarItem(const wchar_t *nPathIcono, const int nPosIcono = 0, const INT_PTR PosicionFila = DLISTAEX_POSICION_FIN, const TCHAR *nTxt = NULL, ...) {
-															TItem  *nItem = new TItem();
-															DWL::DIcono Ico(nPathIcono, DLISTAEX_TAMICONO, DLISTAEX_TAMICONO, nPosIcono);
-															//DListaIconos_Icono *TmpIco = DListaIconos::AgregarIconoExterno(nPathIcono, DLISTAEX_TAMICONO, DLISTAEX_TAMICONO, nPosIcono);
-															va_list Marker;
-															va_start(Marker, nTxt);
-															_AgregarItem(nItem, Ico, PosicionFila, nTxt, Marker);
-															va_end(Marker);
-															return nItem;
-														};*/
 
 		void											EliminarItem(const LONG_PTR ePosItem);
 		void											EliminarItem(DListaEx_Item *eItem);
 		const LONG_PTR									EliminarItemsSeleccionados(void);
 		void											EliminarTodosLosItems(void);
 														// Acceso a los DListaEx_Item
-		inline DListaEx_Item                           *Item(const LONG_PTR iPos) { if (iPos == -1)            { return NULL; }	return _Items[static_cast<unsigned int>(iPos)]; }
-		inline DListaEx_Item                           *ItemResaltado(void)	  	  { if (_ItemResaltado == -1)  { return NULL; }	return _Items[static_cast<unsigned int>(_ItemResaltado)]; };
-		inline DListaEx_Item                           *ItemPresionado(void)	  { if (_ItemPresionado == -1) { return NULL; }	return _Items[static_cast<unsigned int>(_ItemPresionado)]; };
-		inline DListaEx_Item                           *ItemMarcado(void)		  { if (_ItemMarcado == -1)    { return NULL; }	return _Items[static_cast<unsigned int>(_ItemMarcado)]; };
+		inline DListaEx_Item                           *Item(const LONG_PTR iPos) { if (iPos == -1)            { return NULL; }	return _Items[static_cast<size_t>(iPos)]; }
+		inline DListaEx_Item                           *ItemResaltado(void)	  	  { if (_ItemResaltado == -1)  { return NULL; }	return _Items[static_cast<size_t>(_ItemResaltado)]; };
+		inline DListaEx_Item                           *ItemPresionado(void)	  { if (_ItemPresionado == -1) { return NULL; }	return _Items[static_cast<size_t>(_ItemPresionado)]; };
+		inline DListaEx_Item                           *ItemMarcado(void)		  { if (_ItemMarcado == -1)    { return NULL; }	return _Items[static_cast<size_t>(_ItemMarcado)]; };
 		void											ItemMarcado(DListaEx_Item *NuevoItemMarcado, const BOOL nRepintar = FALSE);
 														// Devuelve la posición del DListaEx_Item que está dentro de esta lista
 		const LONG_PTR                                  ItemPos(DListaEx_Item *pItem);
@@ -184,7 +148,6 @@ namespace DWL {
 		virtual void									Evento_MouseSoltado(DEventoMouse &DatosMouse)													{ };
 		virtual void                                    Evento_MouseRueda(DEventoMouseRueda &DatosMouse)												{ };
 		virtual void									Evento_MouseDobleClick(DEventoMouse &DatosMouse)												{ };
-
 
 		virtual void                                    Evento_TeclaPresionada(DEventoTeclado &DatosTeclado)											{ };
 		virtual void                                    Evento_TeclaSoltada(DEventoTeclado &DatosTeclado)												{ };
@@ -250,7 +213,6 @@ namespace DWL {
 		void                                           _CalcularItemsPagina(const size_t TamPagina);
 		void                                           _CalcularPintarIconos(void);
 
-//		DListaEx_Item                                 *_AgregarItem(DListaEx_Item *nItem, DIcono &nIcono, const INT_PTR PosicionFila, const TCHAR *nTxt, va_list Marker);
 		DListaEx_Item                                 *_AgregarItem(DListaEx_Item *nItem, DIcono &nIcono, const INT_PTR PosicionFila, std::initializer_list<std::wstring> Textos);
 		std::vector<DListaEx_Item *>                   _Items;
 		std::vector<DListaEx_Columna *>                _Columnas;

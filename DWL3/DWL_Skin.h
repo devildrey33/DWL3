@@ -194,7 +194,7 @@ ____                       ______
 #define COLOR_SCROLL_OSCURO_FONDO_PRESIONADO			COLOR_FONDO_PRESIONADO
 #define COLOR_SCROLL_OSCURO_BARRA						RGB(80, 80, 80)
 #define COLOR_SCROLL_OSCURO_BARRA_RESALTADO				RGB(120, 120, 120)
-#define COLOR_SCROLL_OSCURO_BARRA_PRESIONADO			RGB( 40,  40,  40)
+#define COLOR_SCROLL_OSCURO_BARRA_PRESIONADO			RGB(180, 180,  180)
 #define COLOR_SCROLL_OSCURO_BORDE						COLOR_BORDE_POPUP
 #define COLOR_SCROLL_OSCURO_BORDE_RESALTADO				COLOR_BORDE_POPUP
 #define COLOR_SCROLL_OSCURO_CONTROL_FONDO				COLOR_FONDO
@@ -298,7 +298,7 @@ ____                       ______
 // Oscura ///////////////////
 /////////////////////////////
 #define COLOR_LISTA_OSCURA_FONDO							COLOR_FONDO
-#define COLOR_LISTA_OSCURA_FONDO_RESALTADO					COLOR_FONDO_RESALTADO
+#define COLOR_LISTA_OSCURA_FONDO_RESALTADO					RGB( 66,  64,  69)
 #define COLOR_LISTA_OSCURA_FONDO_PRESIONADO					COLOR_FONDO_PRESIONADO		// Solo cuando MostrarSeleccion está desactivado
 
 #define COLOR_LISTA_OSCURA_TEXTO							RGB(225, 225, 225)
@@ -359,7 +359,7 @@ ______    _ _      _          _______        _        ______
 #define COLOR_MENU_BORDE                            COLOR_BORDE_POPUP
 #define COLOR_MENU_SEPARADOR                        COLOR_BORDE_POPUP
 #define COLOR_MENU_FONDO							COLOR_BOTON
-#define COLOR_MENU_FONDO_RESALTADO					COLOR_FONDO_RESALTADO			// No utilizar COLOR_BOTON_RESALTADO, ya que las barras del menú utilizan ese color
+#define COLOR_MENU_FONDO_RESALTADO					RGB(86,84,89)			// No utilizar COLOR_BOTON_RESALTADO, ya que las barras del menú utilizan ese color
 #define COLOR_MENU_FONDO_PRESIONADO					COLOR_BOTON_PRESIONADO
 #define COLOR_MENU_TEXTO							COLOR_BOTON_TEXTO
 #define COLOR_MENU_TEXTO_SOMBRA						COLOR_BOTON_TEXTO_SOMBRA
