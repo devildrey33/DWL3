@@ -1318,8 +1318,13 @@ namespace DWL {
 			if (static_cast<LONG_PTR>(_Items.size()) > _ItemResaltado)	_Items[_ItemResaltado]->_TransicionNormal();
 		}
 
+/*		for (size_t i = 0; i < _Items.size(); i++) {
+			_Items[i]->_AniTransicion.Terminar();
+		}*/
+
 		_MouseDentro = FALSE;
-		_ItemResaltado = -1;
+		_ItemResaltado  = -1;
+		_ItemUResaltado = -1;
 		Evento_MouseSaliendo();
 		if (nRepintar == TRUE) Repintar();
 	}

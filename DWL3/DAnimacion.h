@@ -40,50 +40,6 @@ namespace DWL {
 			RGB			// COLORREF
 		};
 
-//		class ValorFinal;
-		// Objeto que contiene el valor inicial de la animación (el valor puede ser decimál o un color)
-/*		class Valor {
-		  public :
-									Valor(void) : _Tipo(Valor_Tipo::Decimal), _Valor(NULL), _Color(NULL), _Propio(FALSE)				{ }
-									// Constructores que crean sus punteros
-									Valor(const COLORREF nCol) : _Tipo(Valor_Tipo::RGB), _Valor(NULL), _Color(NULL), _Propio(TRUE)		{
-										_Color = new COLORREF; *_Color = nCol; 
-									}
-									Valor(const double nValor) : _Tipo(Valor_Tipo::Decimal), _Valor(NULL), _Color(NULL), _Propio(TRUE)	{ 
-										_Valor = new double; *_Valor = nValor; 
-									}
-									// Constructores por "referencia"
-									Valor(COLORREF *nCol) : _Tipo(RGB), _Color(nCol), _Valor(NULL), _Propio(FALSE)						{ }
-									Valor(double *nValor) : _Tipo(Valor_Tipo::Decimal), _Valor(nValor), _Color(NULL), _Propio(FALSE)	{ }
-								   ~Valor(void)																							{ 
-									   if (_Propio == TRUE) { 
-										   if (_Valor != NULL) { delete _Valor; } 
-										   if (_Color != NULL) { delete _Color; } 
-									   }
-								   }
-			inline void				operator = (const COLORREF nCol)	{ *_Color = nCol; }
-			inline void				operator = (const double nValor)	{ *_Valor = nValor; }
-			inline void				operator = (const Valor &nValor)	{ if (_Tipo == Valor_Tipo::Decimal) { *_Valor = *nValor._Valor; } else { *_Color = *nValor._Color;  } }
-			inline bool             operator == (const Valor &Comp)		{ return (_Tipo == Valor_Tipo::Decimal) ? (*_Valor == *Comp._Valor) : (*_Color == *Comp._Color); }
-			inline bool             operator != (const Valor &Comp)		{ return (_Tipo == Valor_Tipo::Decimal) ? (*_Valor != *Comp._Valor) : (*_Color != *Comp._Color); }
-			inline bool             operator < (const Valor &Comp)		{ return (_Tipo == Valor_Tipo::Decimal) ? (*_Valor < *Comp._Valor) : (*_Color < *Comp._Color); }
-			inline bool             operator > (const Valor &Comp)		{ return (_Tipo == Valor_Tipo::Decimal) ? (*_Valor > *Comp._Valor) : (*_Color > *Comp._Color); }
-			inline bool             operator < (const double &Comp)		{ return (*_Valor < Comp); }
-			inline bool             operator > (const double &Comp)		{ return (*_Valor > Comp); }
-			inline const double		operator() (void)					{ return *_Valor; }
-			inline const BYTE		R(void)								{ return GetRValue(*_Color); };
-			inline const BYTE		G(void)								{ return GetGValue(*_Color); };
-			inline const BYTE		B(void)								{ return GetBValue(*_Color); };
-			inline const double		Decimal(void)			  			{ return *_Valor; }
-			inline const COLORREF	Color(void)							{ return *_Color; }
-			inline const Valor_Tipo Tipo(void)							{ return _Tipo; };
-		  protected:
-			double                *_Valor;
-			COLORREF              *_Color;
-			Valor_Tipo             _Tipo;
-			BOOL                   _Propio;
-			friend class ValorFinal;
-		};*/
 
 		// Objeto que contiene un valor de la animación (el valor puede ser decimál o un color)
 		class Valor {
@@ -113,34 +69,6 @@ namespace DWL {
 			Valor_Tipo             _Tipo;
 		};
 
-		// Objeto que contiene el valor final de la animación (el valor puede ser decimál o un color)
-		// El valor final tiene que ser un puntero ya que puede cambiar durante la animación
-/*		class ValorFinal {
-		  public :
-									ValorFinal(void) : _Tipo(Valor_Tipo::Decimal), _Valor(NULL), _Color(NULL)				{ }
-									ValorFinal(COLORREF *nCol) : _Tipo(RGB), _Color(nCol), _Valor(NULL)						{ }
-									ValorFinal(double *nValor) : _Tipo(Valor_Tipo::Decimal), _Valor(nValor), _Color(NULL)	{ }
-			inline void				operator = (COLORREF *nCol)																{ _Color = nCol; }
-			inline void				operator = (double *nValor)																{ _Valor = nValor; }
-			inline bool             operator == (const Valor& Comp)												{ return (_Tipo == Valor_Tipo::Decimal) ? (*_Valor == Comp._Valor) : (*_Color == Comp._Color); }
-			inline bool             operator != (const Valor& Comp)												{ return (_Tipo == Valor_Tipo::Decimal) ? (*_Valor != Comp._Valor) : (*_Color != Comp._Color); }
-			inline bool             operator < (const Valor &Comp)															{ return (_Tipo == Valor_Tipo::Decimal) ? (*_Valor < Comp._Valor) : (*_Color < Comp._Color); }
-			inline bool             operator > (const Valor &Comp)															{ return (_Tipo == Valor_Tipo::Decimal) ? (*_Valor > Comp._Valor) : (*_Color > Comp._Color); }
-			inline bool             operator < (const double &Comp)															{ return (*_Valor < Comp); }
-			inline bool             operator > (const double &Comp)															{ return (*_Valor > Comp); }
-			inline const double		operator() (void)																		{ return *_Valor; }
-			inline const BYTE		R(void)																					{ return GetRValue(*_Color); };
-			inline const BYTE		G(void)																					{ return GetGValue(*_Color); };
-			inline const BYTE		B(void)																					{ return GetBValue(*_Color); };
-			inline const double		Decimal(void)			  																{ return *_Valor; }
-			inline const COLORREF	Color(void)																				{ return *_Color; }
-			inline const Valor_Tipo Tipo(void)																				{ return _Tipo; };
-		  protected:
-			double                *_Valor;
-			COLORREF              *_Color;
-			Valor_Tipo             _Tipo;
-			friend class Valor;
-		};*/
 
 		// Objeto que contiene el valor origen y el valor destino de la animación
 		class Dato {

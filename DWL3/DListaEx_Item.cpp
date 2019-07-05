@@ -36,6 +36,8 @@ namespace DWL {
 		_Transicion((Seleccionado == TRUE) ? DListaEx_TransicionItem_SeleccionadoResaltado : DListaEx_TransicionItem_Resaltado);
 	}
 
+//	void DListaEx_Item::_
+
 	void DListaEx_Item::_Transicion(const DListaEx_TransicionItem nTransicion) {
 		DWORD Duracion = DhWnd::TiempoAnimaciones;
 		if (_AniTransicion.Animando() == TRUE) {
