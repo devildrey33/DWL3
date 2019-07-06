@@ -119,6 +119,7 @@ namespace DWL {
 		COLORREF                       _ColorTextoSombra;
 		COLORREF                       _ColorFondo;
 		DAnimacion                     _AniTransicion;
+		DArbolEx_TransicionNodo		   _UltimaTransicion;
 
 		friend class DArbolEx;
 		friend class DExplorarDirectoriosEx;

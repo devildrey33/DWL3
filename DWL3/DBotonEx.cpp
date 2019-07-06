@@ -234,40 +234,53 @@ namespace DWL {
 			Debug_Escribir_Varg(L"DBotonEx::Transicion %d\n", static_cast<int>(nTransicion));
 		#endif	
 
-		COLORREF FondoHasta = 0, BordeHasta = 0, TextoHasta = 0;
+		COLORREF *FondoHasta = 0, *BordeHasta = 0, *TextoHasta = 0;
 		switch (nTransicion) {
 			case DBotonEx_Transicion_Normal:
-				FondoHasta = Skin.FondoNormal;
-				BordeHasta = Skin.BordeNormal;
-				TextoHasta = Skin.TextoNormal;
+				FondoHasta = &Skin.FondoNormal;
+				BordeHasta = &Skin.BordeNormal;
+				TextoHasta = &Skin.TextoNormal;
 				break;
 			case DBotonEx_Transicion_Resaltado:
-				FondoHasta = Skin.FondoResaltado;
-				BordeHasta = Skin.BordeResaltado;
-				TextoHasta = Skin.TextoResaltado;
+				FondoHasta = &Skin.FondoResaltado;
+				BordeHasta = &Skin.BordeResaltado;
+				TextoHasta = &Skin.TextoResaltado;
 				break;
 			case DBotonEx_Transicion_Presionado:
-				FondoHasta = Skin.FondoPresionado;
-				BordeHasta = Skin.BordePresionado;
-				TextoHasta = Skin.TextoPresionado;
+				FondoHasta = &Skin.FondoPresionado;
+				BordeHasta = &Skin.BordePresionado;
+				TextoHasta = &Skin.TextoPresionado;
 				break;
 			case DBotonEx_Transicion_Marcado:
-				FondoHasta = Skin.FondoMarcado;
-				BordeHasta = Skin.BordeNormal;
-				TextoHasta = Skin.TextoNormal;
+				FondoHasta = &Skin.FondoMarcado;
+				BordeHasta = &Skin.BordeNormal;
+				TextoHasta = &Skin.TextoNormal;
 				break;
 			case DBotonEx_Transicion_Desactivado:
-				FondoHasta = Skin.FondoNormal;
-				BordeHasta = Skin.BordeNormal;
-				TextoHasta = Skin.TextoDesactivado;
+				FondoHasta = &Skin.FondoNormal;
+				BordeHasta = &Skin.BordeNormal;
+				TextoHasta = &Skin.TextoDesactivado;
 				break;
 		}
-		_AniTransicion.Iniciar(_ColorFondo, FondoHasta, _ColorBorde, BordeHasta, _ColorTexto, TextoHasta, Duracion, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+
+		_AniTransicion.Iniciar(
+			{ _ColorFondo, _ColorBorde, _ColorTexto }, 
+			{ FondoHasta, BordeHasta, TextoHasta }, 
+			Duracion, 
+			[=](DAnimacion::Valores& Datos, const BOOL Terminado) {
+				_ColorFondo = Datos[0].Color();
+				_ColorBorde = Datos[1].Color();
+				_ColorTexto = Datos[2].Color();
+				Repintar();
+			}
+		);
+
+/*		_AniTransicion.Iniciar(_ColorFondo, FondoHasta, _ColorBorde, BordeHasta, _ColorTexto, TextoHasta, Duracion, [=](DAnimacion2::Valores &Datos, const BOOL Terminado) {
 			_ColorFondo = Datos[0].Color();
 			_ColorBorde = Datos[1].Color();
 			_ColorTexto = Datos[2].Color();
 			Repintar();
-		});
+		});*/
 	}
 
 	void DBotonEx::_Evento_MousePresionado(const WPARAM wParam, const LPARAM lParam, const int Boton) {

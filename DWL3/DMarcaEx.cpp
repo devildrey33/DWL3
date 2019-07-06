@@ -129,35 +129,35 @@ namespace DWL {
 			_AniTransicion.Terminar();
 		}
 
-		COLORREF FondoHasta = 0, BordeHasta = 0, TextoHasta = 0, FondoMarcaHasta = 0;
+		COLORREF *FondoHasta = 0, *BordeHasta = 0, *TextoHasta = 0, *FondoMarcaHasta = 0;
 		switch (nTransicion) {
 			case DMarcaEx_Transicion_Normal:
-				FondoHasta		= Skin.FondoNormal;
-				FondoMarcaHasta = Skin.FondoMarcaNormal;
-				BordeHasta		= Skin.BordeNormal;
-				TextoHasta		= Skin.TextoNormal;
+				FondoHasta		= &Skin.FondoNormal;
+				FondoMarcaHasta = &Skin.FondoMarcaNormal;
+				BordeHasta		= &Skin.BordeNormal;
+				TextoHasta		= &Skin.TextoNormal;
 				break;
 			case DMarcaEx_Transicion_Resaltado:
-				FondoHasta		= Skin.FondoResaltado;
-				FondoMarcaHasta = Skin.FondoMarcaResaltado;
-				BordeHasta		= Skin.BordeResaltado;
-				TextoHasta		= Skin.TextoResaltado;
+				FondoHasta		= &Skin.FondoResaltado;
+				FondoMarcaHasta = &Skin.FondoMarcaResaltado;
+				BordeHasta		= &Skin.BordeResaltado;
+				TextoHasta		= &Skin.TextoResaltado;
 				break;
 			case DMarcaEx_Transicion_Presionado:
-				FondoHasta		= Skin.FondoPresionado;
-				FondoMarcaHasta = Skin.FondoMarcaPresionado;
-				BordeHasta		= Skin.BordePresionado;
-				TextoHasta		= Skin.TextoPresionado;
+				FondoHasta		= &Skin.FondoPresionado;
+				FondoMarcaHasta = &Skin.FondoMarcaPresionado;
+				BordeHasta		= &Skin.BordePresionado;
+				TextoHasta		= &Skin.TextoPresionado;
 				break;
 			case DMarcaEx_Transicion_Desactivado:
-				FondoHasta		= Skin.FondoNormal;
-				FondoMarcaHasta = Skin.FondoMarcaDesactivado;
-				BordeHasta		= Skin.BordeNormal;
-				TextoHasta		= Skin.TextoDesactivado;
+				FondoHasta		= &Skin.FondoNormal;
+				FondoMarcaHasta = &Skin.FondoMarcaDesactivado;
+				BordeHasta		= &Skin.BordeNormal;
+				TextoHasta		= &Skin.TextoDesactivado;
 				break;
 		}
 
-		_AniTransicion.Iniciar(_ColorFondo, FondoHasta, _ColorFondoMarca, FondoMarcaHasta, _ColorBorde, BordeHasta, _ColorTexto, TextoHasta, Duracion, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+		_AniTransicion.Iniciar({ _ColorFondo, _ColorFondoMarca, _ColorBorde, _ColorTexto }, { FondoHasta, FondoMarcaHasta, BordeHasta, TextoHasta }, Duracion, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorFondo		 = Datos[0].Color();
 			_ColorFondoMarca = Datos[1].Color();
 			_ColorBorde		 = Datos[2].Color();

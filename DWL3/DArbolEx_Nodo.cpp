@@ -6,7 +6,7 @@
 namespace DWL {
 
 	DArbolEx_Nodo::DArbolEx_Nodo(void) :	_Siguiente(NULL), _Anterior(NULL), _Ancestros(0), _AnchoTexto(0), _Arbol(NULL), _Padre(NULL),
-											_ColorExpansor(0), _ColorTexto(0), _ColorTextoSombra(0), _ColorFondo(0),
+											_ColorExpansor(0), _ColorTexto(0), _ColorTextoSombra(0), _ColorFondo(0), _UltimaTransicion(DArbolEx_TransicionNodo_Normal),
 											Expandido(FALSE), Seleccionado(FALSE), _SubSeleccionado(FALSE), _MostrarExpansor(DArbolEx_MostrarExpansor_Auto), _Activado(TRUE) {
 	};
 	
@@ -68,20 +68,20 @@ namespace DWL {
 			_AniTransicionExpansor.Terminar();
 		}
 
-		COLORREF ExpansorHasta = 0;
+		COLORREF *ExpansorHasta = 0;
 		switch (nTransicion) {
 			case DArbolEx_TransicionExpansor_Normal:
-				ExpansorHasta = _Arbol->Skin.ExpansorNormal;
+				ExpansorHasta = &_Arbol->Skin.ExpansorNormal;
 				break;
 			case DArbolEx_TransicionExpansor_Resaltado:
-				ExpansorHasta = _Arbol->Skin.ExpansorResaltado;
+				ExpansorHasta = &_Arbol->Skin.ExpansorResaltado;
 				break;
 			case DArbolEx_TransicionExpansor_Presionado:
-				ExpansorHasta = _Arbol->Skin.ExpansorPresionado;
+				ExpansorHasta = &_Arbol->Skin.ExpansorPresionado;
 				break;
 		}
 
-		_AniTransicionExpansor.Iniciar(_ColorExpansor, ExpansorHasta, Duracion, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+		_AniTransicionExpansor.Iniciar({ _ColorExpansor }, { ExpansorHasta }, Duracion, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorExpansor = Datos[0].Color();
 			_Arbol->RepintarAni();
 		});
@@ -93,97 +93,103 @@ namespace DWL {
 			Duracion = _AniTransicion.TiempoActual();
 			_AniTransicion.Terminar();
 		}
+		_UltimaTransicion = nTransicion;
 
-		COLORREF TextoHasta = 0, SombraHasta = 0, FondoHasta = 0;
+		COLORREF *TextoHasta = 0, *SombraHasta = 0, *FondoHasta = 0;
 		switch (nTransicion) {
 			case DArbolEx_TransicionNodo_Normal:
-				TextoHasta  = _Arbol->Skin.TextoNodoNormal;
-				SombraHasta = _Arbol->Skin.TextoNodoSombra;
-				if (_Arbol->_MouseDentro == TRUE) FondoHasta  = _Arbol->SkinScroll.FondoResaltado;
-				else                              FondoHasta  = _Arbol->SkinScroll.FondoNormal;
+				TextoHasta  = &_Arbol->Skin.TextoNodoNormal;
+				SombraHasta = &_Arbol->Skin.TextoNodoSombra;
+				FondoHasta  = &_Arbol->_ColorFondo;				
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Normal)\n", Texto.c_str());
 				#endif			
 				break;
 			case DArbolEx_TransicionNodo_Resaltado:
-				TextoHasta  = _Arbol->Skin.TextoNodoResaltado;
-				SombraHasta = _Arbol->Skin.TextoNodoSombra;
-				FondoHasta  = _Arbol->Skin.FondoNodoResaltado;
+				TextoHasta  = &_Arbol->Skin.TextoNodoResaltado;
+				SombraHasta = &_Arbol->Skin.TextoNodoSombra;
+				FondoHasta  = &_Arbol->Skin.FondoNodoResaltado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Resaltado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_Seleccionado:
-				TextoHasta  = _Arbol->Skin.TextoNodoSeleccionado;
-				SombraHasta = _Arbol->Skin.TextoNodoSeleccionadoSombra;
-				FondoHasta  = _Arbol->Skin.FondoNodoSeleccionado;
+				TextoHasta  = &_Arbol->Skin.TextoNodoSeleccionado;
+				SombraHasta = &_Arbol->Skin.TextoNodoSeleccionadoSombra;
+				FondoHasta  = &_Arbol->Skin.FondoNodoSeleccionado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Seleccionado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_SeleccionadoResaltado :
-				TextoHasta  = _Arbol->Skin.TextoNodoSeleccionadoResaltado;
-				SombraHasta = _Arbol->Skin.TextoNodoSeleccionadoSombra;
-				FondoHasta  = _Arbol->Skin.FondoNodoSeleccionadoResaltado;
+				TextoHasta  = &_Arbol->Skin.TextoNodoSeleccionadoResaltado;
+				SombraHasta = &_Arbol->Skin.TextoNodoSeleccionadoSombra;
+				FondoHasta  = &_Arbol->Skin.FondoNodoSeleccionadoResaltado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Seleccionado resaltado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_SeleccionadoPresionado :
-				TextoHasta  = _Arbol->Skin.TextoNodoPresionado;
-				SombraHasta = _Arbol->Skin.TextoNodoSeleccionadoSombra;
-				FondoHasta  = _Arbol->Skin.FondoNodoPresionado;
+				TextoHasta  = &_Arbol->Skin.TextoNodoPresionado;
+				SombraHasta = &_Arbol->Skin.TextoNodoSeleccionadoSombra;
+				FondoHasta  = &_Arbol->Skin.FondoNodoPresionado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Seleccionado presionado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_SubSeleccionado:
-				TextoHasta  = _Arbol->Skin.TextoNodoSubSeleccionado;
-				SombraHasta = _Arbol->Skin.TextoNodoSubSeleccionadoSombra;
-				FondoHasta  = _Arbol->Skin.FondoNodoSubSeleccionado;
+				TextoHasta  = &_Arbol->Skin.TextoNodoSubSeleccionado;
+				SombraHasta = &_Arbol->Skin.TextoNodoSubSeleccionadoSombra;
+				FondoHasta  = &_Arbol->Skin.FondoNodoSubSeleccionado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 				Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> SubSeleccionado resaltado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_SubSeleccionadoResaltado:
-				TextoHasta  = _Arbol->Skin.TextoNodoSubSeleccionadoResaltado;
-				SombraHasta = _Arbol->Skin.TextoNodoSubSeleccionadoSombra;
-				FondoHasta  = _Arbol->Skin.FondoNodoSubSeleccionadoResaltado;
+				TextoHasta  = &_Arbol->Skin.TextoNodoSubSeleccionadoResaltado;
+				SombraHasta = &_Arbol->Skin.TextoNodoSubSeleccionadoSombra;
+				FondoHasta  = &_Arbol->Skin.FondoNodoSubSeleccionadoResaltado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> SubSeleccionado resaltado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_SubSeleccionadoPresionado:
-				TextoHasta  = _Arbol->Skin.TextoNodoPresionado;
-				SombraHasta = _Arbol->Skin.TextoNodoSeleccionadoSombra;
-				FondoHasta  = _Arbol->Skin.FondoNodoPresionado;
+				TextoHasta  = &_Arbol->Skin.TextoNodoPresionado;
+				SombraHasta = &_Arbol->Skin.TextoNodoSeleccionadoSombra;
+				FondoHasta  = &_Arbol->Skin.FondoNodoPresionado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> SubSeleccionado presionado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_Desactivado:
-				TextoHasta  = _Arbol->Skin.TextoNodoDesactivado;
-				SombraHasta = _Arbol->Skin.TextoNodoSombra;
-				if (_Arbol->_MouseDentro == TRUE) FondoHasta  = _Arbol->SkinScroll.FondoResaltado;
-				else                              FondoHasta  = _Arbol->SkinScroll.FondoNormal;
+				TextoHasta  = &_Arbol->Skin.TextoNodoDesactivado;
+				SombraHasta = &_Arbol->Skin.TextoNodoSombra;
+				if (_Arbol->_MouseDentro == TRUE) FondoHasta  = &_Arbol->SkinScroll.FondoResaltado;
+				else                              FondoHasta  = &_Arbol->SkinScroll.FondoNormal;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Desactivado)\n", Texto.c_str());
 				#endif
 				break;
 			case DArbolEx_TransicionNodo_DesactivadoResaltado	:
-				TextoHasta  = _Arbol->Skin.TextoNodoDesactivado;
-				SombraHasta = _Arbol->Skin.TextoNodoSombra;
-				FondoHasta  = _Arbol->Skin.FondoNodoResaltado;
+				TextoHasta  = &_Arbol->Skin.TextoNodoDesactivado;
+				SombraHasta = &_Arbol->Skin.TextoNodoSombra;
+				FondoHasta  = &_Arbol->Skin.FondoNodoResaltado;
 				#if DARBOLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir_Varg(L"DArbolEx_Nodo::_Transicion('%s' -> Desactivado resaltado)\n", Texto.c_str());
 				#endif
 				break;
 		}
 
-		_AniTransicion.Iniciar(_ColorTexto, TextoHasta, _ColorTextoSombra, SombraHasta, _ColorFondo, FondoHasta, Duracion, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+		_AniTransicion.Iniciar({ _ColorTexto, _ColorTextoSombra, _ColorFondo }, { TextoHasta, SombraHasta, FondoHasta }, Duracion, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorTexto			= Datos[0].Color();
 			_ColorTextoSombra	= Datos[1].Color();
 			_ColorFondo			= Datos[2].Color();
+
+			if (Terminado == TRUE && _UltimaTransicion == DArbolEx_TransicionNodo_Normal) {
+				if (_Arbol->_MouseDentro == TRUE) _ColorFondo = _Arbol->SkinScroll.FondoResaltado;
+				else                              _ColorFondo = _Arbol->SkinScroll.FondoNormal;
+			}
+
 			_Arbol->RepintarAni();
 		});
 	}

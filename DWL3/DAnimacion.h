@@ -5,110 +5,136 @@
 
 #include <functional>
 #include <vector>
-//#define PI 3.14159265359f
+#define DANIMACION_PI 3.14159265359f
 
-#define FUNCION_POR_DEFECTO			DWL::DAnimacion::FuncionesTiempo::CircularInOut
+#define DANIMACION_FUNCION_POR_DEFECTO		DWL::DAnimacion::FuncionesTiempo::CircularInOut
 
 
 namespace DWL {
 
 	class DAnimacion {
 	   public:
-		   typedef  const double(*FuncionTiempo)(const double);
+		// Tipo para guardar una función de tiempo
+		typedef  const double(*FuncionTiempo)(const double);
+
 		// Funciones de tiempo estaticas 
 		class FuncionesTiempo {
 		  public :
 									FuncionesTiempo(void)					{ };
 			                       ~FuncionesTiempo(void)					{ };
 			  static const double	Linear(const double nTiempo)			{ return nTiempo; };
-			  static const double	SinIn(const double nTiempo)				{ return 1.0f - cos(nTiempo * PI / 2.0f); };
-			  static const double	SinOut(const double nTiempo)			{ return sin(nTiempo * PI / 2.0f); };
-			  static const double	SinInOut(const double nTiempo)			{ return -0.5f * (cos(nTiempo * PI / 2.0f) - 1.0f); };
+			  static const double	SinIn(const double nTiempo)				{ return 1.0f - cos(nTiempo * DANIMACION_PI / 2.0f); };
+			  static const double	SinOut(const double nTiempo)			{ return sin(nTiempo * DANIMACION_PI / 2.0f); };
+			  static const double	SinInOut(const double nTiempo)			{ return -0.5f * (cos(nTiempo * DANIMACION_PI / 2.0f) - 1.0f); };
 			  static const double   CubicInOut(const double nTiempo)		{ return (nTiempo < 0.5f) ? 4.0f * nTiempo * nTiempo * nTiempo : 0.5f * pow(2.0f * nTiempo - 2.0f, 3.0f) + 1.0f; }
-			  static const double   CircularInOut(const double nTiempo)		{ return (nTiempo < 0.5f) ? 0.5f * (1.0f - sqrt(1.0f - 4.0f * nTiempo * nTiempo)) : 0.5f * (sqrt((3.0f - 2.0f * nTiempo) * (2.0f * nTiempo - 1.0f)) + 1.0f); }
-			
-			  static const double   BounceIn(const double nTiempo) {
-										return (nTiempo < 0.5f) ? 
-											nTiempo * 3.0f : 
-											1.5f - (nTiempo * 0.5f);
-									}
-			  static const double   PI;
+			  static const double   CircularInOut(const double nTiempo)		{ return (nTiempo < 0.5f) ? 0.5f * (1.0f - sqrt(1.0f - 4.0f * nTiempo * nTiempo)) : 0.5f * (sqrt((3.0f - 2.0f * nTiempo) * (2.0f * nTiempo - 1.0f)) + 1.0f); }			
+			  static const double   BounceIn(const double nTiempo)			{ return (nTiempo < 0.5f) ? nTiempo * 3.0f : 	1.5f - (nTiempo * 0.5f); }
 		};
 
+		// Tipo de valor para la animación (valor o color)
 		enum Valor_Tipo {
 			Decimal,	// double
 			RGB			// COLORREF
 		};
 
+/*		enum Valor_TipoInterno {
+			PorCopia,		// Copia el valor Hasta en una nueva variable.
+			PorReferencia	// Guarda un puntero al valor Hasta proporcionado.
+		};*/
 
-		// Objeto que contiene un valor de la animación (el valor puede ser decimál o un color)
+
+		// Objeto que contiene un valor por referéncia para la animación (el valor puede ser decimál o un color)
+		// Esta clase puede guardar un valor por cópia o por referencia mediante punteros, y tiene prioridad para los punteros de forma que si el puntero no es NULL lo devolvera antes que el valor por copìa.
 		class Valor {
-		  public :
-									Valor(void) : _Tipo(Valor_Tipo::Decimal), _Valor(0.0f), _Color(0)					{ }
-									Valor(const COLORREF nCol) : _Tipo(RGB), _Color(nCol), _Valor(0.0f)					{ }
-									Valor(const double nValor) : _Tipo(Valor_Tipo::Decimal), _Valor(nValor), _Color(0)	{ }
-			inline void				operator = (const COLORREF nCol)										{ _Color = nCol; }
-			inline void				operator = (const double nValor)										{ _Valor = nValor; }
-			inline bool             operator == (const Valor& Comp)											{ return (_Tipo == Valor_Tipo::Decimal) ? (_Valor == Comp._Valor) : (_Color == Comp._Color); }
-			inline bool             operator != (const Valor& Comp)											{ return (_Tipo == Valor_Tipo::Decimal) ? (_Valor != Comp._Valor) : (_Color != Comp._Color); }
-			inline bool             operator < (const Valor &Comp)											{ return (_Tipo == Valor_Tipo::Decimal) ? (_Valor < Comp._Valor) : (_Color < Comp._Color); }
-			inline bool             operator > (const Valor &Comp)											{ return (_Tipo == Valor_Tipo::Decimal) ? (_Valor > Comp._Valor) : (_Color > Comp._Color); }
-			inline bool             operator < (const double &Comp)											{ return (_Valor < Comp); }
-			inline bool             operator > (const double &Comp)											{ return (_Valor > Comp); }
-			inline const double		operator() (void)														{ return _Valor; }
-			inline const BYTE		R(void)																	{ return GetRValue(_Color); };
-			inline const BYTE		G(void)																	{ return GetGValue(_Color); };
-			inline const BYTE		B(void)																	{ return GetBValue(_Color); };
-			inline const double		Decimal(void)			  												{ return _Valor; }
-			inline const long		Entero(void)			  												{ return static_cast<long>(_Valor); }
-			inline const COLORREF	Color(void)																{ return _Color; }
-			inline const Valor_Tipo Tipo(void)																{ return _Tipo; };
-		  protected:
-			double                 _Valor;
-			COLORREF               _Color;
-			Valor_Tipo             _Tipo;
+		  public :					// Constructor vacio
+									Valor(void)							: _Tipo(Valor_Tipo::Decimal), _ValorC(0),		_ColorC(0),		_Valor(NULL),	_Color(NULL)		{ }
+									// Constructores para valores
+									Valor(const COLORREF nCol)			: _Tipo(Valor_Tipo::RGB)    , _ValorC(0),		_ColorC(nCol),	_Valor(NULL),	_Color(NULL)		{ }
+									Valor(const double nValor)			: _Tipo(Valor_Tipo::Decimal), _ValorC(nValor),  _ColorC(0),		_Valor(NULL),	_Color(NULL)		{ }
+									// Constructores para punteros
+									Valor(COLORREF* nCol)				: _Tipo(Valor_Tipo::RGB)	, _ValorC(0),		_ColorC(0),		_Valor(NULL),	_Color(nCol)		{ }
+									Valor(double* nValor)				: _Tipo(Valor_Tipo::Decimal), _ValorC(0),		_ColorC(0),		_Valor(nValor), _Color(NULL)		{ }
+
+									// Asignan valores
+			inline void				operator = (const COLORREF nCol)	{ _ColorC = nCol;		}
+			inline void				operator = (const double nValor)	{ _ValorC = nValor; 	}
+									// Asignan punteros
+			inline void				operator = (COLORREF *nCol)			{ _Color = nCol;		}
+			inline void				operator = (double *nValor)			{ _Valor = nValor;		}
+
+									// Compara objetos Valor
+			bool					operator == (Valor& Comp);
+			bool					operator != (Valor& Comp);
+			bool					operator < (Valor& Comp);
+			bool					operator > (Valor& Comp);
+
+									// Compara valores decimales
+			inline bool             operator < (const double& Comp)		{ return (_Valor == NULL) ? (_ValorC < Comp) : (*_Valor < Comp); }
+			inline bool             operator > (const double& Comp)		{ return (_Valor == NULL) ? (_ValorC > Comp) : (*_Valor > Comp); }
+
+									// Devuelve el valor decimal
+			inline const double		operator() (void)					{ return (_Valor == NULL) ? _ValorC : *_Valor; }
+									// Devuelven los canales RGB
+			inline const BYTE		R(void)								{ return (_Color == NULL) ? GetRValue(_ColorC) : GetRValue(*_Color); };
+			inline const BYTE		G(void)								{ return (_Color == NULL) ? GetGValue(_ColorC) : GetGValue(*_Color); };
+			inline const BYTE		B(void)								{ return (_Color == NULL) ? GetBValue(_ColorC) : GetBValue(*_Color); };
+									// Devuelven los valores
+			inline const double		Decimal(void)			  			{ return (_Valor == NULL) ? _ValorC : *_Valor; }
+			inline const long		Entero(void)			  			{ return (_Valor == NULL) ? static_cast<long>(_ValorC) : static_cast<long>(*_Valor); }
+									// Devuelve el color
+			inline const COLORREF	Color(void)							{ return (_Color == NULL) ? _ColorC : *_Color; }
+									// Devuelve el tipo de dato (valor o color)
+			inline const Valor_Tipo Tipo(void)							{ return _Tipo; };
+		  protected:		
+			double                *_Valor;	// Puntero a un valor (Si es NULL hay que mirar el _ValorC)
+			COLORREF              *_Color;	// Puntero a un color (Si es NULL hay que mirar el _ColorC)
+			double                 _ValorC;	// Valor por cópia
+			COLORREF               _ColorC;	// Color por cópia
+			Valor_Tipo             _Tipo;	// Tipo (valor o color)
 		};
 
 
 		// Objeto que contiene el valor origen y el valor destino de la animación
 		class Dato {
 	   		public:
-										Dato(void) : Funcion(NULL)																															{ };
-										Dato(const double nDesde,	double nHasta,		FuncionTiempo nFuncion = FuncionesTiempo::Linear) : Desde(nDesde), Hasta(nHasta), Funcion(nFuncion)	{ };
-										Dato(const COLORREF nDesde, COLORREF nHasta,	FuncionTiempo nFuncion = FuncionesTiempo::Linear) : Desde(nDesde), Hasta(nHasta), Funcion(nFuncion)	{ };
-//										Dato(const double nDesde,	double *nHasta,		FuncionTiempo nFuncion = FuncionesTiempo::Linear) : Desde(nDesde), Hasta(nHasta), Funcion(nFuncion)	{ };
-//										Dato(const COLORREF nDesde, COLORREF *nHasta,	FuncionTiempo nFuncion = FuncionesTiempo::Linear) : Desde(nDesde), Hasta(nHasta), Funcion(nFuncion)	{ };
-//										Dato(double *nDesde,		double *nHasta,		FuncionTiempo nFuncion = FuncionesTiempo::Linear) : Desde(nDesde), Hasta(nHasta), Funcion(nFuncion)	{ };
-//										Dato(COLORREF *nDesde,		COLORREF *nHasta,	FuncionTiempo nFuncion = FuncionesTiempo::Linear) : Desde(nDesde), Hasta(nHasta), Funcion(nFuncion)	{ };
-									   ~Dato(void)																																			{ };
+										Dato(void) : Funcion(NULL)																																{ };
+										Dato(const double    nDesde, double        *nHasta, FuncionTiempo nFuncion = FuncionesTiempo::Linear) : Desde(nDesde), Hasta(nHasta), Funcion(nFuncion)	{ };
+										Dato(const COLORREF  nDesde, COLORREF      *nHasta, FuncionTiempo nFuncion = FuncionesTiempo::Linear) : Desde(nDesde), Hasta(nHasta), Funcion(nFuncion)	{ };
+										Dato(const double    nDesde, const double   nHasta, FuncionTiempo nFuncion = FuncionesTiempo::Linear) : Desde(nDesde), Hasta(nHasta), Funcion(nFuncion)	{ };
+										Dato(const COLORREF  nDesde, const COLORREF nHasta, FuncionTiempo nFuncion = FuncionesTiempo::Linear) : Desde(nDesde), Hasta(nHasta), Funcion(nFuncion)	{ };
+									   ~Dato(void)																																				{ };
 		     Valor						Desde;
 			 Valor						Hasta;
 			 FuncionTiempo				Funcion;
-			 inline const Valor_Tipo	Tipo(void) { return Desde.Tipo(); };
+			 inline const Valor_Tipo	Tipo(void)	{ return Desde.Tipo();	};
 		};
 
-		// Vector da Dato (que contiene Valor Desde, Hasta)
+		// Objeto para almacenar un vector de datos Desde y Hasta
+		// Puedes agregar un valor decimal con las funciones AgregarDecimal, o un color con las funciones AgregarRGB
 		class Datos {
 		   public :
-									Datos(void) { }
-				                   ~Datos(void) { }
-			void                    AgregarRGB(const COLORREF nDesde, const COLORREF nHasta,	FuncionTiempo nFuncion = FuncionesTiempo::Linear) { _Datos.push_back(Dato(nDesde, nHasta, nFuncion)); };
-//			void                    AgregarRGB(const COLORREF nDesde, COLORREF *nHasta,			FuncionTiempo nFuncion = FuncionesTiempo::Linear) { _Datos.push_back(Dato(nDesde, nHasta, nFuncion)); };
-			void                    AgregarDecimal(const double nDesde, const double nHasta,	FuncionTiempo nFuncion = FuncionesTiempo::Linear) { _Datos.push_back(Dato(nDesde, nHasta, nFuncion)); };
-//			void                    AgregarDecimal(const double nDesde, double *nHasta,			FuncionTiempo nFuncion = FuncionesTiempo::Linear) { _Datos.push_back(Dato(nDesde, nHasta, nFuncion)); };
-			inline Dato            &operator [] (const size_t Pos) { return _Datos[Pos]; }
-			inline const size_t     Total(void) { return _Datos.size(); }
+									Datos(void)																							{ }
+				                   ~Datos(void)																							{ }
+									// Funciones para valores por cópia
+			void                    AgregarRGB(COLORREF    nDesde, COLORREF  nHasta, FuncionTiempo nFuncion = FuncionesTiempo::Linear)	{ _Datos.push_back(Dato(nDesde, nHasta, nFuncion)); };
+			void                    AgregarDecimal(double  nDesde, double    nHasta, FuncionTiempo nFuncion = FuncionesTiempo::Linear)	{ _Datos.push_back(Dato(nDesde, nHasta, nFuncion)); };
+									// Funciones para valores Hasta por referéncia
+			void                    AgregarRGB(COLORREF    nDesde, COLORREF *nHasta, FuncionTiempo nFuncion = FuncionesTiempo::Linear)  { _Datos.push_back(Dato(nDesde, nHasta, nFuncion)); };
+			void                    AgregarDecimal(double  nDesde, double   *nHasta, FuncionTiempo nFuncion = FuncionesTiempo::Linear)  { _Datos.push_back(Dato(nDesde, nHasta, nFuncion)); };
+			inline Dato            &operator [] (const size_t Pos)																		{ return _Datos[Pos]; }
+			inline const size_t     Total(void)																							{ return _Datos.size(); }
 		   protected:
 			std::vector<Dato>	   _Datos;
 		};
 
-		// Vector de valores visible
+
+		// Vector de valores actuales de la animación
 		class Valores {
 		   public :
 									Valores(void) { }
 								   ~Valores(void) { }
-			inline Valor           &operator [] (const size_t Pos) { return _Valores[Pos]; }
-			inline void             Resize(const size_t nTam) { _Valores.resize(nTam); }
+			inline Valor           &operator [] (const size_t Pos)	{ return _Valores[Pos];		}
+			inline void             Resize(const size_t nTam)		{ _Valores.resize(nTam);	}
 		   protected :
 			std::vector<Valor>     _Valores;
 		};
@@ -116,22 +142,16 @@ namespace DWL {
 
 													DAnimacion(void);
 		                                           ~DAnimacion(void);
-
-													// Iniciar para un solo valor (desde - hasta)
-		void										Iniciar(const double Desde, const double Hasta, const DWORD Milisegundos, std::function<void(DAnimacion::Valores &, const BOOL)> LambdaCallback, FuncionTiempo Funcion = FUNCION_POR_DEFECTO, const DWORD Intervalo = 16);
-													// Iniciar para dos valores (desde - hasta)
-		void										Iniciar(const double Desde0, const double Hasta0, const double Desde1, const double Hasta1, const DWORD Milisegundos, std::function<void(DAnimacion::Valores &, const BOOL)> LambdaCallback, FuncionTiempo Funcion = FUNCION_POR_DEFECTO);
-													// Iniciar para 1 color
-		void										Iniciar(const COLORREF Desde0, const COLORREF Hasta0, const DWORD Milisegundos, std::function<void(Valores &, const BOOL)> LambdaCallback, FuncionTiempo Funcion = FUNCION_POR_DEFECTO);
-													// Iniciar para 2 colores
-		void										Iniciar(const COLORREF Desde0, const COLORREF Hasta0, const COLORREF Desde1, const COLORREF Hasta1, const DWORD Milisegundos, std::function<void(Valores &, const BOOL)> LambdaCallback, FuncionTiempo Funcion = FUNCION_POR_DEFECTO);
-													// Iniciar para 3 colores
-		void										Iniciar(const COLORREF Desde0, const COLORREF Hasta0, const COLORREF Desde1, const COLORREF Hasta1, const COLORREF Desde2, const COLORREF Hasta2, const DWORD Milisegundos, std::function<void(Valores &, const BOOL)> LambdaCallback, FuncionTiempo Funcion = FUNCION_POR_DEFECTO);
-													// Iniciar para 4 colores
-		void										Iniciar(const COLORREF Desde0, const COLORREF Hasta0, const COLORREF Desde1, const COLORREF Hasta1, const COLORREF Desde2, const COLORREF Hasta2, const COLORREF Desde3, const COLORREF Hasta3, const DWORD Milisegundos, std::function<void(Valores &, const BOOL)> LambdaCallback, FuncionTiempo Funcion = FUNCION_POR_DEFECTO);
-
+												    // Funciones para iniciar la animación con una lista de parámetros del mismo tipo
+		void										Iniciar(std::initializer_list<long>     Desde, std::initializer_list<long>     Hasta, const DWORD Milisegundos, std::function<void(DAnimacion::Valores&, const BOOL)> LambdaCallback, std::initializer_list <FuncionTiempo> FuncionesTiempo = { DANIMACION_FUNCION_POR_DEFECTO }, const DWORD Intervalo = 16);
+		void										Iniciar(std::initializer_list<double>   Desde, std::initializer_list<double>   Hasta, const DWORD Milisegundos, std::function<void(DAnimacion::Valores&, const BOOL)> LambdaCallback, std::initializer_list <FuncionTiempo> FuncionesTiempo = { DANIMACION_FUNCION_POR_DEFECTO }, const DWORD Intervalo = 16);
+		void										Iniciar(std::initializer_list<COLORREF> Desde, std::initializer_list<COLORREF> Hasta, const DWORD Milisegundos, std::function<void(DAnimacion::Valores&, const BOOL)> LambdaCallback, std::initializer_list <FuncionTiempo> FuncionesTiempo = { DANIMACION_FUNCION_POR_DEFECTO }, const DWORD Intervalo = 16);
+												    // Funciones para iniciar la animación con la lista de parámetros Hasta por referéncia (de esta forma puedes modificar el valor Hasta durante la animación)
+		void										Iniciar(std::initializer_list<long>     Desde, std::initializer_list<long *>     Hasta, const DWORD Milisegundos, std::function<void(DAnimacion::Valores&, const BOOL)> LambdaCallback, std::initializer_list <FuncionTiempo> FuncionesTiempo = { DANIMACION_FUNCION_POR_DEFECTO }, const DWORD Intervalo = 16);
+		void										Iniciar(std::initializer_list<double>   Desde, std::initializer_list<double *>   Hasta, const DWORD Milisegundos, std::function<void(DAnimacion::Valores&, const BOOL)> LambdaCallback, std::initializer_list <FuncionTiempo> FuncionesTiempo = { DANIMACION_FUNCION_POR_DEFECTO }, const DWORD Intervalo = 16);
+		void										Iniciar(std::initializer_list<COLORREF> Desde, std::initializer_list<COLORREF *> Hasta, const DWORD Milisegundos, std::function<void(DAnimacion::Valores&, const BOOL)> LambdaCallback, std::initializer_list <FuncionTiempo> FuncionesTiempo = { DANIMACION_FUNCION_POR_DEFECTO }, const DWORD Intervalo = 16);
+													// Funcion para iniciar la animación con una lista de parámetros a medida que puede contener enteros, decimales y colores en la misma lista.
 		void										Iniciar(DAnimacion::Datos &Datos, const DWORD Milisegundos, std::function<void(DAnimacion::Valores &, const BOOL)> LambdaCallback, const DWORD Intervalo = 16);
-//		void                                        Invertir(void);
 		void										Terminar(void);
 		inline const BOOL                           Animando(void) { return (_Timer != NULL); }
 		inline const DWORD							TiempoActual(void) { return _TiempoActual; }
@@ -148,54 +168,6 @@ namespace DWL {
 		Valores                                    _Valores;
 
 	};
-
-	/*
-
-	class DAnimacionColor {
-	   public:
-		// Objeto que contiene el color origen y el color destino de la animación (separado en canales RGB)
-		// En definitiva equivale a animar los 3 canales RGB del color partiendo de un único varlor RGB
-		class Colores {
-	   		public:
-								Colores(void) : Desde(0), Hasta(0) { };
-								Colores(const COLORREF nDesde, const COLORREF nHasta) : Desde(nDesde), Hasta(nHasta) { };
-			                   ~Colores(void) { };
-			inline const BYTE	DesdeR(void) { return GetRValue(Desde); };
-			inline const BYTE	DesdeG(void) { return GetGValue(Desde); };
-			inline const BYTE	DesdeB(void) { return GetBValue(Desde); };
-			inline const BYTE	HastaR(void) { return GetRValue(Hasta); };
-			inline const BYTE	HastaG(void) { return GetGValue(Hasta); };
-			inline const BYTE	HastaB(void) { return GetBValue(Hasta); };
-			COLORREF			Desde;
-			COLORREF			Hasta;
-		};
-																	DAnimacionColor();
-		                                                           ~DAnimacionColor();
-
-																	// Iniciar para un solo valor (desde - hasta)
-		void														Iniciar(const COLORREF Desde, const COLORREF Hasta, const DWORD Milisegundos, std::function<void(std::vector<COLORREF> &, const BOOL)> LambdaCallback);
-																	// Iniciar para dos valores (desde - hasta)
-		void														Iniciar(const COLORREF Desde1, const COLORREF Hasta1, const COLORREF Desde2, const COLORREF Hasta2, const DWORD Milisegundos, std::function<void(std::vector<COLORREF> &, const BOOL)> LambdaCallback);
-																	// Iniciar para tres valores (desde - hasta)
-		void														Iniciar(const COLORREF Desde1, const COLORREF Hasta1, const COLORREF Desde2, const COLORREF Hasta2, const COLORREF Desde3, const COLORREF Hasta3, const DWORD Milisegundos, std::function<void(std::vector<COLORREF> &, const BOOL)> LambdaCallback);
-																	// Iniciar para cuatro valores (desde - hasta)
-		void														Iniciar(const COLORREF Desde1, const COLORREF Hasta1, const COLORREF Desde2, const COLORREF Hasta2, const COLORREF Desde3, const COLORREF Hasta3, const COLORREF Desde4, const COLORREF Hasta4, const DWORD Milisegundos, std::function<void(std::vector<COLORREF> &, const BOOL)> LambdaCallback);
-																	// Iniciar para un vector de valores (cada valor tiene un desde y un hasta)
-		void														Iniciar(std::vector<Colores> &Valores, const DWORD Milisegundos, std::function<void(std::vector<COLORREF> &, const BOOL)> LambdaCallback);
-																	// Invierte la animación (mientras se este ejecutando)
-		void                                                        Invertir(void);
-		void														Terminar(void);
-		inline const BOOL                                           Animando(void) { return (_Timer != NULL);  }
-		inline const DWORD                                          TiempoActual(void) { return _TiempoActual;  }
-	protected:
-		static void CALLBACK									   _TimerProc(PVOID lpParameter, BOOLEAN TimerOrWaitFired);
-		std::function<void(std::vector<COLORREF> &, const BOOL)>   _Callback;
-		HANDLE                                                     _Timer;
-		DWORD                                                      _Duracion;
-		DWORD                                                      _TiempoActual;
-		std::vector<Colores>                                       _Datos;
-		std::vector<COLORREF>                                      _Valores;
-
-	};*/
 };
+
 #endif

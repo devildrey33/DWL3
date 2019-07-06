@@ -351,7 +351,7 @@ namespace DWL {
 		KillTimer(_hWnd, ID_TIMER_CURSOR);
 		// Si se piede el foco, hay que retirar el cursor
 		_AniCursor.Terminar();
-		_AniCursor.Iniciar(_ColorCursor, _ColorFondo, 400, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+		_AniCursor.Iniciar({ _ColorCursor }, { &_ColorFondo }, 400, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorCursor = Datos[0].Color();
 			Repintar();
 		});
@@ -360,13 +360,13 @@ namespace DWL {
 	void DEdicionTextoEx::_Evento_Temporizador(const INT_PTR tID) {
 		// Si es el temporizador del cursor
 		if (tID == ID_TIMER_CURSOR) {			
-			static BOOL CursorVisible = FALSE;
-			COLORREF	Hasta;
+			static BOOL  CursorVisible = FALSE;
+			COLORREF	*Hasta = 0;
 			// Asigno el color final del cursor
-			if (CursorVisible == FALSE) Hasta = Skin.Cursor;
-			else						Hasta = _ColorFondo;
+			if (CursorVisible == FALSE) Hasta = &Skin.Cursor;
+			else						Hasta = &_ColorFondo;
 			_AniCursor.Terminar();
-			_AniCursor.Iniciar(_ColorCursor, Hasta, 400, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+			_AniCursor.Iniciar({ _ColorCursor }, { Hasta }, 400, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 				_ColorCursor = Datos[0].Color();
 				Repintar();
 			});
@@ -383,36 +383,36 @@ namespace DWL {
 			_AniTransicion.Terminar();
 		}
 
-		COLORREF FondoHasta = 0, BordeHasta = 0, TextoHasta = 0, TextoSombraHasta = 0;
+		COLORREF *FondoHasta = 0, *BordeHasta = 0, *TextoHasta = 0, *TextoSombraHasta = 0;
 		switch (nTransicion) {
 			case DMarcaEx_Transicion_Normal:
-				FondoHasta		 = Skin.FondoNormal;
-				BordeHasta		 = Skin.BordeNormal;
-				TextoHasta	 	 = Skin.Texto;
-				TextoSombraHasta = Skin.TextoSombra;
+				FondoHasta		 = &Skin.FondoNormal;
+				BordeHasta		 = &Skin.BordeNormal;
+				TextoHasta	 	 = &Skin.Texto;
+				TextoSombraHasta = &Skin.TextoSombra;
 				break;
 			case DMarcaEx_Transicion_Resaltado:
-				FondoHasta		 = Skin.FondoResaltado;
-				BordeHasta		 = Skin.BordeResaltado;
-				TextoHasta		 = Skin.TextoResaltado;
-				TextoSombraHasta = Skin.TextoResaltadoSombra;
+				FondoHasta		 = &Skin.FondoResaltado;
+				BordeHasta		 = &Skin.BordeResaltado;
+				TextoHasta		 = &Skin.TextoResaltado;
+				TextoSombraHasta = &Skin.TextoResaltadoSombra;
 				break;
 			case DMarcaEx_Transicion_Presionado:
-				FondoHasta		 = Skin.FondoPresionado;
-				BordeHasta	 	 = Skin.BordePresionado;
-				TextoHasta		 = Skin.TextoPresionado;
-				TextoSombraHasta = Skin.TextoPresionadoSombra;
+				FondoHasta		 = &Skin.FondoPresionado;
+				BordeHasta	 	 = &Skin.BordePresionado;
+				TextoHasta		 = &Skin.TextoPresionado;
+				TextoSombraHasta = &Skin.TextoPresionadoSombra;
 				break;
 			case DMarcaEx_Transicion_Desactivado:
-				FondoHasta		 = Skin.FondoDesactivado;
-				BordeHasta		 = Skin.BordeNormal;
-				TextoHasta		 = Skin.TextoDesactivado;
-				TextoSombraHasta = Skin.TextoDesactivadoSombra;
+				FondoHasta		 = &Skin.FondoDesactivado;
+				BordeHasta		 = &Skin.BordeNormal;
+				TextoHasta		 = &Skin.TextoDesactivado;
+				TextoSombraHasta = &Skin.TextoDesactivadoSombra;
 				break;
 		}
 
 
-		_AniTransicion.Iniciar(_ColorFondo, FondoHasta, _ColorBorde, BordeHasta, _ColorTexto, TextoHasta, _ColorTextoSombra, TextoSombraHasta, Duracion, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+		_AniTransicion.Iniciar({ _ColorFondo, _ColorBorde, _ColorTexto, _ColorTextoSombra }, { FondoHasta, BordeHasta, TextoHasta, TextoSombraHasta }, Duracion, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorFondo			= Datos[0].Color();
 			_ColorBorde			= Datos[1].Color();
 			_ColorTexto			= Datos[2].Color();

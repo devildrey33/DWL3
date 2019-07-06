@@ -280,31 +280,31 @@ namespace DWL {
 			_AniTransicion.Terminar();
 		}
 
-		COLORREF FondoHasta = 0, BordeHasta = 0, BarraHasta = 0;
+		COLORREF *FondoHasta = 0, *BordeHasta = 0, *BarraHasta = 0;
 		switch (nTransicion) {
 			case DBarraEx_Transicion_Normal:
-				FondoHasta = Skin.FondoNormal;
-				BarraHasta = Skin.BarraNormal;
-				BordeHasta = Skin.BordeNormal;
+				FondoHasta = &Skin.FondoNormal;
+				BarraHasta = &Skin.BarraNormal;
+				BordeHasta = &Skin.BordeNormal;
 				break;
 			case DBarraEx_Transicion_Resaltado:
-				FondoHasta = Skin.FondoResaltado;
-				BarraHasta = Skin.BarraResaltado;
-				BordeHasta = Skin.BordeResaltado;
+				FondoHasta = &Skin.FondoResaltado;
+				BarraHasta = &Skin.BarraResaltado;
+				BordeHasta = &Skin.BordeResaltado;
 				break;
 			case DBarraEx_Transicion_Presionado:
-				FondoHasta = Skin.FondoPresionado;
-				BarraHasta = Skin.BarraPresionado;
-				BordeHasta = Skin.BordePresionado;
+				FondoHasta = &Skin.FondoPresionado;
+				BarraHasta = &Skin.BarraPresionado;
+				BordeHasta = &Skin.BordePresionado;
 				break;
 			case DBarraEx_Transicion_Desactivado:
-				FondoHasta = Skin.FondoDesactivado;
-				BarraHasta = Skin.BarraDesactivado;
-				BordeHasta = Skin.BordeNormal;
+				FondoHasta = &Skin.FondoDesactivado;
+				BarraHasta = &Skin.BarraDesactivado;
+				BordeHasta = &Skin.BordeNormal;
 				break;
 		}
 
-		_AniTransicion.Iniciar(_ColorFondo, FondoHasta, _ColorBorde, BordeHasta, _ColorBarra, BarraHasta, Duracion, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+		_AniTransicion.Iniciar({ _ColorFondo, _ColorBorde, _ColorBarra }, { FondoHasta, BordeHasta, BarraHasta }, Duracion, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorFondo = Datos[0].Color();
 			_ColorBorde = Datos[1].Color();
 			_ColorBarra = Datos[2].Color();

@@ -306,39 +306,39 @@ namespace DWL {
 			_ScrollV_AniTransicion.Terminar();
 		}
 //		_ColorFondoV = &_ColorFondoV_Real;
-		COLORREF FondoHasta = 0, BarraHasta = 0;
+		COLORREF *FondoHasta = 0, *BarraHasta = 0;
 		switch (nTransicion) {
 			case DBarraScrollEx_Transicion_Normal:
-				FondoHasta = SkinScroll.FondoScrollNormal;
-				BarraHasta = SkinScroll.BarraScrollNormal;
+				FondoHasta = &SkinScroll.FondoScrollNormal;
+				BarraHasta = &SkinScroll.BarraScrollNormal;
 				#if DBARRASCROLLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DBarraScrollEx::ScrollV_Transicion DBarraScrollEx_Transicion_Normal\n");
 				#endif
 				break;
 			case DBarraScrollEx_Transicion_BarraResaltada:
-				FondoHasta = SkinScroll.FondoScrollNormal;
-				BarraHasta = SkinScroll.BarraScrollResaltado;
+				FondoHasta = &SkinScroll.FondoScrollNormal;
+				BarraHasta = &SkinScroll.BarraScrollResaltado;
 				#if DBARRASCROLLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DBarraScrollEx::ScrollV_Transicion DBarraScrollEx_Transicion_BarraResaltada\n");
 				#endif
 				break;
 			case DBarraScrollEx_Transicion_FondoResaltado:
-				FondoHasta = SkinScroll.FondoScrollResaltado;
-				BarraHasta = SkinScroll.BarraScrollNormal;
+				FondoHasta = &SkinScroll.FondoScrollResaltado;
+				BarraHasta = &SkinScroll.BarraScrollNormal;
 				#if DBARRASCROLLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DBarraScrollEx::ScrollV_Transicion DBarraScrollEx_Transicion_FondoResaltado\n");
 				#endif
 				break;
 			case DBarraScrollEx_Transicion_Presionado:
-				FondoHasta = SkinScroll.FondoScrollPresionado;
-				BarraHasta = SkinScroll.BarraScrollPresionado;
+				FondoHasta = &SkinScroll.FondoScrollPresionado;
+				BarraHasta = &SkinScroll.BarraScrollPresionado;
 				#if DBARRASCROLLEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DBarraScrollEx::ScrollV_Transicion DBarraScrollEx_Transicion_Presionado\n");
 				#endif
 				break;
 		}
 
-		_ScrollV_AniTransicion.Iniciar(_ColorFondoV, FondoHasta, _ColorBarraV, BarraHasta, Duracion, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+		_ScrollV_AniTransicion.Iniciar({ _ColorFondoV, _ColorBarraV }, { FondoHasta, BarraHasta }, Duracion, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorFondoV = Datos[0].Color();
 			_ColorBarraV = Datos[1].Color();
 			RepintarAni();
@@ -355,29 +355,29 @@ namespace DWL {
 			_ScrollH_AniTransicion.Terminar();
 		}
 //		_ColorFondoH = &_ColorFondoH_Real;
-		COLORREF FondoHasta = 0, BarraHasta = 0;
+		COLORREF *FondoHasta = 0, *BarraHasta = 0;
 		switch (nTransicion) {
 			case DBarraScrollEx_Transicion_Normal:
-				FondoHasta = SkinScroll.FondoScrollNormal;
-				BarraHasta = SkinScroll.BarraScrollNormal;
+				FondoHasta = &SkinScroll.FondoScrollNormal;
+				BarraHasta = &SkinScroll.BarraScrollNormal;
 				break;
 			case DBarraScrollEx_Transicion_BarraResaltada:
-				FondoHasta = SkinScroll.FondoScrollNormal;
-				BarraHasta = SkinScroll.BarraScrollResaltado;
+				FondoHasta = &SkinScroll.FondoScrollNormal;
+				BarraHasta = &SkinScroll.BarraScrollResaltado;
 				break;
 			case DBarraScrollEx_Transicion_FondoResaltado:
-				FondoHasta = SkinScroll.FondoScrollResaltado;
-				BarraHasta = SkinScroll.BarraScrollNormal;
+				FondoHasta = &SkinScroll.FondoScrollResaltado;
+				BarraHasta = &SkinScroll.BarraScrollNormal;
 				break;
 			case DBarraScrollEx_Transicion_Presionado:
-				FondoHasta = SkinScroll.FondoScrollPresionado;
-				BarraHasta = SkinScroll.BarraScrollPresionado;
+				FondoHasta = &SkinScroll.FondoScrollPresionado;
+				BarraHasta = &SkinScroll.BarraScrollPresionado;
 				break;
 		}
 
-		_ScrollH_AniTransicion.Iniciar(_ColorFondoH, FondoHasta, _ColorBarraH, BarraHasta, Duracion, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+		_ScrollH_AniTransicion.Iniciar({ _ColorFondoH, _ColorBarraH }, { FondoHasta, BarraHasta }, Duracion, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorFondoH	= Datos[0].Color();
-			_ColorBarraH		= Datos[1].Color();
+			_ColorBarraH	= Datos[1].Color();
 			RepintarAni();
 			/*if (Terminado == TRUE) {
 				_ColorFondoH = &_ColorFondo;
@@ -394,19 +394,19 @@ namespace DWL {
 			_Scrolls_AniTransicionBorde.Terminar();
 		}
 
-		COLORREF BordeHasta = 0, FondoHasta = 0;
+		COLORREF *BordeHasta = 0, *FondoHasta = 0;
 		switch (nTransicion) {
 			case DBarraScrollEx_Transicion_Borde_Normal:
-				BordeHasta = SkinScroll.BordeNormal;
-				FondoHasta = SkinScroll.FondoNormal;
+				BordeHasta = &SkinScroll.BordeNormal;
+				FondoHasta = &SkinScroll.FondoNormal;
 				break;
 			case DBarraScrollEx_Transicion_Borde_Resaltado:
-				BordeHasta = SkinScroll.BordeResaltado;
-				FondoHasta = SkinScroll.FondoResaltado;
+				BordeHasta = &SkinScroll.BordeResaltado;
+				FondoHasta = &SkinScroll.FondoResaltado;
 				break;
 		}
 
-		_Scrolls_AniTransicionBorde.Iniciar(_ColorBorde, BordeHasta, _ColorFondo, FondoHasta, Duracion + 25, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+		_Scrolls_AniTransicionBorde.Iniciar({ _ColorBorde, _ColorFondo }, { BordeHasta, FondoHasta }, Duracion + 25, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorBorde = Datos[0].Color();
 			_ColorFondo = Datos[1].Color();
 			if (Terminado == FALSE) RepintarAni();	

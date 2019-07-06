@@ -33,7 +33,7 @@ namespace DWL {
 	DhWnd	*DMenuEx::_hWndDest			= NULL;
 
 
-	DMenuEx::DMenuEx(void) : DWL::DVentana(), _Padre(NULL), _Tipo(DMenuEx_Tipo_Raiz), _ID(0), _Activado(TRUE), _MenuResaltado(NULL), _MenuPresionado(NULL), _MenuDesplegado(NULL), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _BarraPosX(0), _MargenI(0) /*, _AnularMouseMove(NULL)*/ {
+	DMenuEx::DMenuEx(void) : DWL::DVentana(), _Padre(NULL), _Tipo(DMenuEx_Tipo_Raiz), _ID(0), _Activado(TRUE), _MenuResaltado(NULL), _MenuPresionado(NULL), _MenuDesplegado(NULL), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _BarraPosX(0), _MargenI(0), MaxOpacidad(230.0f)/*, _AnularMouseMove(NULL)*/ {
 		_Recta = { 0, 0, 0, 0 };
 		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 	}
@@ -147,7 +147,7 @@ namespace DWL {
 				}
 			}
 			_AniMostrar.Terminar();
-			_AniMostrar.Iniciar(0.0f, 230.0f, DhWnd::TiempoAnimaciones, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+			_AniMostrar.Iniciar({ 0.0f }, { &MaxOpacidad }, DhWnd::TiempoAnimaciones, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 				Opacidad(static_cast<BYTE>(Datos[0].Decimal()));
 			});
 
@@ -605,7 +605,7 @@ namespace DWL {
 			}
 
 			_AniMostrar.Terminar();
-			_AniMostrar.Iniciar(0.0f, 230.0f, DhWnd::TiempoAnimaciones, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+			_AniMostrar.Iniciar({ 0.0f }, { &MaxOpacidad }, DhWnd::TiempoAnimaciones, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 				Opacidad(static_cast<BYTE>(Datos[0].Decimal()));
 			});
 
@@ -713,26 +713,26 @@ namespace DWL {
 			_AniTransicion.Terminar();
 		}
 
-		COLORREF FondoHasta = 0, TextoHasta = 0;
+		COLORREF *FondoHasta = 0, *TextoHasta = 0;
 		switch (nTransicion) {
 			case DMenuEx_Transicion_Normal:
-				FondoHasta = Skin.FondoNormal;
-				TextoHasta = Skin.TextoNormal;
+				FondoHasta = &Skin.FondoNormal;
+				TextoHasta = &Skin.TextoNormal;
 				break;
 			case DMenuEx_Transicion_Resaltado:
-				FondoHasta = Skin.FondoResaltado;
-				TextoHasta = Skin.TextoResaltado;
+				FondoHasta = &Skin.FondoResaltado;
+				TextoHasta = &Skin.TextoResaltado;
 				break;
 			case DMenuEx_Transicion_Presionado:
-				FondoHasta = Skin.FondoPresionado;
-				TextoHasta = Skin.TextoPresionado;
+				FondoHasta = &Skin.FondoPresionado;
+				TextoHasta = &Skin.TextoPresionado;
 				break;
 			case DMenuEx_Transicion_Desactivado:
-				FondoHasta = Skin.FondoNormal;
-				TextoHasta = Skin.TextoDesactivado;
+				FondoHasta = &Skin.FondoNormal;
+				TextoHasta = &Skin.TextoDesactivado;
 				break;
 		}
-		_AniTransicion.Iniciar(_ColorFondo, FondoHasta, _ColorTexto, TextoHasta, Duracion, [=](DAnimacion::Valores &Datos, const BOOL Terminado) {
+		_AniTransicion.Iniciar({ _ColorFondo, _ColorTexto }, { FondoHasta, TextoHasta }, Duracion, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorFondo = Datos[0].Color();
 			_ColorTexto = Datos[1].Color();
 			_Padre->Repintar();

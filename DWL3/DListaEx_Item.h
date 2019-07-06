@@ -54,7 +54,7 @@ namespace DWL {
 		DAnimacion                         _AniTransicion;
 
 		DListaEx                          *_Lista;
-
+		DListaEx_TransicionItem		       _UltimaTransicion;
 		friend class DListaEx;
 	};
 	

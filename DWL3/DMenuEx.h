@@ -135,6 +135,8 @@ namespace DWL {
 		INT64					Parametro;
 
 		DMenuEx_Skin			Skin;
+
+		double                  MaxOpacidad;
 	  protected:
 								// Constructor menú tipo texto (interno AgregarBarra)
 								DMenuEx(DMenuEx *nPadre, DMenuEx_Tipo nTipo, DhWnd *nhWndPadre, const INT_PTR nID, const wchar_t *nTexto, const INT_PTR nIconoRecursos, const BOOL nActivado, const float nMinimo, const float nMaximo, const float nValor);
