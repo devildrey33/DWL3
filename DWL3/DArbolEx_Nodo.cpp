@@ -201,26 +201,30 @@ namespace DWL {
 		if (_Activado == TRUE) {
 			if (Seleccionado == TRUE) {
 				if (_SubSeleccionado == TRUE) {					
-					_ColorTexto			= _Arbol->Skin.TextoNodoSubSeleccionado;
+/*					_ColorTexto			= _Arbol->Skin.TextoNodoSubSeleccionado;
 					_ColorTextoSombra	= _Arbol->Skin.TextoNodoSubSeleccionadoSombra;
-					_ColorFondo			= _Arbol->Skin.FondoNodoSubSeleccionado;;
+					_ColorFondo			= _Arbol->Skin.FondoNodoSubSeleccionado;;*/
+					_Transicion(DArbolEx_TransicionNodo_SubSeleccionado);
 				}
 				else {
-					_ColorTexto			= _Arbol->Skin.TextoNodoSeleccionado;
+/*					_ColorTexto			= _Arbol->Skin.TextoNodoSeleccionado;
 					_ColorTextoSombra	= _Arbol->Skin.TextoNodoSeleccionadoSombra;
-					_ColorFondo			= _Arbol->Skin.FondoNodoSeleccionado;
+					_ColorFondo			= _Arbol->Skin.FondoNodoSeleccionado;*/
+					_Transicion(DArbolEx_TransicionNodo_Seleccionado);
 				}
 			}
 			else {
-				_ColorTexto			= _Arbol->Skin.TextoNodoNormal;
+			/*	_ColorTexto			= _Arbol->Skin.TextoNodoNormal;
 				_ColorTextoSombra	= _Arbol->Skin.TextoNodoSombra;
-				_ColorFondo			= _Arbol->_ColorFondo;
+				_ColorFondo			= _Arbol->_ColorFondo;*/
+				_Transicion(DArbolEx_TransicionNodo_Normal);
 			}
 		}
 		else {
-			_ColorTexto			= _Arbol->Skin.TextoNodoDesactivado;
+/*			_ColorTexto			= _Arbol->Skin.TextoNodoDesactivado;
 			_ColorTextoSombra	= _Arbol->Skin.TextoNodoSombra;
-			_ColorFondo			= _Arbol->_ColorFondo;
+			_ColorFondo			= _Arbol->_ColorFondo;*/
+			_Transicion(DArbolEx_TransicionNodo_Desactivado);
 		}
 		
 	}

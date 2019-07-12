@@ -53,10 +53,10 @@
 
 								            // Mira las unidades locales de la 'C' a la 'Z' evitando las disqueteras.
 			const unsigned int			    Escanear_Unidades_Locales(void);
-			DUnidadDisco			       *Unidad(const int Pos);
+			DUnidadDisco			       *Unidad(const size_t Pos);
 			DUnidadDisco			       *Buscar_Numero_Serie(const DWORD Numero);
 			DUnidadDisco			       *Buscar_Letra(const TCHAR Letra);
-			const UINT      			    TotalUnidades(void);
+			const size_t      			    TotalUnidades(void);
           private :
   		    void							BorrarMemoria(void);
 

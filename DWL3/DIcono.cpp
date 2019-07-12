@@ -12,6 +12,10 @@ namespace DWL {
 
 
 	DIcono::DIcono(void) : _Icono(NULL) {
+		// Agrego un primer icono transparente
+		if (_Iconos.size() == 0) {
+			_Iconos.push_back(new DIcono_Datos(0, 0, 128, 128));
+		}
 	}
 
 	DIcono::DIcono(const INT_PTR nIDRecursos, const int nAncho, const int nAlto) : _Icono(NULL) {
@@ -84,11 +88,18 @@ namespace DWL {
 		_Icono = _BuscarIDStr(Nombre.c_str(), sfi.iIcon);
 		// No existe, lo creamos
 		if (_Icono == NULL) {
-			hr = SHGetFileInfo(Path, nPosicionIco, &sfi, sizeof(sfi), SHGFI_ICON);
-			if (SUCCEEDED(hr)) {
-				_Icono = new DIcono_Datos(sfi.hIcon, --_IDNegativa, nAncho, nAlto, Nombre, PosIco);
-				_Iconos.push_back(_Icono);
-				//return nIcono;
+			DWORD Attr = GetFileAttributes(Path);
+			// El path especificado no existe asigno el icono icono transparente 
+			if (Attr == INVALID_FILE_ATTRIBUTES) {
+				_Icono = _Iconos[0];
+			}
+			// El path exite, extraigo el icono
+			else {
+				hr = SHGetFileInfo(Path, nPosicionIco, &sfi, sizeof(sfi), SHGFI_ICON);
+				if (SUCCEEDED(hr)) {
+					_Icono = new DIcono_Datos(sfi.hIcon, --_IDNegativa, nAncho, nAlto, Nombre, PosIco);
+					_Iconos.push_back(_Icono);
+				}
 			}
 		}
 	}
@@ -102,8 +113,8 @@ namespace DWL {
 	}
 
 	DIcono::DIcono_Datos *DIcono::_BuscarIDStr(const wchar_t *nIDStr, const int nPosicionStr) {		
-		for (size_t i = 0; i < _Iconos.size(); i++) {
-			if (_Iconos[i]->IDStr == nIDStr && _Iconos[i]->IDStrPos == nPosicionStr) {
+		for (size_t i = 0; i < _Iconos.size(); i++) {								//  Asegura que el icono consultado no sea un icono de recursos o knownfolder
+			if (_Iconos[i]->IDStr == nIDStr && _Iconos[i]->IDStrPos == nPosicionStr && _Iconos[i]->ID == 0) {
 				return _Iconos[i];
 			}
 		}

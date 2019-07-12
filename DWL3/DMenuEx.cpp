@@ -33,26 +33,26 @@ namespace DWL {
 	DhWnd	*DMenuEx::_hWndDest			= NULL;
 
 
-	DMenuEx::DMenuEx(void) : DWL::DVentana(), _Padre(NULL), _Tipo(DMenuEx_Tipo_Raiz), _ID(0), _Activado(TRUE), _MenuResaltado(NULL), _MenuPresionado(NULL), _MenuDesplegado(NULL), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _BarraPosX(0), _MargenI(0), MaxOpacidad(230.0f)/*, _AnularMouseMove(NULL)*/ {
+	DMenuEx::DMenuEx(void) : DWL::DVentana(), _Padre(NULL), _Tipo(DMenuEx_Tipo_Raiz), _ID(0), _Activado(TRUE), _MenuResaltado(NULL), _MenuPresionado(NULL), _MenuDesplegado(NULL), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _BarraPosX(0), _MargenI(0), MaxOpacidad(230.0f), Parametro(0)/*, _AnularMouseMove(NULL)*/ {
 		_Recta = { 0, 0, 0, 0 };
 		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 	}
 
 	// Constructor menú tipo separador (interno AgregarSeparador)
-	DMenuEx::DMenuEx(DMenuEx *nPadre, DMenuEx_Tipo nTipo, DhWnd *nhWndPadre, const INT_PTR nID) : DWL::DVentana(), _Padre(nPadre), _Tipo(DMenuEx_Tipo_Separador), _ID(nID), _MenuResaltado(NULL), _MenuPresionado(NULL), _Activado(TRUE), _MenuDesplegado(NULL), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _BarraPosX(0), _MargenI(0)/*, _AnularMouseMove(NULL) */ {
+	DMenuEx::DMenuEx(DMenuEx* nPadre, DMenuEx_Tipo nTipo, DhWnd* nhWndPadre, const INT_PTR nID) : DWL::DVentana(), _Padre(nPadre), _Tipo(DMenuEx_Tipo_Separador), _ID(nID), _MenuResaltado(NULL), _MenuPresionado(NULL), _Activado(TRUE), _MenuDesplegado(NULL), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _BarraPosX(0), _MargenI(0), Parametro(0), MaxOpacidad(230.0f)/*, _AnularMouseMove(NULL) */ {
 		_Recta = { 0, 0, 0, 0 };
 		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 	}
 
 	// Constructor menú tipo texto (interno AgregarMenu)
-	DMenuEx::DMenuEx(DMenuEx *nPadre, DMenuEx_Tipo nTipo, DhWnd *nhWndPadre, const INT_PTR nID, const wchar_t *nTexto, const INT_PTR nIconoRecursos, const BOOL nActivado) : DWL::DVentana(), _Padre(nPadre), _Tipo(DMenuEx_Tipo_Texto), _ID(nID), _Texto(nTexto), _Activado(nActivado), _MenuResaltado(NULL), _MenuPresionado(NULL), _MenuDesplegado(NULL), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _BarraPosX(0), _MargenI(0)/* , _AnularMouseMove(NULL) */ {
+	DMenuEx::DMenuEx(DMenuEx *nPadre, DMenuEx_Tipo nTipo, DhWnd *nhWndPadre, const INT_PTR nID, const wchar_t *nTexto, const INT_PTR nIconoRecursos, const BOOL nActivado) : DWL::DVentana(), _Padre(nPadre), _Tipo(DMenuEx_Tipo_Texto), _ID(nID), _Texto(nTexto), _Activado(nActivado), _MenuResaltado(NULL), _MenuPresionado(NULL), _MenuDesplegado(NULL), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _BarraPosX(0), _MargenI(0), Parametro(0), MaxOpacidad(230.0f)/* , _AnularMouseMove(NULL) */ {
 		_Recta = { 0, 0, 0, 0 };
 		_Icono.CrearIconoRecursos(nIconoRecursos, DMENUEX_TAMICONO, DMENUEX_TAMICONO);
 		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 	}
 
 	// Constructor menú tipo texto (interno AgregarBarra)
-	DMenuEx::DMenuEx(DMenuEx *nPadre, DMenuEx_Tipo nTipo, DhWnd *nhWndPadre, const INT_PTR nID, const wchar_t *nTexto, const INT_PTR nIconoRecursos, const BOOL nActivado, const float nMinimo, const float nMaximo, const float nValor) : DWL::DVentana(), _Padre(nPadre), _Tipo(DMenuEx_Tipo_Barra), _ID(nID), _Texto(nTexto), _Activado(nActivado), _MenuResaltado(NULL), _MenuPresionado(NULL), _MenuDesplegado(NULL), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _BarraPosX(0), _MargenI(0)/* , _AnularMouseMove(NULL) */ {
+	DMenuEx::DMenuEx(DMenuEx *nPadre, DMenuEx_Tipo nTipo, DhWnd *nhWndPadre, const INT_PTR nID, const wchar_t *nTexto, const INT_PTR nIconoRecursos, const BOOL nActivado, const float nMinimo, const float nMaximo, const float nValor) : DWL::DVentana(), _Padre(nPadre), _Tipo(DMenuEx_Tipo_Barra), _ID(nID), _Texto(nTexto), _Activado(nActivado), _MenuResaltado(NULL), _MenuPresionado(NULL), _MenuDesplegado(NULL), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _BarraPosX(0), _MargenI(0), Parametro(0), MaxOpacidad(230.0f)/* , _AnularMouseMove(NULL) */ {
 		_Recta = { 0, 0, 0, 0 };
 		_Icono.CrearIconoRecursos(nIconoRecursos, DMENUEX_TAMICONO, DMENUEX_TAMICONO);
 		_Barra._Minimo = nMinimo;
@@ -585,6 +585,7 @@ namespace DWL {
 			CrearVentana(_hWndDest, L"DMenuEx", L"", cX, cY, Tam.x, Tam.y, WS_POPUP | WS_CAPTION, NULL, CS_DBLCLKS);
 
 			DMouse::CambiarCursor();
+//			BYTE Op = static_cast<BYTE>(MaxOpacidad);
 			Opacidad(0);
 
 			MARGINS Margen = { 0, 0, 0, 1 };
@@ -606,7 +607,7 @@ namespace DWL {
 
 			_AniMostrar.Terminar();
 			_AniMostrar.Iniciar({ 0.0f }, { &MaxOpacidad }, DhWnd::TiempoAnimaciones, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
-				Opacidad(static_cast<BYTE>(Datos[0].Decimal()));
+				Opacidad(static_cast<BYTE>(Datos[0].Entero()));
 			});
 
 		}
@@ -1110,4 +1111,4 @@ namespace DWL {
 		return DVentana::GestorMensajes(uMsg, wParam, lParam);
 	}
 
-}
+};

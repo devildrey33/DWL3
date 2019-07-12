@@ -103,6 +103,12 @@
     <Filter Include="Sistema\Base\Skins">
       <UniqueIdentifier>{5df90167-dcc8-418d-b377-3434a16f2f44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sistema\Fuentes">
+      <UniqueIdentifier>{0c1a072c-9b8b-4c21-a8f0-212c0d8aba00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sistema\Iconos">
+      <UniqueIdentifier>{7a7f6f25-ac89-4a00-ada1-6d7fc162d971}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DAnimacion.h">
@@ -132,13 +138,7 @@
     <ClInclude Include="DBarraTareas.h">
       <Filter>Ventanas\BarraTareas</Filter>
     </ClInclude>
-    <ClInclude Include="DFuente.h">
-      <Filter>Ventanas\Base</Filter>
-    </ClInclude>
     <ClInclude Include="DhWnd.h">
-      <Filter>Ventanas\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="DIcono.h">
       <Filter>Ventanas\Base</Filter>
     </ClInclude>
     <ClInclude Include="DControl.h">
@@ -249,6 +249,12 @@
     <ClInclude Include="pch.h">
       <Filter>Sistema\Base</Filter>
     </ClInclude>
+    <ClInclude Include="DIcono.h">
+      <Filter>Sistema\Iconos</Filter>
+    </ClInclude>
+    <ClInclude Include="DFuente.h">
+      <Filter>Sistema\Fuentes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DAnimacion.cpp">
@@ -275,13 +281,7 @@
     <ClCompile Include="DBarraTareas.cpp">
       <Filter>Ventanas\BarraTareas</Filter>
     </ClCompile>
-    <ClCompile Include="DFuente.cpp">
-      <Filter>Ventanas\Base</Filter>
-    </ClCompile>
     <ClCompile Include="DhWnd.cpp">
-      <Filter>Ventanas\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="DIcono.cpp">
       <Filter>Ventanas\Base</Filter>
     </ClCompile>
     <ClCompile Include="DControl.cpp">
@@ -370,6 +370,12 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Sistema\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DIcono.cpp">
+      <Filter>Sistema\Iconos</Filter>
+    </ClCompile>
+    <ClCompile Include="DFuente.cpp">
+      <Filter>Sistema\Fuentes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

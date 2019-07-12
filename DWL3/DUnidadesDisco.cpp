@@ -89,7 +89,7 @@ namespace DWL {
 		return static_cast<unsigned int>(_Unidades.size());
 	};
 
-	DUnidadDisco *DUnidadesDisco::Unidad(const int Pos) {
+	DUnidadDisco *DUnidadesDisco::Unidad(const size_t Pos) {
 		return _Unidades[Pos];
 	};
 
@@ -108,8 +108,8 @@ namespace DWL {
 		return NULL;
 	};
 
-	const UINT DUnidadesDisco::TotalUnidades(void) {
-		return static_cast<UINT>(_Unidades.size());
+	const size_t DUnidadesDisco::TotalUnidades(void) {
+		return _Unidades.size();
 	};
 
 	void DUnidadesDisco::BorrarMemoria(void) {

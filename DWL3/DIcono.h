@@ -19,7 +19,7 @@ namespace DWL {
 									DIcono_Datos(HICON nIcono, const INT_PTR nID, const int nAncho, const int nAlto, std::wstring &nIDStr, const int nIDStrPos) : Icono(nIcono), ID(nID), Ancho(nAncho), Alto(nAlto), IDStrPos(nIDStrPos), IDStr(nIDStr) { };
 								   ~DIcono_Datos(void) { DestroyIcon(Icono); };
 			HICON				    Icono;
-			INT_PTR			        ID;			// ID del icono (positiva si es un icono de los recursos, negativa si es un icono externo o un icono KnownFolder
+			INT_PTR			        ID;			// ID del icono (positiva si es un icono de los recursos, negativa si es un icono externo o un icono KnownFolder)
 			int			            Ancho;
 			int				        Alto;
 			int					    IDStrPos;	// Posición del icono externo (un archivo de iconos externo puede tener varios iconos dentro)

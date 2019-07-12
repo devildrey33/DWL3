@@ -25,7 +25,7 @@ namespace DWL {
 		_Padre = nPadre;
 		_Terminado = FALSE;
 		// Creo la ventana
-		CrearVentana(nPadre, L"DDlgDirectorio", L"Selecciona un Directorio", cX, cY, cAncho, cAlto, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME, WS_EX_APPWINDOW, NULL, NULL, NULL, ID_Icono);
+		CrearVentana(nPadre, L"DDlgDirectorio", L"Selecciona un Directorio", cX, cY, (cAncho > 100) ? cAncho : 100, (cAlto > 100) ? cAlto : 100, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME, WS_EX_APPWINDOW, NULL, NULL, NULL, ID_Icono);
 		// Obtengo el tamaño de la recta cliente de la ventana.
 		RECT RC;
 		GetClientRect(_hWnd, &RC);
