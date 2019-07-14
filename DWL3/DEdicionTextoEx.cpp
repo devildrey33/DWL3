@@ -325,9 +325,9 @@ namespace DWL {
 		POINT Pt = { DatosMouse.X(), DatosMouse.Y() };
 		if (PtInRect(&RC, Pt) != 0) {
 			Transicion(DEdicionTextoEx_Transicion_Resaltado);
-			SendMessage(GetParent(hWnd()), DWL_EDICIONTEXTOEX_CLICK, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
 		}
-//		else {
+		SendMessage(GetParent(hWnd()), DWL_EDICIONTEXTOEX_CLICK, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
+		//		else {
 //			Transicion(DEdicionTextoEx_Transicion_Normal);
 //		}
 		_Presionado = FALSE;
@@ -375,7 +375,7 @@ namespace DWL {
 	}
 
 	void DEdicionTextoEx::Transicion(const DEdicionTextoEx_Transicion nTransicion) {
-		Debug_Escribir_Varg(L"DEdicionTextoEx::Transicion %d\n", nTransicion);
+		
 
 		DWORD Duracion = DhWnd::TiempoAnimaciones;
 		if (_AniTransicion.Animando() == TRUE) {
@@ -385,25 +385,29 @@ namespace DWL {
 
 		COLORREF *FondoHasta = 0, *BordeHasta = 0, *TextoHasta = 0, *TextoSombraHasta = 0;
 		switch (nTransicion) {
-			case DMarcaEx_Transicion_Normal:
+			case DEdicionTextoEx_Transicion_Normal:
+				Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Normal.\n");
 				FondoHasta		 = &Skin.FondoNormal;
 				BordeHasta		 = &Skin.BordeNormal;
 				TextoHasta	 	 = &Skin.Texto;
 				TextoSombraHasta = &Skin.TextoSombra;
 				break;
-			case DMarcaEx_Transicion_Resaltado:
+			case DEdicionTextoEx_Transicion_Resaltado:
+				Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Resaltado.\n");
 				FondoHasta		 = &Skin.FondoResaltado;
 				BordeHasta		 = &Skin.BordeResaltado;
 				TextoHasta		 = &Skin.TextoResaltado;
 				TextoSombraHasta = &Skin.TextoResaltadoSombra;
 				break;
-			case DMarcaEx_Transicion_Presionado:
+			case DEdicionTextoEx_Transicion_Presionado:
+				Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Presionado.\n");
 				FondoHasta		 = &Skin.FondoPresionado;
 				BordeHasta	 	 = &Skin.BordePresionado;
 				TextoHasta		 = &Skin.TextoPresionado;
 				TextoSombraHasta = &Skin.TextoPresionadoSombra;
 				break;
-			case DMarcaEx_Transicion_Desactivado:
+			case DEdicionTextoEx_Transicion_Desactivado:
+				Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Desactivado.\n");
 				FondoHasta		 = &Skin.FondoDesactivado;
 				BordeHasta		 = &Skin.BordeNormal;
 				TextoHasta		 = &Skin.TextoDesactivado;

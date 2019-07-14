@@ -5,7 +5,7 @@
 
 namespace DWL {
 
-	DExplorarDirectoriosEx::DExplorarDirectoriosEx(void) : _NodoEscritorio(NULL), _NodoMisDocumentos(NULL), _NodoMiPC(NULL), _NodoRed(NULL), MostrarArchivosOcultos(FALSE) {
+	DExplorarDirectoriosEx::DExplorarDirectoriosEx(void) : _NodoEscritorio(NULL), _NodoMisDocumentos(NULL), _NodoMiPC(NULL), _NodoRed(NULL), MostrarArchivosOcultos(FALSE), MostrarRed(TRUE) {
 	}
 
 	DExplorarDirectoriosEx::~DExplorarDirectoriosEx(void) {
@@ -96,11 +96,13 @@ namespace DWL {
 		_NodoEscritorio		= AgregarEntrada(L"Escritorio",		NULL, FOLDERID_Desktop,			DExplorarDirectoriosEx_TipoNodo_Escritorio, PathEscritorio.c_str());
 		_NodoMisDocumentos	= AgregarEntrada(L"Mis Documentos", NULL, FOLDERID_PublicDocuments, DExplorarDirectoriosEx_TipoNodo_MisDocumentos, PathDocumentos.c_str()); // FOLDERID_Documents
 		_NodoMiPC			= AgregarEntrada(L"Mi PC",			NULL, FOLDERID_ComputerFolder,  DExplorarDirectoriosEx_TipoNodo_MiPC);
-		_NodoRed			= AgregarEntrada(L"Red",			NULL, FOLDERID_NetworkFolder,   DExplorarDirectoriosEx_TipoNodo_Red);
+		if (MostrarRed == TRUE) {
+			_NodoRed		= AgregarEntrada(L"Red",			NULL, FOLDERID_NetworkFolder,   DExplorarDirectoriosEx_TipoNodo_Red);
+			AgregarEntrada(L"-", _NodoRed, 0, DExplorarDirectoriosEx_TipoNodo_Red_PorExplorar);
+		}
 
 		AgregarEntrada(L"+", _NodoEscritorio,	 0, DExplorarDirectoriosEx_TipoNodo_Directorio_PorExplorar);
 		AgregarEntrada(L"+", _NodoMisDocumentos, 0, DExplorarDirectoriosEx_TipoNodo_Directorio_PorExplorar);
-		AgregarEntrada(L"-", _NodoRed,			 0, DExplorarDirectoriosEx_TipoNodo_Red_PorExplorar);
 
 		// Exploro las unidades fisicas disponibles 
 		DWORD							MascaraBitsUnidades = GetLogicalDrives();

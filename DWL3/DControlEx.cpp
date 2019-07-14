@@ -10,6 +10,7 @@ namespace DWL {
 		if (_hWnd != NULL && IsWindow(_hWnd) == 0) { Destruir(); }
 		if (hWnd()) { Debug_Escribir(L"DControlEx::Crear() Error : ya se ha creado el control extendido\n"); return hWnd(); }
 		ATOM CA = RegistrarClase(nNombre, _GestorMensajes, nEstilosClase);
+		// Si el DhWnd padre es NULL pasamos NULL al hWndPadre
 		HWND hWndPadre = (nPadre != NULL) ? nPadre->hWnd() : NULL;
 		_MouseDentro = FALSE;
 		_hWnd = CreateWindowEx(nEstilosExtendidos, nNombre, nTexto, nEstilos, cX, cY, cAncho, cAlto, hWndPadre, reinterpret_cast<HMENU>(cID), GetModuleHandle(NULL), this);

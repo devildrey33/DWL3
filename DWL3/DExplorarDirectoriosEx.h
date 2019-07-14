@@ -46,6 +46,7 @@ namespace DWL {
 		void									ActualizarDirectorios(void);
 												// Opciones
 		BOOL									MostrarArchivosOcultos;			// Por defecto FALSE
+		BOOL									MostrarRed;						// Por defecto TRUE
 
 		const wchar_t                          *PathSeleccionado(void);
 		DIcono                                 *IconoSeleccionado(void);
