@@ -4,6 +4,7 @@
 #include "DEventoMouse.h"
 #include "DMarcaEx.h"
 #include "DEventoTeclado.h"
+#include "DPortapapeles.h"
 
 #define DEDICIONTEXTOEX_TAMICONO			16
 #define DEDICIONTEXTOEX_MARGEN_X			 4
@@ -112,13 +113,13 @@ namespace DWL {
 			RECT FondoSeleccion = { 0,0,0,0 };
 			SIZE TamTexto1 = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor).c_str());
 			SIZE TamTexto2 = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosSeleccion).c_str());
-			int Alto = (TamTexto1.cy != 0) ? TamTexto1.cy : TamTexto2.cy;
-			int Top = ((RC.bottom - Alto) / 2) + 2;
-			int Bottom = (((RC.bottom - Alto) / 2) + Alto) - 2;
-			if (TamTexto1.cx > TamTexto2.cx) FondoSeleccion = { PosTexto.left + TamTexto2.cx, ((RC.bottom - Alto) / 2) + 2, PosTexto.left + TamTexto1.cx, (((RC.bottom - Alto) / 2) + Alto) - 2 };
-			else                             FondoSeleccion = { PosTexto.left + TamTexto1.cx, ((RC.bottom - Alto) / 2) + 2, PosTexto.left + TamTexto2.cx, (((RC.bottom - Alto) / 2) + Alto) - 2 };
+			int Alto	   = (TamTexto1.cy != 0) ? TamTexto1.cy : TamTexto2.cy; // Altura del texto
+			int Top		   = ((RC.bottom - Alto) / 2) + 2;						// valor Top del RECT
+			int Bottom	   = (((RC.bottom - Alto) / 2) + Alto) - 2;				// valor Bottom del RECT
+			if (TamTexto1.cx > TamTexto2.cx) FondoSeleccion = { PosTexto.left + TamTexto2.cx, Top, PosTexto.left + TamTexto1.cx, Bottom };
+			else                             FondoSeleccion = { PosTexto.left + TamTexto1.cx, Top, PosTexto.left + TamTexto2.cx, Bottom };
 
-			HBRUSH BrochaSeleccion = CreateSolidBrush(Skin.Seleccion);
+			HBRUSH BrochaSeleccion = CreateSolidBrush(Skin.FondoSeleccion);
 			FillRect(Buffer, &FondoSeleccion, BrochaSeleccion);
 			DeleteObject(BrochaSeleccion);
 		}
@@ -158,7 +159,7 @@ namespace DWL {
 	}
 
 
-	RECT DEdicionTextoEx::_PosicionTexto(RECT &RC) {
+	const RECT DEdicionTextoEx::_PosicionTexto(RECT &RC) {
 		// Calculo el tamaño del icono
 		long TamIcono = (_Icono() != NULL) ? DEDICIONTEXTOEX_TAMICONO + DEDICIONTEXTOEX_MARGEN_X : DEDICIONTEXTOEX_MARGEN_X;
 
@@ -167,20 +168,16 @@ namespace DWL {
 
 		// Calculo la posición del texto
 		SIZE TamTexto = Fuente.ObtenerTamTexto(_Texto.c_str());
-		RECT PosTexto = { 0, 0, 0, 0 };
 		switch (Alineacion) {
 			case DEdicionTextoEx_Alineacion_Izquierda:
-				SetRect(&PosTexto, EspacioTexto.left, EspacioTexto.top, EspacioTexto.left + TamTexto.cx, EspacioTexto.bottom);
-				break;
+				return { EspacioTexto.left, EspacioTexto.top, EspacioTexto.left + TamTexto.cx, EspacioTexto.bottom };
 			case DEdicionTextoEx_Alineacion_Derecha:
-				SetRect(&PosTexto, EspacioTexto.right - TamTexto.cx, 0, EspacioTexto.right, EspacioTexto.bottom);
-				break;
+				return { EspacioTexto.right - TamTexto.cx, 0, EspacioTexto.right, EspacioTexto.bottom };
 			case DEdicionTextoEx_Alineacion_Centrado:
-				SetRect(&PosTexto, (EspacioTexto.right - TamTexto.cx) / 2, 0, ((EspacioTexto.right - TamTexto.cx) / 2 ) + TamTexto.cx, EspacioTexto.bottom);
-				break;
+				return { (EspacioTexto.right - TamTexto.cx) / 2, 0, ((EspacioTexto.right - TamTexto.cx) / 2) + TamTexto.cx, EspacioTexto.bottom };
 		}
 
-		return PosTexto;
+		return { 0, 0, 0, 0 };
 	}
 
 
@@ -224,9 +221,9 @@ namespace DWL {
 
 	void DEdicionTextoEx::_Evento_TeclaPresionada(WPARAM wParam, LPARAM lParam) {
 		DEventoTeclado DatosTeclado(wParam, lParam, this);
-		switch (DatosTeclado.Caracter()) {
-			case VK_SHIFT:
-				break;
+		switch (DatosTeclado.TeclaVirtual()) {
+//			case VK_SHIFT:
+//				break;
 			case VK_HOME:
 				_PosCursor = 0;
 				break;
@@ -235,13 +232,31 @@ namespace DWL {
 				break;
 			case VK_LEFT:
 				if (_PosCursor > 0) _PosCursor--;
-				break;
+				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
+					break;
 			case VK_RIGHT:
 				if (_PosCursor < _Texto.size()) _PosCursor++;
+				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
 				break;
 			case VK_DELETE: // Suprimir
 				if (_Texto.size() > 0 && _PosCursor < _Texto.size()) _Texto.erase(_PosCursor, 1);
 				break;
+			case L'c': case L'C':	
+				if (DatosTeclado.Control() == TRUE)	_ControlC();		
+				break;
+			case L'x': case L'X':	
+				if (DatosTeclado.Control() == TRUE)	_ControlX();	
+				break;
+			case L'v': case L'V':
+				if (DatosTeclado.Control() == TRUE)	_ControlV();
+				break;
+			case L'z': case L'Z':
+				if (DatosTeclado.Control() == TRUE)	_ControlZ();
+				break;
+			case L'y': case L'Y':
+				if (DatosTeclado.Control() == TRUE)	_ControlY();
+				break;
+
 		}
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_TeclaPresionada %d.\n", DatosTeclado.Caracter());
@@ -251,14 +266,86 @@ namespace DWL {
 
 	void DEdicionTextoEx::_Evento_TeclaSoltada(WPARAM wParam, LPARAM lParam) {
 		DEventoTeclado DatosTeclado(wParam, lParam, this);
-		switch (DatosTeclado.TeclaVirtual()) {
+/*		switch (DatosTeclado.TeclaVirtual()) {
 			case VK_SHIFT:
 				break;
-		}
+		}*/
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_TeclaSoltada %d.\n", DatosTeclado.Caracter());
 		#endif
 
+	}
+
+	void DEdicionTextoEx::_ControlC(void) {
+		size_t Desde = 0;
+		size_t Hasta = 0;
+		if (_PosCursor > _PosSeleccion) {
+			Desde = _PosSeleccion;
+			Hasta = _PosCursor;
+		}
+		else {
+			Desde = _PosCursor;
+			Hasta = _PosSeleccion;
+		}
+		std::wstring TextoSeleccionado = _Texto.substr(Desde, Hasta - Desde);
+		DPortapapeles::AsignarTexto(TextoSeleccionado);
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlC %s.\n", TextoSeleccionado.c_str());
+		#endif
+	}
+
+	void DEdicionTextoEx::_ControlX(void) {
+		size_t Desde = 0;
+		size_t Hasta = 0;
+		if (_PosCursor > _PosSeleccion) {
+			Desde = _PosSeleccion;
+			Hasta = _PosCursor;
+		}
+		else {
+			Desde = _PosCursor;
+			Hasta = _PosSeleccion;
+		}
+		std::wstring TextoSeleccionado = _Texto.substr(Desde, Hasta - Desde);
+		DPortapapeles::AsignarTexto(TextoSeleccionado);
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlX %s.\n", TextoSeleccionado.c_str());
+		#endif
+		std::wstring Tmp = _Texto.substr(0, Desde) + _Texto.substr(Hasta, _Texto.size() - Hasta);
+		_Texto = Tmp;
+		_PosCursor = Desde;
+		_PosSeleccion = _PosCursor;
+		Repintar();
+	}
+
+	void DEdicionTextoEx::_ControlV(void) {
+		size_t Desde = 0;
+		size_t Hasta = 0;
+		if (_PosCursor > _PosSeleccion) {
+			Desde = _PosSeleccion;
+			Hasta = _PosCursor;
+		}
+		else {
+			Desde = _PosCursor;
+			Hasta = _PosSeleccion;
+		}
+
+		std::wstring P, Tmp;
+		DPortapapeles::ObtenerTexto(_hWnd, P);
+		Tmp = _Texto.substr(0, Desde) + P + _Texto.substr(Hasta, _Texto.size() - Hasta);
+		_Texto = Tmp;
+		_PosSeleccion = Desde;
+		_PosCursor += P.size();
+		Repintar();
+
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlV %s.\n", P.c_str());
+		#endif
+	}
+
+	void DEdicionTextoEx::_ControlZ(void) {
+	}
+
+	void DEdicionTextoEx::_ControlY(void) {
 	}
 
 	void DEdicionTextoEx::_Evento_Tecla(WPARAM wParam, LPARAM lParam) {
@@ -272,22 +359,34 @@ namespace DWL {
 				if (_PosCursor > 0) _Texto.erase(--_PosCursor, 1);				
 				break;
 			case VK_ESCAPE: // Desselecciono todo
-				//_FinSeleccion = -1;
+				_PosSeleccion = _PosCursor;
 				break;
 			default:
 				// Si el carácter presionado no es válido para el tipo de entrada actual salgo
 				if (_EntradaPermitida(DatosTeclado.TeclaVirtual()) == FALSE) {
 					return;
 				}
-
-				if (_PosCursor == _Texto.size()) {
-					_Texto += static_cast<wchar_t>(DatosTeclado.TeclaVirtual());
+				// No se está presionado el control
+				if (DatosTeclado.Control() != TRUE) {
+					if (_PosCursor == _Texto.size()) {
+						_Texto += DatosTeclado.Caracter();
+					}
+					else {
+						_Texto.insert(_PosCursor, 1, static_cast<wchar_t>(DatosTeclado.TeclaVirtual()));
+					}
+					_PosCursor++;
+					_PosSeleccion = _PosCursor;
 				}
+/*				// Se está presionado el control
 				else {
-					_Texto.insert(_PosCursor, 1, static_cast<wchar_t>(DatosTeclado.TeclaVirtual()));
+					wchar_t ccc = DatosTeclado.Caracter();
+					switch (DatosTeclado.Caracter()) {
+						case L'c': case L'C':		_ControlC();		break;
+						case L'x': case L'X':		_ControlX();		break;
+						case L'v': case L'V':		_ControlV();		break;
+					}
 				}
-				_PosCursor++;
-				break;
+				break;*/
 		}		
 		Repintar();
 		SendMessage(GetParent(hWnd()), DWL_EDICIONTEXTOEX_CAMBIO, static_cast<WPARAM>(ID()), 0);

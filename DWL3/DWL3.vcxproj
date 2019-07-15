@@ -196,6 +196,7 @@
     <ClInclude Include="DMensajesWnd.h" />
     <ClInclude Include="DMenuEx.h" />
     <ClInclude Include="DMouse.h" />
+    <ClInclude Include="DPortapapeles.h" />
     <ClInclude Include="DRegistro.h" />
     <ClInclude Include="DStringUtils.h" />
     <ClInclude Include="DTemporizador.h" />
@@ -241,6 +242,7 @@
     <ClCompile Include="DMarcaEx.cpp" />
     <ClCompile Include="DMenuEx.cpp" />
     <ClCompile Include="DMouse.cpp" />
+    <ClCompile Include="DPortapapeles.cpp" />
     <ClCompile Include="DRegistro.cpp" />
     <ClCompile Include="DStringUtils.cpp" />
     <ClCompile Include="DTemporizador.cpp" />

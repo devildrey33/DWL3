@@ -103,11 +103,18 @@ namespace DWL {
 		void                       _Evento_FocoAsignado(void);
 		void                       _Evento_FocoPerdido(void);
 		void					   _Evento_Temporizador(const INT_PTR tID);
+
+		void                       _ControlC(void);
+		void                       _ControlX(void);
+		void                       _ControlV(void);
+		void                       _ControlZ(void);
+		void                       _ControlY(void);
+
 		DIcono                     _Icono;
 
 		std::wstring               _Texto;
 
-		RECT                       _PosicionTexto(RECT &RC);
+		const RECT                 _PosicionTexto(RECT &RC);
 
 		COLORREF                   _ColorTexto;
 		COLORREF                   _ColorTextoSombra;

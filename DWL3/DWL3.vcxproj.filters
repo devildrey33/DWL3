@@ -109,6 +109,9 @@
     <Filter Include="Sistema\Iconos">
       <UniqueIdentifier>{7a7f6f25-ac89-4a00-ada1-6d7fc162d971}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sistema\Portapapeles">
+      <UniqueIdentifier>{126c1e28-defc-4985-902a-cfc5c9f15626}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DAnimacion.h">
@@ -255,6 +258,9 @@
     <ClInclude Include="DFuente.h">
       <Filter>Sistema\Fuentes</Filter>
     </ClInclude>
+    <ClInclude Include="DPortapapeles.h">
+      <Filter>Sistema\Portapapeles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DAnimacion.cpp">
@@ -376,6 +382,9 @@
     </ClCompile>
     <ClCompile Include="DFuente.cpp">
       <Filter>Sistema\Fuentes</Filter>
+    </ClCompile>
+    <ClCompile Include="DPortapapeles.cpp">
+      <Filter>Sistema\Portapapeles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
