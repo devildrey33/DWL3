@@ -1,13 +1,13 @@
 #include "VentanaPrincipal.h"
 #include "resource.h"
 
-#define ID_ARBOL	1000
+#define ID_LISTA	1000
 
 
 void VentanaPrincipal::Crear(void) {
 	CrearVentana(NULL, L"Ejemplo_ListalEx", L"Ejemplo ListaEx", 100, 100, 400, 400, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
 	
-	Lista.CrearListaEx(this, 10, 10, 360, 200, ID_ARBOL, WS_CHILD | WS_VISIBLE);
+	Lista.CrearListaEx(this, 10, 10, 360, 200, ID_LISTA, WS_CHILD | WS_VISIBLE);
 
 	Lista.AgregarColumna(120, DWL::DListaEx_Columna_Alineacion_Izquierda);
 	Lista.AgregarColumna(120, DWL::DListaEx_Columna_Alineacion_Centrado);

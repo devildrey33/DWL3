@@ -8,7 +8,7 @@
 void VentanaPrincipal::Crear(void) {
 	CrearVentana(NULL, L"Ejemplo_EdicionTextoEx", L"Ejemplo EdicionTextoEx", 100, 100, 400, 400, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
 
-	Edit1.CrearEdicionTextoEx(this, L"Test1", 10, 10, 300, 20, ID_EDIT1);
+	Edit1.CrearEdicionTextoEx(this, L"12345", 10, 10, 300, 20, ID_EDIT1);
 	Edit2.Alineacion = DWL::DEdicionTextoEx_Alineacion_Centrado;
 	Edit2.CrearEdicionTextoEx(this, L"Test2", 10, 40, 300, 20, ID_EDIT2);
 	Edit3.Alineacion = DWL::DEdicionTextoEx_Alineacion_Derecha;

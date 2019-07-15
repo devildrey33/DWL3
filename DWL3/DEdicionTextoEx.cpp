@@ -217,8 +217,46 @@ namespace DWL {
 		return _Texto.size();
 	}
 
+	// WM_CHAR
+	void DEdicionTextoEx::_Evento_Tecla(WPARAM wParam, LPARAM lParam) {
+		DEventoTeclado DatosTeclado(wParam, lParam, this);
+		switch (DatosTeclado.TeclaVirtual()) {
+			case VK_RETURN:
+				if (Entrada == DEdicionTextoEx_Entrada_SinEntrada) return;
+				break;
+			case VK_BACK: // Borrar
+				if (Entrada == DEdicionTextoEx_Entrada_SinEntrada) return;
+				if (_PosCursor > 0) _Texto.erase(--_PosCursor, 1);				
+				break;
+			case VK_ESCAPE: // Desselecciono todo
+				_PosSeleccion = _PosCursor;
+				break;
+			default:
+				// Si el carácter presionado no es válido para el tipo de entrada actual salgo
+				if (_EntradaPermitida(DatosTeclado.TeclaVirtual()) == FALSE) {
+					return;
+				}
+				// No se está presionado el control
+				if (DatosTeclado.Control() != TRUE) {
+					if (_PosCursor == _Texto.size()) {
+						_Texto += DatosTeclado.Caracter();
+					}
+					else {
+						_Texto.insert(_PosCursor, 1, static_cast<wchar_t>(DatosTeclado.TeclaVirtual()));
+					}
+					_PosCursor++;
+					_PosSeleccion = _PosCursor;
+				}
+		}		
+		Repintar();
+		SendMessage(GetParent(hWnd()), DWL_EDICIONTEXTOEX_CAMBIO, static_cast<WPARAM>(ID()), 0);
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_Tecla %d.\n", DatosTeclado.TeclaVirtual());
+		#endif
 
+	}
 
+	// WM_KEYDOWN
 	void DEdicionTextoEx::_Evento_TeclaPresionada(WPARAM wParam, LPARAM lParam) {
 		DEventoTeclado DatosTeclado(wParam, lParam, this);
 		switch (DatosTeclado.TeclaVirtual()) {
@@ -264,18 +302,15 @@ namespace DWL {
 		Repintar();
 	}
 
+	// WM_KEYUP
 	void DEdicionTextoEx::_Evento_TeclaSoltada(WPARAM wParam, LPARAM lParam) {
-		DEventoTeclado DatosTeclado(wParam, lParam, this);
-/*		switch (DatosTeclado.TeclaVirtual()) {
-			case VK_SHIFT:
-				break;
-		}*/
+//		DEventoTeclado DatosTeclado(wParam, lParam, this);
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_TeclaSoltada %d.\n", DatosTeclado.Caracter());
 		#endif
-
 	}
 
+	// Teclado Control + C (copy)
 	void DEdicionTextoEx::_ControlC(void) {
 		size_t Desde = 0;
 		size_t Hasta = 0;
@@ -294,6 +329,7 @@ namespace DWL {
 		#endif
 	}
 
+	// Teclado Control + X (cut)
 	void DEdicionTextoEx::_ControlX(void) {
 		size_t Desde = 0;
 		size_t Hasta = 0;
@@ -317,6 +353,7 @@ namespace DWL {
 		Repintar();
 	}
 
+	// Teclado Control + V (paste)
 	void DEdicionTextoEx::_ControlV(void) {
 		size_t Desde = 0;
 		size_t Hasta = 0;
@@ -334,7 +371,7 @@ namespace DWL {
 		Tmp = _Texto.substr(0, Desde) + P + _Texto.substr(Hasta, _Texto.size() - Hasta);
 		_Texto = Tmp;
 		_PosSeleccion = Desde;
-		_PosCursor += P.size();
+		_PosCursor += P.size() - 1;
 		Repintar();
 
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
@@ -342,59 +379,14 @@ namespace DWL {
 		#endif
 	}
 
+	// Teclado Control + Z (undo)
 	void DEdicionTextoEx::_ControlZ(void) {
 	}
 
+	// Teclado Control + Y (redo)
 	void DEdicionTextoEx::_ControlY(void) {
 	}
 
-	void DEdicionTextoEx::_Evento_Tecla(WPARAM wParam, LPARAM lParam) {
-		DEventoTeclado DatosTeclado(wParam, lParam, this);
-		switch (DatosTeclado.TeclaVirtual()) {
-			case VK_RETURN:
-				if (Entrada == DEdicionTextoEx_Entrada_SinEntrada) return;
-				break;
-			case VK_BACK: // Borrar
-				if (Entrada == DEdicionTextoEx_Entrada_SinEntrada) return;
-				if (_PosCursor > 0) _Texto.erase(--_PosCursor, 1);				
-				break;
-			case VK_ESCAPE: // Desselecciono todo
-				_PosSeleccion = _PosCursor;
-				break;
-			default:
-				// Si el carácter presionado no es válido para el tipo de entrada actual salgo
-				if (_EntradaPermitida(DatosTeclado.TeclaVirtual()) == FALSE) {
-					return;
-				}
-				// No se está presionado el control
-				if (DatosTeclado.Control() != TRUE) {
-					if (_PosCursor == _Texto.size()) {
-						_Texto += DatosTeclado.Caracter();
-					}
-					else {
-						_Texto.insert(_PosCursor, 1, static_cast<wchar_t>(DatosTeclado.TeclaVirtual()));
-					}
-					_PosCursor++;
-					_PosSeleccion = _PosCursor;
-				}
-/*				// Se está presionado el control
-				else {
-					wchar_t ccc = DatosTeclado.Caracter();
-					switch (DatosTeclado.Caracter()) {
-						case L'c': case L'C':		_ControlC();		break;
-						case L'x': case L'X':		_ControlX();		break;
-						case L'v': case L'V':		_ControlV();		break;
-					}
-				}
-				break;*/
-		}		
-		Repintar();
-		SendMessage(GetParent(hWnd()), DWL_EDICIONTEXTOEX_CAMBIO, static_cast<WPARAM>(ID()), 0);
-		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
-			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_Tecla %d.\n", DatosTeclado.TeclaVirtual());
-		#endif
-
-	}
 
 	const BOOL DEdicionTextoEx::_EntradaPermitida(const wchar_t Caracter) {
 		switch (Entrada) {
