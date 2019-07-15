@@ -53,7 +53,7 @@ class MiApp : public DWL::DApp {
   public :
                         MiApp(void) { };
                         // Por ejemplo puedes añadir tu ventana principal dentro de esta clase
-	VentanaPrincipal	MiVentana;
+    VentanaPrincipal    MiVentana;
 };
 ```
 

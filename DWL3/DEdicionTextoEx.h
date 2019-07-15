@@ -17,6 +17,8 @@ namespace DWL {
 		COLORREF     FondoResaltado;
 		COLORREF     FondoPresionado;
 		COLORREF     FondoDesactivado;
+		COLORREF     FondoSeleccion;
+
 		COLORREF     Texto;
 		COLORREF     TextoSombra;
 		COLORREF     TextoResaltado;
@@ -28,9 +30,6 @@ namespace DWL {
 		COLORREF     BordeNormal;
 		COLORREF     BordeResaltado;
 		COLORREF     BordePresionado;							
-		COLORREF     FondoSeleccion;
-//		COLORREF     SeleccionTexto;
-//		COLORREF     SeleccionTextoSombra;
 
 		COLORREF     Cursor;
 					 // Fuente
@@ -76,7 +75,6 @@ namespace DWL {
 		LRESULT CALLBACK			GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		inline DIcono              &Icono(void) { return _Icono; }
 		void                        Icono(DIcono *nIcono, const BOOL nRepintar = TRUE);
-//		inline const wchar_t       *Texto(void) { return _Texto.c_str(); };
 		std::wstring			   &Texto(void) { return _Texto; }
 		virtual void                Texto(const LONG_PTR ValorEntero, const BOOL nRepintar = TRUE);
 		virtual void                Texto(const double ValorDecimal, const int Decimales = 2, const BOOL nRepintar = TRUE);

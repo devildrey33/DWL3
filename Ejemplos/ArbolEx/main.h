@@ -22,9 +22,9 @@
 
 
 // Clase aplicación para este proyecto
-class EjemploEdicionTextoExApp : public DWL::DApp {
+class EjemploArbolExApp : public DWL::DApp {
   public :
-						EjemploEdicionTextoExApp(void) { };
+						EjemploArbolExApp(void) { };
 						// Ventana principal para este proyecto
 	VentanaPrincipal	Ventana;
 };

@@ -58,6 +58,15 @@ namespace DWL {
 	}
 
 
-	//	DApp* _Aplicacion = NULL;
+	int DApp::BucleMensajes(void) {
+		MSG Msg;
+		while (GetMessage(&Msg, NULL, 0, 0) > 0) {
+			TranslateMessage(&Msg);
+			DispatchMessage(&Msg);
+		}
+		return static_cast<int>(Msg.wParam);
+	}
+
+	
 };
 

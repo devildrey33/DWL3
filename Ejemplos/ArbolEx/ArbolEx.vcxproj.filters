@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Código">
+      <UniqueIdentifier>{5b89c829-878c-456c-a418-2fc2b99fb7e5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>Código</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Código</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Código</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Código</Filter>
+    </ClInclude>
+    <ClInclude Include="VentanaPrincipal.h">
+      <Filter>Código</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ArbolEx.rc">
+      <Filter>Archivos de recursos</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="ArbolEx.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\..\Iconos\IDI_Analizar.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\..\Iconos\IDI_Genero.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\..\Iconos\IDI_Grupo.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\..\Iconos\IDI_Momento.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\..\Iconos\IDI_Nota.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="..\..\Iconos\IDI_PistaAudio.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Código</Filter>
+    </ClCompile>
+    <ClCompile Include="VentanaPrincipal.cpp">
+      <Filter>Código</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <DVentana.h>
-#include <DEdicionTextoEx.h>
+#include <DListaEx.h>
 
 
 // Ventana principal para el ejemplo
@@ -13,8 +13,6 @@ class VentanaPrincipal : public DWL::DVentana {
 
 	LRESULT CALLBACK		GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	DWL::DEdicionTextoEx	Edit1;
-	DWL::DEdicionTextoEx	Edit2;
-	DWL::DEdicionTextoEx	Edit3;
+	DWL::DListaEx			Lista;
 };
 

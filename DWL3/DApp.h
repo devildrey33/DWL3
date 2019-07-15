@@ -34,19 +34,23 @@ namespace DWL {
 
 
 										// Evento Tecla soltada general de todas las ventanas
-		virtual void                    Evento_TeclaPresionada(DWL::DEventoTeclado& DatosTeclado) { };
+		virtual void                    Evento_TeclaPresionada(DWL::DEventoTeclado& DatosTeclado)	{ };
 										// Evento Tecla soltada general de todas las ventanas
-		virtual void                    Evento_TeclaSoltada(DWL::DEventoTeclado& DatosTeclado) { };
+		virtual void                    Evento_TeclaSoltada(DWL::DEventoTeclado& DatosTeclado)		{ };
 
 										//! Función que devuelve el HINSTANCE de nuestra aplicación.
 										/*! Esta función devuelve el HINSTANCE de nuestra aplicación.
 										    \fn			inline HINSTANCE Instancia(void);
 										    \return		Devuelve el HINSTANCE de nuestra aplicación.
 										*/											
-		inline HINSTANCE				Instancia(void) { return GetModuleHandle(NULL);	};
+		inline HINSTANCE				Instancia(void)												{ return GetModuleHandle(NULL);	};
 
 										// Ventana que muestra una consola al estilo MS-DOS para depuración
 		DConsola						ConsolaDebug;
+										// Función que termina el bucle de mensajes y por ende termina la aplicación
+		inline void						TerminarBucleMensajes(int CodigoSalilda = 0)				{ PostQuitMessage(CodigoSalilda); }
+										// Función que inicia un bucle de mensajes hasta que se llama a PostQuitMessage o App.TerminarBucleMensajes()
+		virtual int						BucleMensajes(void);
 	};
 
 };

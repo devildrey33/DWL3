@@ -24,7 +24,7 @@ namespace DWL {
 
 	void DPortapapeles::AsignarTexto(const wchar_t* nTexto) {
 		if (nTexto == NULL) return;
-		int Len = wcslen(nTexto) + 1;
+		size_t Len = wcslen(nTexto) + 1;
 		if (Len == 0) return;
 		if (OpenClipboard(NULL) == TRUE) {
 			HGLOBAL Copy = GlobalAlloc(GMEM_MOVEABLE, Len * sizeof(TCHAR)); 

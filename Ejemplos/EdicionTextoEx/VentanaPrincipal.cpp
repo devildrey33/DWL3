@@ -19,7 +19,6 @@ void VentanaPrincipal::Crear(void) {
 LRESULT CALLBACK VentanaPrincipal::GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
 		case WM_CLOSE :
-//			WM_Close();
 			PostQuitMessage(0);
 			return 0;
 	}
