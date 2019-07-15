@@ -5,8 +5,9 @@
 #include "DMarcaEx.h"
 #include "DEventoTeclado.h"
 
-#define DEDICIONTEXTOEX_TAMICONO	16
-#define DEDICIONTEXTOEX_MARGEN_X	4
+#define DEDICIONTEXTOEX_TAMICONO			16
+#define DEDICIONTEXTOEX_MARGEN_X			 4
+#define DEDICIONTEXTOEX_MARGEN_CURSOR_Y		 3
 
 #define ID_TIMER_CURSOR				1000
 
@@ -84,6 +85,86 @@ namespace DWL {
 	void DEdicionTextoEx::Pintar(HDC DC, const int cX, const int cY) {
 		RECT RC;
 		GetClientRect(hWnd(), &RC);
+
+		HDC		Buffer			= CreateCompatibleDC(NULL);								// Creo un buffer en memória para pintar el control
+		HBITMAP Bmp				= CreateCompatibleBitmap(DC, RC.right, RC.bottom);		// Creo un DC compatible para el buffer
+		HBITMAP vBmp			= static_cast<HBITMAP>(SelectObject(Buffer, Bmp));		// Bitmap compatible para el DC
+		HFONT	vFuente			= static_cast<HFONT>(SelectObject(Buffer, Fuente()));	// Selecciono la fuente del control
+		RECT    EspacioTexto	= { 0, 0, 0, 0 };
+
+		// Pinto el fondo
+		HBRUSH BrochaFondo = CreateSolidBrush(_ColorFondo);
+		FillRect(Buffer, &RC, BrochaFondo);
+		DeleteObject(BrochaFondo);
+
+		// Pinto el borde
+		HBRUSH BrochaBorde = CreateSolidBrush(_ColorBorde);
+		FrameRect(Buffer, &RC, BrochaBorde);
+		DeleteObject(BrochaBorde);
+
+		long TamIcono = DEDICIONTEXTOEX_MARGEN_X;
+		// Pinto el icono (si hay icono)
+		if (_Icono() != NULL) {
+			TamIcono = DEDICIONTEXTOEX_TAMICONO + DEDICIONTEXTOEX_MARGEN_X;
+			// Pinto el icono
+			DrawIconEx(Buffer, 2, 2, _Icono(), DEDICIONTEXTOEX_TAMICONO, DEDICIONTEXTOEX_TAMICONO, 0, 0, DI_NORMAL);
+		}
+		// Espacio disponible para el texto (por si hay un icono)
+		EspacioTexto = { RC.left + TamIcono, RC.top, RC.right - TamIcono, RC.bottom };
+
+		// Calculo la posición del texto
+		SIZE TamTexto = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor).c_str());
+		RECT PosTexto = { 0, 0, 0, 0 };
+		switch (Alineacion) {
+			case DEdicionTextoEx_Alineacion_Izquierda:
+				SetRect(&PosTexto, DEDICIONTEXTOEX_MARGEN_X, 0, DEDICIONTEXTOEX_MARGEN_X + TamTexto.cx, RC.bottom);
+				break;
+			case DEdicionTextoEx_Alineacion_Derecha:
+				SetRect(&PosTexto, RC.right - DEDICIONTEXTOEX_MARGEN_X - TamTexto.cx, 0, RC.right - DEDICIONTEXTOEX_MARGEN_X, RC.bottom);
+				break;
+			case DEdicionTextoEx_Alineacion_Centrado:
+				SetRect(&PosTexto, (RC.right - DEDICIONTEXTOEX_MARGEN_X - TamTexto.cx) / 2, 0, ((RC.right - DEDICIONTEXTOEX_MARGEN_X - TamTexto.cx) / 2 ) + TamTexto.cx, RC.bottom);
+				break;
+		}
+
+		// Asigno el fondo transparente al pintar el texto
+		SetBkMode(Buffer, TRANSPARENT);
+		// Pinto la sombra del texto
+		if (Skin.FuenteSombraTexto == TRUE) {
+			SetTextColor(Buffer, _ColorTextoSombra);
+			TextOut(Buffer, PosTexto.left + 1, PosTexto.top + 1, _Texto.c_str(), static_cast<int>(_Texto.size()));
+		}
+
+		// Pinto el texto
+		SetTextColor(Buffer, _ColorTexto);
+		TextOut(Buffer, PosTexto.left, PosTexto.top, _Texto.c_str(), static_cast<int>(_Texto.size()));
+
+		// Pinto el cursor (si el tipo de entrada lo permite y el control tiene el foco)
+		if (Entrada != DEdicionTextoEx_Entrada_SinEntrada && GetFocus() == _hWnd) {
+			HPEN			PlumaCursor			= CreatePen(PS_SOLID, 1, _ColorCursor);
+			HPEN			VPluma				= static_cast<HPEN>(SelectObject(Buffer, PlumaCursor));
+			SIZE			TamTextoHC			= Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor).c_str());
+			
+			MoveToEx(Buffer, PosTexto.left + TamTextoHC.cx, DEDICIONTEXTOEX_MARGEN_CURSOR_Y, NULL);
+			LineTo(Buffer, PosTexto.left + TamTextoHC.cx, PosTexto.bottom - DEDICIONTEXTOEX_MARGEN_CURSOR_Y);
+			SelectObject(Buffer, VPluma);
+		}
+
+		// Copio el buffer al DC
+		BitBlt(DC, cX + RC.left, cY + RC.top, RC.right - cX, RC.bottom - cY, Buffer, 0, 0, SRCCOPY);
+
+		// Elimino el buffer de la memória	
+		SelectObject(Buffer, vFuente);
+		SelectObject(Buffer, vBmp);
+		DeleteObject(Bmp);
+		DeleteDC(Buffer);
+	}
+
+
+	// TODO : s'ha de fer una nova funció amb TextOut, i aixi ja calculo jo totes les posicions exactament, el Problema del DrawText es que no se on acaba pintat el texte
+/*	void DEdicionTextoEx::Pintar(HDC DC, const int cX, const int cY) {
+		RECT RC;
+		GetClientRect(hWnd(), &RC);
 		
 		HDC		Buffer		= CreateCompatibleDC(NULL);							// Creo un buffer en memória para pintar el control
 		HBITMAP Bmp			= CreateCompatibleBitmap(DC, RC.right, RC.bottom);	// Creo un DC compatible para el buffer
@@ -110,21 +191,24 @@ namespace DWL {
 		}
 
 		HFONT vFuente = static_cast<HFONT>(SelectObject(Buffer, Fuente()));
-		// Calculo la posición X del cursor
-/*		switch (Alineacion) {
+
+/*		// Calculo la posición X del cursor
+		SIZE PC = { 0, 0 };
+		long PosDifX = 0;		
+		switch (Alineacion) {
 			case DEdicionTextoEx_Alineacion_Izquierda :
-				PC = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor));
+				PC = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor).c_str());
 				if (PC.cx > RTexto.right - RTexto.left) PosDifX = PC.cx - (RTexto.right - RTexto.left);
 				break;
 			case DEdicionTextoEx_Alineacion_Derecha :
-				PC = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(_Texto.size()-1, _PosCursor));
+				PC = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(_Texto.size()-1, _PosCursor).c_str());
 				break;
 			case DEdicionTextoEx_Alineacion_Centrado :
-				PC = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor));
+				PC = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor).c_str());
 				break;
 		}*/
-
-		SIZE PC = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor).c_str());
+		// Calculo la posición X del cursor
+/*		SIZE PC = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor).c_str());
 		long PosDifX = 0;
 		if (PC.cx > RTexto.right - RTexto.left) PosDifX = PC.cx - (RTexto.right - RTexto.left);
 
@@ -147,20 +231,20 @@ namespace DWL {
 			HPEN VPluma = static_cast<HPEN>(SelectObject(Buffer, PlumaCursor));
 			SIZE TamTxt;
 			GetTextExtentPoint(Buffer, TextoHastaElCursor.c_str(), static_cast<int>(TextoHastaElCursor.size()), &TamTxt);
-			int PosCursorPx = RTexto.left + TamTxt.cx + 1;
+			int PosCursorPx = PC.cx + RTexto.left + TamTxt.cx + 1;
 			MoveToEx(Buffer, PosCursorPx, 2, NULL);
 			LineTo(Buffer, PosCursorPx, (RTexto.bottom - RTexto.top) - 2);
 			SelectObject(Buffer, VPluma);
 		}
 
 		// Copio el buffer al DC
-		BitBlt(DC, cX + RC.left, cY + RC.top, RC.right, RC.bottom, Buffer, 0, 0, SRCCOPY);
+		BitBlt(DC, cX + RC.left, cY + RC.top, RC.right, RC.bottom, Buffer, PosDifX, 0, SRCCOPY);
 
 		// Elimino el buffer de la memória
 		SelectObject(Buffer, BmpViejo);
 		DeleteObject(Bmp);
 		DeleteDC(Buffer);
-	}
+	}*/
 
 	void DEdicionTextoEx::_Evento_TeclaPresionada(WPARAM wParam, LPARAM lParam) {
 		DEventoTeclado DatosTeclado(wParam, lParam, this);
@@ -183,6 +267,9 @@ namespace DWL {
 				if (_Texto.size() > 0 && _PosCursor < _Texto.size()) _Texto.erase(_PosCursor, 1);
 				break;
 		}
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_TeclaPresionada %d.\n", DatosTeclado.Caracter());
+		#endif
 		Repintar();
 	}
 
@@ -192,6 +279,10 @@ namespace DWL {
 			case VK_SHIFT:
 				break;
 		}
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_TeclaSoltada %d.\n", DatosTeclado.Caracter());
+		#endif
+
 	}
 
 	void DEdicionTextoEx::_Evento_Tecla(WPARAM wParam, LPARAM lParam) {
@@ -224,6 +315,10 @@ namespace DWL {
 		}		
 		Repintar();
 		SendMessage(GetParent(hWnd()), DWL_EDICIONTEXTOEX_CAMBIO, static_cast<WPARAM>(ID()), 0);
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_Tecla %d.\n", DatosTeclado.TeclaVirtual());
+		#endif
+
 	}
 
 	const BOOL DEdicionTextoEx::_EntradaPermitida(const wchar_t Caracter) {
@@ -374,9 +469,8 @@ namespace DWL {
 		}
 	}
 
-	void DEdicionTextoEx::Transicion(const DEdicionTextoEx_Transicion nTransicion) {
-		
 
+	void DEdicionTextoEx::Transicion(const DEdicionTextoEx_Transicion nTransicion) {
 		DWORD Duracion = DhWnd::TiempoAnimaciones;
 		if (_AniTransicion.Animando() == TRUE) {
 			Duracion = _AniTransicion.TiempoActual();
@@ -386,28 +480,36 @@ namespace DWL {
 		COLORREF *FondoHasta = 0, *BordeHasta = 0, *TextoHasta = 0, *TextoSombraHasta = 0;
 		switch (nTransicion) {
 			case DEdicionTextoEx_Transicion_Normal:
-				Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Normal.\n");
+				#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+					Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Normal.\n");
+				#endif
 				FondoHasta		 = &Skin.FondoNormal;
 				BordeHasta		 = &Skin.BordeNormal;
 				TextoHasta	 	 = &Skin.Texto;
 				TextoSombraHasta = &Skin.TextoSombra;
 				break;
 			case DEdicionTextoEx_Transicion_Resaltado:
-				Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Resaltado.\n");
+				#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+					Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Resaltado.\n");
+				#endif			
 				FondoHasta		 = &Skin.FondoResaltado;
 				BordeHasta		 = &Skin.BordeResaltado;
 				TextoHasta		 = &Skin.TextoResaltado;
 				TextoSombraHasta = &Skin.TextoResaltadoSombra;
 				break;
 			case DEdicionTextoEx_Transicion_Presionado:
-				Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Presionado.\n");
+				#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+					Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Presionado.\n");
+				#endif
 				FondoHasta		 = &Skin.FondoPresionado;
 				BordeHasta	 	 = &Skin.BordePresionado;
 				TextoHasta		 = &Skin.TextoPresionado;
 				TextoSombraHasta = &Skin.TextoPresionadoSombra;
 				break;
 			case DEdicionTextoEx_Transicion_Desactivado:
-				Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Desactivado.\n");
+				#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+					Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Desactivado.\n");
+				#endif			
 				FondoHasta		 = &Skin.FondoDesactivado;
 				BordeHasta		 = &Skin.BordeNormal;
 				TextoHasta		 = &Skin.TextoDesactivado;

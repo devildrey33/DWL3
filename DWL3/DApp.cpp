@@ -6,6 +6,10 @@ DWL::DApp *_Aplicacion = NULL;
 
 namespace DWL {
 
+	DApp::DApp(void) {
+		_Aplicacion = this;
+	}
+
 	/* Vacia la cola de mensajes para este hilo */
 	void DApp::Eventos_Mirar(void) {
 		static MSG msg;

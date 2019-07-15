@@ -8,6 +8,8 @@
 
 namespace DWL {
 
+	#define DEDICIONTEXTOEX_MOSTRARDEBUG	FALSE
+
 	class DEdicionTextoEx_Skin {
 	  public:
 					 DEdicionTextoEx_Skin(void);

@@ -10,6 +10,7 @@ namespace DWL {
 		if (_hWnd != NULL && IsWindow(_hWnd) == 0) { Destruir(); }
 		if (hWnd()) { Debug_Escribir(L"DControlEx::Crear() Error : ya se ha creado el control extendido\n"); return hWnd(); }
 		ATOM CA = RegistrarClase(nNombre, _GestorMensajes, nEstilosClase);
+		_Padre = nPadre;
 		// Si el DhWnd padre es NULL pasamos NULL al hWndPadre
 		HWND hWndPadre = (nPadre != NULL) ? nPadre->hWnd() : NULL;
 		_MouseDentro = FALSE;
@@ -40,8 +41,11 @@ namespace DWL {
 				PreControlEx->GestorMensajes(uMsg, wParam, lParam);
 				return TRUE;
 			}
+//			case WM_NCDESTROY :
+//				return DefWindowProc(nhWnd, uMsg, wParam, lParam);
 			default: {
-				DControlEx *ControlEx = reinterpret_cast<DControlEx *>(GetWindowLongPtr(nhWnd, GWLP_USERDATA));
+					//				HWND h = GetParent(nhWnd);
+				DControlEx* ControlEx = reinterpret_cast<DControlEx*>(GetWindowLongPtr(nhWnd, GWLP_USERDATA));
 				if (ControlEx != NULL) {
 					return ControlEx->GestorMensajes(uMsg, wParam, lParam);
 					//					if (Ret != DWL_USAR_GESTOR_POR_DEFECTO) return 0;

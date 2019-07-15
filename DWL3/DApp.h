@@ -3,12 +3,30 @@
 
 #include "DEventoTeclado.h"
 #include "DConsola.h"
+#include <memory>
 
 namespace DWL {
 
+	// Singleton básico para contener la clase aplicación
+	template<typename T> class DSingleton {
+	  public:
+		static T   &Instancia(void) {
+						static T instancia;
+						return instancia;
+					};
+
+					DSingleton(const DSingleton&) = delete;
+		DSingleton &operator= (const DSingleton) = delete;
+
+	  protected:
+					DSingleton(void) {}
+	};
+
+
+
 	class DApp {
 	  public :
-										DApp(void) { }
+										DApp(void);
 
 		void							Eventos_Mirar(void);
 	
@@ -35,6 +53,13 @@ namespace DWL {
 
 // Variable externa con la clase DApp (para uso de la DWL)
 extern DWL::DApp *_Aplicacion;
+
+// Crea un singleton de la clase aplicación especificada
+#define INICIAR_DWL3(DAPP) class _DWLApp : public DWL::DSingleton<DAPP> { };
+// Devuelve la instancia de la clase aplicación
+#define App _DWLApp::Instancia()
+
+//#define TERMINAR_DWL3()  _DWLApp::Eliminar();
 
 
 // Fer un extern MiApp *_App al projecte dependent

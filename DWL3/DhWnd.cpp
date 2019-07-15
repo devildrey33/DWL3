@@ -95,11 +95,59 @@ namespace DWL {
 
 
 
+/*	void DhWnd::WM_ParentNotify(WPARAM wParam, LPARAM lParam) {
+		// Se ha destruido un control hijo
+		if (LOWORD(wParam) == WM_DESTROY) {
+			#if DHWND_MOSTRARDEBUG == TRUE
+				Debug_Escribir_Varg(L"DhWnd::WM_ParentNotify Destroy -> %d %d", HIWORD(wParam), lParam);
+			#endif
+
+			for (size_t i = 0; i < _Hijos.size(); i++) {
+				if (_Hijos[i]->ID() == HIWORD(wParam) && (HWND)lParam == _Hijos[i]->_hWnd) {
+					_Hijos[i]->_hWnd = nullptr;
+					return;
+				}
+			}
+		}
+	}
+
+	// Libero los window procedures
+	void DhWnd::WM_Close(DhWnd *C) {
+		if (C == nullptr) C = this;
+		for (size_t i = 0; i < C->_Hijos.size(); i++) {
+			if (C->_Hijos[i]->_Hijos.size() != 0) WM_Close(C->_Hijos[i]);
+			SetWindowLongPtr(C->_Hijos[i]->_hWnd, GWLP_USERDATA, NULL);
+			C->_Hijos[i]->_hWnd = nullptr;
+		}
+		C->_Hijos.resize(0);
+		SetWindowLongPtr(C->_hWnd, GWLP_USERDATA, NULL);
+	}*/
 
 
+	const BOOL DhWnd::Destruir(void) {
+		#if DHWND_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DhWnd::Destruir %d %d\n", ID(), _hWnd);
+		#endif
+		if (_hWnd == NULL) {
+			return TRUE;
+		}
 
+		SetWindowLongPtr(_hWnd, GWLP_USERDATA, NULL);
 
-
+/*		if (_Padre != NULL) {
+			for (size_t i = 0; i < _Padre->_Hijos.size(); i++) {
+				if (_Padre->_Hijos[i]->ID() == ID()) {
+					// Borro este control de la lista de hijos del padre.
+					_Padre->_Hijos.erase(_Padre->_Hijos.begin() + static_cast<unsigned int>(i));
+					break;
+				}
+			}
+		}*/
+		_Padre = NULL;
+		BOOL R = DestroyWindow(_hWnd);
+		_hWnd = NULL;
+		return R;
+	};
 
 
 

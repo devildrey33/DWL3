@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="xXx_MAIN_xXx">
+      <UniqueIdentifier>{89c66196-b654-4f9b-aaf6-c8ce9fbae80e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EdicionTextoEx.h">
+      <Filter>xXx_MAIN_xXx</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>xXx_MAIN_xXx</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>xXx_MAIN_xXx</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>xXx_MAIN_xXx</Filter>
+    </ClInclude>
+    <ClInclude Include="VentanaPrincipal.h">
+      <Filter>xXx_MAIN_xXx</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="VentanaPrincipal.cpp">
+      <Filter>xXx_MAIN_xXx</Filter>
+    </ClCompile>
+    <ClCompile Include="EdicionTextoEx.cpp">
+      <Filter>xXx_MAIN_xXx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EdicionTextoEx.rc">
+      <Filter>Archivos de recursos</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="EdicionTextoEx.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

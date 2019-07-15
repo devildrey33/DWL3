@@ -1,14 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29001.49
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DWL3", "DWL3\DWL3.vcxproj", "{CDEEAE52-009B-41D5-9F2F-77CF4844349E}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ejemplo EdicionTextoEx", "Ejemplos\EdicionTextoEx\EdicionTextoEx.vcxproj", "{1DB3A50D-D838-485B-A572-F21363C74E7F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{CDEEAE52-009B-41D5-9F2F-77CF4844349E} = {CDEEAE52-009B-41D5-9F2F-77CF4844349E}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EdicionTextoEx", "EdicionTextoEx.vcxproj", "{1DB3A50D-D838-485B-A572-F21363C74E7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,14 +13,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CDEEAE52-009B-41D5-9F2F-77CF4844349E}.Debug|x64.ActiveCfg = Debug|x64
-		{CDEEAE52-009B-41D5-9F2F-77CF4844349E}.Debug|x64.Build.0 = Debug|x64
-		{CDEEAE52-009B-41D5-9F2F-77CF4844349E}.Debug|x86.ActiveCfg = Debug|Win32
-		{CDEEAE52-009B-41D5-9F2F-77CF4844349E}.Debug|x86.Build.0 = Debug|Win32
-		{CDEEAE52-009B-41D5-9F2F-77CF4844349E}.Release|x64.ActiveCfg = Release|x64
-		{CDEEAE52-009B-41D5-9F2F-77CF4844349E}.Release|x64.Build.0 = Release|x64
-		{CDEEAE52-009B-41D5-9F2F-77CF4844349E}.Release|x86.ActiveCfg = Release|Win32
-		{CDEEAE52-009B-41D5-9F2F-77CF4844349E}.Release|x86.Build.0 = Release|Win32
 		{1DB3A50D-D838-485B-A572-F21363C74E7F}.Debug|x64.ActiveCfg = Debug|x64
 		{1DB3A50D-D838-485B-A572-F21363C74E7F}.Debug|x64.Build.0 = Debug|x64
 		{1DB3A50D-D838-485B-A572-F21363C74E7F}.Debug|x86.ActiveCfg = Debug|Win32
@@ -39,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {66A65588-E995-4DF7-BD67-1D8663EED94E}
+		SolutionGuid = {07881159-8243-47A6-A4A3-1EFA424F3CDE}
 	EndGlobalSection
 EndGlobal
