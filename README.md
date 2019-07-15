@@ -30,17 +30,17 @@ Para crear un proyecto utilizando la DWL3 debes seguir los siguientes pasos :
 ```c++
 // Archivo lib de la DWL según la configuración suponiendo que el directorio DWL y el directorio de tu proyecto comparten el mismo directorio padre.
 #ifdef _DEBUG
-	#if _WIN64
-		#pragma comment(lib, "..\\Build\\DWL\\x64\\Debug\\DWL3.lib")
-	#else
-		#pragma comment(lib, "..\\Build\\DWL\\x86\\Debug\\DWL3.lib")
-	#endif
+    #if _WIN64
+        #pragma comment(lib, "..\\Build\\DWL\\x64\\Debug\\DWL3.lib")
+    #else
+        #pragma comment(lib, "..\\Build\\DWL\\x86\\Debug\\DWL3.lib")
+    #endif
 #else
-	#if _WIN64
-		#pragma comment(lib, "..\\Build\\DWL\\x64\\Release\\DWL3.lib")
-	#else
-		#pragma comment(lib, "..\\Build\\DWL\\x86\\Release\\DWL3.lib")
-	#endif
+    #if _WIN64
+        #pragma comment(lib, "..\\Build\\DWL\\x64\\Release\\DWL3.lib")
+    #else
+        #pragma comment(lib, "..\\Build\\DWL\\x86\\Release\\DWL3.lib")
+    #endif
 #endif
 ''''
 
@@ -50,15 +50,18 @@ Para crear un proyecto utilizando la DWL3 debes seguir los siguientes pasos :
 // Paso 1 : crear un objeto que herede de DApp para que sea nuestra clase aplicación
 class MiApp : public DWL::DApp {
   public :
-						MiApp(void) { };
-						// Por ejemplo puedes añadir tu ventana principal dentro de esta clase
+				MiApp(void) { };
+				// Por ejemplo puedes añadir tu ventana principal dentro de esta clase
 	VentanaPrincipal	MiVentana;
 };
 
 ''''
 * Y por ultimo debes añadir el siguiente código en el MAIN :
 ```c++
-int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow) {
+int APIENTRY _tWinMain(_In_     HINSTANCE hInstance, 
+		       _In_opt_ HINSTANCE hPrevInstance,
+		       _In_     LPTSTR    lpCmdLine, 
+		       _In_     int       nCmdShow) {
 	// Inicio la DWL con la clase aplicación de este proyecto
 	INICIAR_DWL3(MiApp);
 	...
