@@ -11,7 +11,7 @@ void VentanaPrincipal::Crear(void) {
 	Edit1.CrearEdicionTextoEx(this, L"Test1", 10, 10, 300, 20, ID_EDIT1);
 	Edit2.Alineacion = DWL::DEdicionTextoEx_Alineacion_Centrado;
 	Edit2.CrearEdicionTextoEx(this, L"Test2", 10, 40, 300, 20, ID_EDIT2);
-	Edit2.Alineacion = DWL::DEdicionTextoEx_Alineacion_Derecha;
+	Edit3.Alineacion = DWL::DEdicionTextoEx_Alineacion_Derecha;
 	Edit3.CrearEdicionTextoEx(this, L"Test3", 10, 70, 300, 20, ID_EDIT3);
 }
 

@@ -20,11 +20,11 @@ Para crear un proyecto utilizando la DWL3 debes seguir los siguientes pasos :
 
 * Clonar / Descargar esta librería.
 
-* Crear una solución con un nuevo proyecto, e agregar la DWL3 a tu proyecto.
+* Crear una solución con un nuevo proyecto, e agregar la DWL3 a tu solución.
 
 * En las dependencias de tu proyecto debes marcar la DWL3 (Proyecto -> Dependencias del proyecto...)
 
-* Debes configurar los directorios de inclusión de tu proyecto para añadir el directorio de la DWL3 con el código.
+* Debes configurar los directorios de inclusión de tu proyecto para añadir el directorio de la DWL3 con el código. "/DWL3/DWL3"
 
 * Tienes que enlazar los lib, puedes hacer-lo desde las propiedades del proyecto / vinculador, o utilizando la directiva pragma de la siguiente forma :
 ```c++
@@ -51,8 +51,8 @@ Para crear un proyecto utilizando la DWL3 debes seguir los siguientes pasos :
 // Paso 1 : crear un objeto que herede de DApp para que sea nuestra clase aplicación
 class MiApp : public DWL::DApp {
   public :
-				MiApp(void) { };
-				// Por ejemplo puedes añadir tu ventana principal dentro de esta clase
+                        MiApp(void) { };
+                        // Por ejemplo puedes añadir tu ventana principal dentro de esta clase
 	VentanaPrincipal	MiVentana;
 };
 ```
@@ -65,6 +65,7 @@ int APIENTRY _tWinMain(_In_     HINSTANCE hInstance,
 		       _In_     int       nCmdShow) {
 	// Inicio la DWL con la clase aplicación de este proyecto
 	INICIAR_DWL3(MiApp);
+	App.MiVentana.Crear();
 	...
 ```
  

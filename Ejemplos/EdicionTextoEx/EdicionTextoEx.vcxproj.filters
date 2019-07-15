@@ -5,33 +5,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="xXx_MAIN_xXx">
+    <Filter Include="Código">
       <UniqueIdentifier>{89c66196-b654-4f9b-aaf6-c8ce9fbae80e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EdicionTextoEx.h">
-      <Filter>xXx_MAIN_xXx</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
-      <Filter>xXx_MAIN_xXx</Filter>
+      <Filter>Código</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>xXx_MAIN_xXx</Filter>
+      <Filter>Código</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>xXx_MAIN_xXx</Filter>
+      <Filter>Código</Filter>
     </ClInclude>
     <ClInclude Include="VentanaPrincipal.h">
-      <Filter>xXx_MAIN_xXx</Filter>
+      <Filter>Código</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Código</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VentanaPrincipal.cpp">
-      <Filter>xXx_MAIN_xXx</Filter>
+      <Filter>Código</Filter>
     </ClCompile>
-    <ClCompile Include="EdicionTextoEx.cpp">
-      <Filter>xXx_MAIN_xXx</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>Código</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

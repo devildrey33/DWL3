@@ -2,7 +2,7 @@
 //
 
 #include "framework.h"
-#include "EdicionTextoEx.h"
+#include "main.h"
 
 
 
@@ -13,7 +13,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	// Inicio la DWL con la clase aplicación de este proyecto
 	INICIAR_DWL3(EjemploEdicionTextoExApp);
 
-//	App.ConsolaDebug.Crear(L"Consola de depuración");
+	App.ConsolaDebug.Crear(L"DEBUG");
 
 	App.Ventana.Crear();
 

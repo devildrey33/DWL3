@@ -28,9 +28,9 @@ namespace DWL {
 		COLORREF     BordeNormal;
 		COLORREF     BordeResaltado;
 		COLORREF     BordePresionado;							
-		COLORREF     Seleccion;
-		COLORREF     SeleccionTexto;
-		COLORREF     SeleccionTextoSombra;
+		COLORREF     FondoSeleccion;
+//		COLORREF     SeleccionTexto;
+//		COLORREF     SeleccionTextoSombra;
 
 		COLORREF     Cursor;
 					 // Fuente
@@ -89,6 +89,7 @@ namespace DWL {
 		DEdicionTextoEx_Entrada		Entrada;		// Tipo de entrada permitida para el usuario
 		DEdicionTextoEx_Alineacion	Alineacion;
 		DEdicionTextoEx_Skin        Skin;
+		const size_t                HitTest(const int cX, const int cY);
 	  protected:
 		const BOOL                 _EntradaPermitida(const wchar_t Caracter); // Determina si el caracter introducido es válido para el tipo de entrada actual
 		void					   _Evento_Pintar(void);
@@ -106,6 +107,8 @@ namespace DWL {
 
 		std::wstring               _Texto;
 
+		RECT                       _PosicionTexto(RECT &RC);
+
 		COLORREF                   _ColorTexto;
 		COLORREF                   _ColorTextoSombra;
 		COLORREF                   _ColorFondo;
@@ -113,6 +116,7 @@ namespace DWL {
 		COLORREF                   _ColorCursor;
 
 		size_t                     _PosCursor;
+		size_t                     _PosSeleccion;
 //		size_t                     _FinSeleccion;
 		DAnimacion                 _AniCursor;
 		DAnimacion                 _AniTransicion;		
