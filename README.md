@@ -28,7 +28,8 @@ Para crear un proyecto utilizando la DWL3 debes seguir los siguientes pasos :
 
 * Tienes que enlazar los lib, puedes hacer-lo desde las propiedades del proyecto / vinculador, o utilizando la directiva pragma de la siguiente forma :
 ```c++
-// Archivo lib de la DWL según la configuración suponiendo que el directorio DWL y el directorio de tu proyecto comparten el mismo directorio padre.
+// Archivo lib de la DWL según la configuración,
+// suponiendo que el directorio DWL y el directorio de tu proyecto comparten el mismo directorio padre.
 #ifdef _DEBUG
     #if _WIN64
         #pragma comment(lib, "..\\Build\\DWL\\x64\\Debug\\DWL3.lib")
@@ -42,7 +43,7 @@ Para crear un proyecto utilizando la DWL3 debes seguir los siguientes pasos :
         #pragma comment(lib, "..\\Build\\DWL\\x86\\Release\\DWL3.lib")
     #endif
 #endif
-''''
+```
 
 * Necesitas crear un objeto aplicación al que despues podrás acceder desde qualquier parte del código.
 ```c++
@@ -54,8 +55,8 @@ class MiApp : public DWL::DApp {
 				// Por ejemplo puedes añadir tu ventana principal dentro de esta clase
 	VentanaPrincipal	MiVentana;
 };
+```
 
-''''
 * Y por ultimo debes añadir el siguiente código en el MAIN :
 ```c++
 int APIENTRY _tWinMain(_In_     HINSTANCE hInstance, 
