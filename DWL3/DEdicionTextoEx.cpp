@@ -102,7 +102,7 @@ namespace DWL {
 
 		// Pinto el icono (si hay icono)
 		if (_Icono() != NULL) {
-			DrawIconEx(Buffer, 2, 2, _Icono(), DEDICIONTEXTOEX_TAMICONO, DEDICIONTEXTOEX_TAMICONO, 0, 0, DI_NORMAL);
+			DrawIconEx(Buffer, 2, (RC.bottom - DEDICIONTEXTOEX_TAMICONO) / 2, _Icono(), DEDICIONTEXTOEX_TAMICONO, DEDICIONTEXTOEX_TAMICONO, 0, 0, DI_NORMAL);
 		}
 
 		// Obtengo el rectangulo que ocupará el texto
@@ -168,13 +168,18 @@ namespace DWL {
 
 		// Calculo la posición del texto
 		SIZE TamTexto = Fuente.ObtenerTamTexto(_Texto.c_str());
+
+		// Calculo la altura del texto
+		int Top = ((EspacioTexto.bottom - EspacioTexto.top) - TamTexto.cy) / 2;
+		int Bottom = Top + TamTexto.cy;
+
 		switch (Alineacion) {
 			case DEdicionTextoEx_Alineacion_Izquierda:
-				return { EspacioTexto.left, EspacioTexto.top, EspacioTexto.left + TamTexto.cx, EspacioTexto.bottom };
+				return { EspacioTexto.left, Top, EspacioTexto.left + TamTexto.cx, Bottom };
 			case DEdicionTextoEx_Alineacion_Derecha:
-				return { EspacioTexto.right - TamTexto.cx, 0, EspacioTexto.right, EspacioTexto.bottom };
+				return { EspacioTexto.right - TamTexto.cx, Top, EspacioTexto.right, Bottom };
 			case DEdicionTextoEx_Alineacion_Centrado:
-				return { (EspacioTexto.right - TamTexto.cx) / 2, 0, ((EspacioTexto.right - TamTexto.cx) / 2) + TamTexto.cx, EspacioTexto.bottom };
+				return { (EspacioTexto.right - TamTexto.cx) / 2, Top, ((EspacioTexto.right - TamTexto.cx) / 2) + TamTexto.cx, Bottom };
 		}
 
 		return { 0, 0, 0, 0 };
