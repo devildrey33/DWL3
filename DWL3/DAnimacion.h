@@ -37,10 +37,6 @@ namespace DWL {
 			RGB			// COLORREF
 		};
 
-/*		enum Valor_TipoInterno {
-			PorCopia,		// Copia el valor Hasta en una nueva variable.
-			PorReferencia	// Guarda un puntero al valor Hasta proporcionado.
-		};*/
 
 
 		// Objeto que contiene un valor por referéncia para la animación (el valor puede ser decimál o un color)

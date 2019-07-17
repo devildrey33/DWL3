@@ -7,8 +7,10 @@
 namespace DWL {
 	// Objeto que re-emplaza a DListaIconos 
 
-	// Se ha diseñado para cargar no cargar 20 veces el mismo icono de forma que guarda todos los iconos en memória, 
+	// Se ha diseñado para no cargar 20 veces el mismo icono de forma que guarda todos los iconos en memória, 
 	// y si vamos a crear un icono que ya existe nos devuelve el existente sin necesidad de crear uno nuevo.
+
+	// Los iconos se borrarán al terminar la aplicación (NO ES MULTITHREAD ya que en teoría todo el tema del GDI se debería llevar desde el hilo principal)
 	class DIcono {
 	  protected:
 		// Datos de un icono

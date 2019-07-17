@@ -195,7 +195,7 @@ namespace DWL {
 		void                                           _SubirItemsSeleccionados(void);
 		void                                           _BajarItemsSeleccionados(void);
 
-		// Teclas especiales
+														// Teclas especiales
 		void										   _Tecla_CursorArriba(DEventoTeclado &DatosTeclado);
 		void										   _Tecla_CursorAbajo(DEventoTeclado &DatosTeclado);
 		void										   _Tecla_Inicio(DEventoTeclado &DatosTeclado);

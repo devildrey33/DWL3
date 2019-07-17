@@ -20,8 +20,8 @@ namespace DWL {
 	}
 
 
-	// TODO : fer que retorni un TCHAR *
-	const TCHAR* DApp::ObtenerSO(void) {
+	
+	const wchar_t *DApp::ObtenerSO(void) {
 		UINT Version = 0;
 
 		if (IsWindowsXPOrGreater())			Version++;

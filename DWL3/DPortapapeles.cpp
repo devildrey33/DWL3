@@ -2,17 +2,12 @@
 #include "DPortapapeles.h"
 
 namespace DWL {
-	void DPortapapeles::ObtenerTexto(HWND hWndPaste, std::wstring& OUT_Texto) {
-		HGLOBAL				Paste = NULL;
-		LPTSTR				Str = NULL;
-//		static DWLString    Txt;
+	// Función que obtiene el texto del portapapeles
+	void DPortapapeles::ObtenerTexto(HWND hWndPaste, std::wstring &OUT_Texto) {
+		HGLOBAL		Paste = NULL;
+		LPTSTR		Str   = NULL;
 		if (OpenClipboard(hWndPaste) == TRUE) {
-			#if defined UNICODE
-				Paste = GetClipboardData(CF_UNICODETEXT);
-			#else
-				Paste = GetClipboardData(CF_TEXT);
-			#endif
-			//DWLDebug::MostrarUltimoError();
+			Paste = GetClipboardData(CF_UNICODETEXT);
 			if (Paste != NULL) {
 				Str = static_cast<LPTSTR>(GlobalLock(Paste));
 				if (Str != nullptr) OUT_Texto = Str;
@@ -22,7 +17,8 @@ namespace DWL {
 		}
 	}
 
-	void DPortapapeles::AsignarTexto(const wchar_t* nTexto) {
+	// Función que asigna el texto al portapapeles
+	void DPortapapeles::AsignarTexto(const wchar_t *nTexto) {
 		if (nTexto == NULL) return;
 		size_t Len = wcslen(nTexto) + 1;
 		if (Len == 0) return;
@@ -41,10 +37,10 @@ namespace DWL {
 				}
 			}
 		}
-
 	}
 
-	void DPortapapeles::AsignarTexto(std::wstring& Texto) {
+	// Función que asigna el texto al portapapeles
+	void DPortapapeles::AsignarTexto(std::wstring &Texto) {
 		AsignarTexto(Texto.c_str());
 	}
 

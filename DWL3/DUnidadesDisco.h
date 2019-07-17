@@ -17,6 +17,7 @@
 	        DEnum_UnidadDisco_Tipo_RamDisk			= 6
         };
 
+		// Objeto que engloba una unidad de disco
         class DUnidadDisco  {
           public:
 			//virtual const DEnum_Objeto		Objeto_Tipo(void) { return DEnum_Objeto_UnidadDisco; };
@@ -44,18 +45,20 @@
         };
 
 
-
+		// Objeto que contiene todas las unidades de disco disponibles
 		class DUnidadesDisco  {
           public :
-//			virtual const DEnum_Objeto		Objeto_Tipo(void) { return DEnum_Objeto_UnidadesDisco; };
 											DUnidadesDisco(void);
 										   ~DUnidadesDisco(void);
 
 								            // Mira las unidades locales de la 'C' a la 'Z' evitando las disqueteras.
 			const unsigned int			    Escanear_Unidades_Locales(void);
+											// Función que devuelve la unidad por la posición especificada
 			DUnidadDisco			       *Unidad(const size_t Pos);
+											// Función que devuelve la unidad por su numero de serie especificado
 			DUnidadDisco			       *Buscar_Numero_Serie(const DWORD Numero);
-			DUnidadDisco			       *Buscar_Letra(const TCHAR Letra);
+											// Función que devuelve la unidad por su letra especifcada
+			DUnidadDisco			       *Buscar_Letra(const wchar_t Letra);
 			const size_t      			    TotalUnidades(void);
           private :
   		    void							BorrarMemoria(void);

@@ -7,72 +7,59 @@
 
 namespace DWL {
 
-	// Singleton básico para contener la clase aplicación
-	template<typename T> class DSingleton {
+	class DApp;
+
+	// Singleton básico para contener la clase aplicación que hereda de DApp
+	template<class T = DApp> class DSingleton {
 	  public:
+					// Función que crea una instancia estática y la devuelve (al ser estatica la instancia solo se crea la pirmera vez que se accede a esta función)
 		static T   &Instancia(void) {
 						static T instancia;
 						return instancia;
 					};
-
+					// Elimino el constructor copia
 					DSingleton(const DSingleton&) = delete;
+					// Elimino el operador =
 		DSingleton &operator= (const DSingleton) = delete;
-
-	  protected:
-					DSingleton(void) {}
+	  private:
+					// Constructor por defecto des-habilitado
+					DSingleton(void) { }
 	};
 
 
 
 	class DApp {
-	  public :
+	  public :							// Constructor
 										DApp(void);
-
+										// Función que vacia la cola de mensajes de esta aplicación
 		void							Eventos_Mirar(void);
-	
-		const TCHAR 				   *ObtenerSO(void);
-
-
+										// Función que obtiene el sistema operativo actual y lo devuelve en un string
+		const wchar_t 				   *ObtenerSO(void);
 										// Evento Tecla soltada general de todas las ventanas
 		virtual void                    Evento_TeclaPresionada(DWL::DEventoTeclado& DatosTeclado)	{ };
 										// Evento Tecla soltada general de todas las ventanas
 		virtual void                    Evento_TeclaSoltada(DWL::DEventoTeclado& DatosTeclado)		{ };
-
-										//! Función que devuelve el HINSTANCE de nuestra aplicación.
-										/*! Esta función devuelve el HINSTANCE de nuestra aplicación.
-										    \fn			inline HINSTANCE Instancia(void);
-										    \return		Devuelve el HINSTANCE de nuestra aplicación.
-										*/											
+										// Función que devuelve la instancia de esta aplicación										
 		inline HINSTANCE				Instancia(void)												{ return GetModuleHandle(NULL);	};
-
 										// Ventana que muestra una consola al estilo MS-DOS para depuración
 		DConsola						ConsolaDebug;
 										// Función que termina el bucle de mensajes y por ende termina la aplicación
-		inline void						TerminarBucleMensajes(int CodigoSalilda = 0)				{ PostQuitMessage(CodigoSalilda); }
+		inline void						TerminarBucleMensajes(int CodigoSalida = 0)					{ PostQuitMessage(CodigoSalida); }
 										// Función que inicia un bucle de mensajes hasta que se llama a PostQuitMessage o App.TerminarBucleMensajes()
 		virtual int						BucleMensajes(void);
 	};
 
 };
 
-// Variable externa con la clase DApp (para uso de la DWL)
+// Variable externa con la clase DApp (para uso interno de la DWL, si necesitas acceder al objeto aplicación utiliza la macro App)
 extern DWL::DApp *_Aplicacion;
 
 // Crea un singleton de la clase aplicación especificada
 #define INICIAR_DWL3(DAPP) class _DWLApp : public DWL::DSingleton<DAPP> { };
+
 // Devuelve la instancia de la clase aplicación
 #define App _DWLApp::Instancia()
 
-//#define TERMINAR_DWL3()  _DWLApp::Eliminar();
-
-
-// Fer un extern MiApp *_App al projecte dependent
-// Despres fer una macro #define App (*_App) 
-
-/*template <class TApp = DWL::DApp> TApp *DWL_Iniciar(TApp) {
-	_Aplicacion = new TApp;
-	return static_cast<TApp>(_Aplicacion);
-}*/
 
 
 #ifdef DWL_MOSTRAR_CONSOLA 

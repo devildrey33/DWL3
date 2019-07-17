@@ -108,9 +108,16 @@ namespace DWL {
 		void                       _ControlZ(void);
 		void                       _ControlY(void);
 
+		void                       _AgregarTextoUndo(void);
+
 		DIcono                     _Icono;
 
 		std::wstring               _Texto;
+									// Textos guardados para el control Z y el control Y
+		std::vector<std::wstring>  _Textos;
+									// Posición de los cursores guardados para el control Z y el control Y
+		std::vector<size_t>        _PosCursores;
+		size_t                     _PosRedoUndo;
 
 		const RECT                 _PosicionTexto(RECT &RC);
 

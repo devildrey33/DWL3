@@ -100,7 +100,7 @@ namespace DWL {
 		return NULL;
 	};
 
-	DUnidadDisco *DUnidadesDisco::Buscar_Letra(const TCHAR Letra) {
+	DUnidadDisco *DUnidadesDisco::Buscar_Letra(const wchar_t Letra) {
 		TCHAR L2 = toupper(Letra);
 		for (size_t n = 0; n < _Unidades.size(); n++) {
 			if (_Unidades[n]->Letra() == L2) return _Unidades[n];

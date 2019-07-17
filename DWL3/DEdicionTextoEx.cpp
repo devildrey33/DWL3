@@ -12,16 +12,19 @@
 
 #define ID_TIMER_CURSOR				1000
 
-namespace DWL {
-/*
-	  _____  ______    _ _      _          _______        _        ______      
-	 |  __ \|  ____|  | (_)    (_)        |__   __|      | |      |  ____|     
-	 | |  | | |__   __| |_  ___ _  ___  _ __ | | _____  _| |_ ___ | |__  __  __
-	 | |  | |  __| / _` | |/ __| |/ _ \| '_ \| |/ _ \ \/ / __/ _ \|  __| \ \/ /
-	 | |__| | |___| (_| | | (__| | (_) | | | | |  __/>  <| || (_) | |____ >  < 
-	 |_____/|______\__,_|_|\___|_|\___/|_| |_|_|\___/_/\_\\__\___/|______/_/\_\
-                                                                          																		  
+
+/*		_________ _______  ______   _______																											 _  _
+		\__   __/(  ___  )(  __  \ (  ___  )																					 			        ( )( )
+		   ) (   | (   ) || (  \  )| (   ) |   _   - Scroll al sobresalir el texto del control														| || |
+		   | |   | |   | || |   ) || |   | |  (_)  																									| || |
+		   | |   | |   | || |   | || |   | |          																								| || |
+		   | |   | |   | || |   ) || |   | |   _																									(_)(_)
+		   | |   | (___) || (__/  )| (___) |  (_)	    																							 _  _
+		   )_(   (_______)(______/ (_______)           																								(_)(_)
 */
+
+
+namespace DWL {
 	DEdicionTextoEx_Skin::DEdicionTextoEx_Skin(void) :
 		// Colores por defecto
 		FondoNormal				(COLOR_EDICION_FONDO),
@@ -48,18 +51,27 @@ namespace DWL {
 		FuenteNegrita			(FALSE),
 		FuenteCursiva			(FALSE),
 		FuenteSubrayado			(FALSE),
-		FuenteSombraTexto		(TRUE) {
+		FuenteSombraTexto		(TRUE)				{
 	}
 
-	DEdicionTextoEx::DEdicionTextoEx(void) : DControlEx(), Entrada(DEdicionTextoEx_Entrada_Texto), Alineacion(DEdicionTextoEx_Alineacion_Izquierda), _Presionado(FALSE), _PosCursor(0), _ColorTexto(Skin.Texto), _ColorTextoSombra(Skin.TextoSombra),  _ColorFondo(Skin.FondoNormal), _ColorBorde(Skin.BordeNormal), _ColorCursor(Skin.FondoNormal), _PosSeleccion(0) {
+	/*
+		  _____  ______    _ _      _          _______        _        ______
+		 |  __ \|  ____|  | (_)    (_)        |__   __|      | |      |  ____|
+		 | |  | | |__   __| |_  ___ _  ___  _ __ | | _____  _| |_ ___ | |__  __  __
+		 | |  | |  __| / _` | |/ __| |/ _ \| '_ \| |/ _ \ \/ / __/ _ \|  __| \ \/ /
+		 | |__| | |___| (_| | | (__| | (_) | | | | |  __/>  <| || (_) | |____ >  <
+		 |_____/|______\__,_|_|\___|_|\___/|_| |_|_|\___/_/\_\\__\___/|______/_/\_\
+
+	*/
+	DEdicionTextoEx::DEdicionTextoEx(void) : DControlEx(), Entrada(DEdicionTextoEx_Entrada_Texto), Alineacion(DEdicionTextoEx_Alineacion_Izquierda), _Presionado(FALSE), _PosCursor(0), _ColorTexto(Skin.Texto), _ColorTextoSombra(Skin.TextoSombra),  _ColorFondo(Skin.FondoNormal), _ColorBorde(Skin.BordeNormal), _ColorCursor(Skin.FondoNormal), _PosSeleccion(0), _PosRedoUndo(0) {
 	}
 
 
 	DEdicionTextoEx::~DEdicionTextoEx(void) {
 	}
 
+	// Función para crear el control EdicionTextoEx
 	HWND DEdicionTextoEx::CrearEdicionTextoEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, DIcono *nIcono, const long Estilos) {
-//		if (hWnd()) { Debug_Escribir(L"DEdicionTextoEx::CrearEdicionTextoEx() Error : ya se ha creado el control...\n"); return hWnd(); }
 		_hWnd = CrearControlEx(nPadre, L"DEdicionTextoEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL, CS_HREDRAW | CS_VREDRAW);
 		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		_Texto				= nTxt;
@@ -70,16 +82,19 @@ namespace DWL {
 		_ColorFondo			= Skin.FondoNormal;
 		_ColorBorde			= Skin.BordeNormal;
 		_ColorCursor		= Skin.FondoNormal; // Inicialmente el color del cursor es el del fondo, y tiene que llegar con una animación a COLOR_EDICION_CURSOR;
+		_AgregarTextoUndo();
 		Icono(nIcono, FALSE);
 		return hWnd();
 	}
 
+	// Función que asigna el icono a mostrar en la izquierda, NULL para no mostrar ningun icono
 	void DEdicionTextoEx::Icono(DIcono *nIcono, const BOOL nRepintar) {
 		if (nIcono == NULL) return;
 		_Icono = *nIcono;		
 		if (nRepintar != FALSE) Repintar();
 	}
 
+	// Función que pinta el control en el DC y las coordenadas especificadas
 	void DEdicionTextoEx::Pintar(HDC DC, const int cX, const int cY) {
 		RECT RC;
 		GetClientRect(hWnd(), &RC);
@@ -144,7 +159,7 @@ namespace DWL {
 			SIZE			TamTextoHC			= Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor).c_str());
 			
 			MoveToEx(Buffer, PosTexto.left + TamTextoHC.cx, DEDICIONTEXTOEX_MARGEN_CURSOR_Y, NULL);
-			LineTo(Buffer, PosTexto.left + TamTextoHC.cx, PosTexto.bottom - DEDICIONTEXTOEX_MARGEN_CURSOR_Y);
+			LineTo(Buffer, PosTexto.left + TamTextoHC.cx, (PosTexto.bottom == PosTexto.top) ? RC.bottom - DEDICIONTEXTOEX_MARGEN_CURSOR_Y : PosTexto.bottom - DEDICIONTEXTOEX_MARGEN_CURSOR_Y);
 			SelectObject(Buffer, VPluma);
 		}
 
@@ -159,6 +174,7 @@ namespace DWL {
 	}
 
 
+	// Función que devuelve un RECT con el tamaño y posición del texto
 	const RECT DEdicionTextoEx::_PosicionTexto(RECT &RC) {
 		// Calculo el tamaño del icono
 		long TamIcono = (_Icono() != NULL) ? DEDICIONTEXTOEX_TAMICONO + DEDICIONTEXTOEX_MARGEN_X : DEDICIONTEXTOEX_MARGEN_X;
@@ -222,6 +238,7 @@ namespace DWL {
 		return _Texto.size();
 	}
 
+
 	// WM_CHAR
 	void DEdicionTextoEx::_Evento_Tecla(WPARAM wParam, LPARAM lParam) {
 		DEventoTeclado DatosTeclado(wParam, lParam, this);
@@ -231,7 +248,10 @@ namespace DWL {
 				break;
 			case VK_BACK: // Borrar
 				if (Entrada == DEdicionTextoEx_Entrada_SinEntrada) return;
-				if (_PosCursor > 0) _Texto.erase(--_PosCursor, 1);				
+				if (_PosCursor > 0) {
+					_Texto.erase(--_PosCursor, 1);
+					_AgregarTextoUndo();
+				}
 				break;
 			case VK_ESCAPE: // Desselecciono todo
 				_PosSeleccion = _PosCursor;
@@ -243,14 +263,18 @@ namespace DWL {
 				}
 				// No se está presionado el control
 				if (DatosTeclado.Control() != TRUE) {
-					if (_PosCursor == _Texto.size()) {
+					if (_PosCursor >= _Texto.size()) {
 						_Texto += DatosTeclado.Caracter();
+						_PosCursor = _Texto.size();
 					}
 					else {
 						_Texto.insert(_PosCursor, 1, static_cast<wchar_t>(DatosTeclado.TeclaVirtual()));
+						_PosCursor++;
 					}
-					_PosCursor++;
+					
 					_PosSeleccion = _PosCursor;
+					// Añado el texto a la lista de textos para el undo / redo
+					_AgregarTextoUndo();
 				}
 		}		
 		Repintar();
@@ -258,7 +282,6 @@ namespace DWL {
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_Tecla %d.\n", DatosTeclado.TeclaVirtual());
 		#endif
-
 	}
 
 	// WM_KEYDOWN
@@ -269,20 +292,25 @@ namespace DWL {
 //				break;
 			case VK_HOME:
 				_PosCursor = 0;
+				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
 				break;
 			case VK_END:
 				_PosCursor = _Texto.size();
+				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
 				break;
 			case VK_LEFT:
 				if (_PosCursor > 0) _PosCursor--;
 				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
-					break;
+				break;
 			case VK_RIGHT:
 				if (_PosCursor < _Texto.size()) _PosCursor++;
 				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
 				break;
 			case VK_DELETE: // Suprimir
-				if (_Texto.size() > 0 && _PosCursor < _Texto.size()) _Texto.erase(_PosCursor, 1);
+				if (_Texto.size() > 0 && _PosCursor < _Texto.size()) {
+					_Texto.erase(_PosCursor, 1);
+					_AgregarTextoUndo();
+				}
 				break;
 			case L'c': case L'C':	
 				if (DatosTeclado.Control() == TRUE)	_ControlC();		
@@ -355,7 +383,7 @@ namespace DWL {
 		_Texto = Tmp;
 		_PosCursor = Desde;
 		_PosSeleccion = _PosCursor;
-		Repintar();
+//		Repintar();
 	}
 
 	// Teclado Control + V (paste)
@@ -377,7 +405,7 @@ namespace DWL {
 		_Texto = Tmp;
 		_PosSeleccion = Desde;
 		_PosCursor += P.size() - 1;
-		Repintar();
+//		Repintar();
 
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlV %s.\n", P.c_str());
@@ -386,10 +414,44 @@ namespace DWL {
 
 	// Teclado Control + Z (undo)
 	void DEdicionTextoEx::_ControlZ(void) {
+//		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlZ %d %d.\n", _PosRedoUndo, _PosCursor);
+//		#endif
+		if (_PosRedoUndo > 1) {
+			_Texto		  = _Textos[(--_PosRedoUndo) - 1];
+			_PosCursor	  = _PosCursores[_PosRedoUndo - 1];
+			_PosSeleccion = _PosCursor;
+		}
+//		Repintar();
 	}
 
 	// Teclado Control + Y (redo)
 	void DEdicionTextoEx::_ControlY(void) {
+//		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlY %d %d.\n", _PosRedoUndo, _PosCursor);
+//		#endif
+//		if (_PosRedoUndo == 0) return;
+		if (_PosRedoUndo < _Textos.size()) {
+			_Texto		  = _Textos[(++_PosRedoUndo) - 1];
+			_PosCursor	  = _PosCursores[_PosRedoUndo - 1];
+			_PosSeleccion = _PosCursor;
+		}
+//		Repintar();
+	}
+
+
+	void DEdicionTextoEx::_AgregarTextoUndo(void) {
+		if (_PosRedoUndo < _Textos.size()) {
+			_Textos.resize(_PosRedoUndo);
+			_PosCursores.resize(_PosRedoUndo);
+
+		}
+		_Textos.push_back(_Texto);
+		_PosCursores.push_back(_PosCursor);
+		_PosRedoUndo = static_cast<long>(_Textos.size());
+//		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_AgregarTextoUndo %d.\n", _PosRedoUndo);
+//		#endif
 	}
 
 
@@ -418,6 +480,7 @@ namespace DWL {
 		return FALSE;
 	}
 
+	// WM_PAINT
 	void DEdicionTextoEx::_Evento_Pintar(void) {
 		HDC         DC;
 		PAINTSTRUCT PS;
@@ -426,54 +489,54 @@ namespace DWL {
 		EndPaint(hWnd(), &PS);
 	}
 
+	// Función que activa / desactiva el control
 	void DEdicionTextoEx::Activado(const BOOL nActivar) {
 		BOOL Ret = FALSE;
 		Ret = EnableWindow(_hWnd, nActivar);
 		Transicion((nActivar == TRUE) ? DEdicionTextoEx_Transicion_Normal : DEdicionTextoEx_Transicion_Desactivado);
 	}
 
-
-/*	void DEdicionTextoEx::_Evento_Size(void) {
-		RECT RC;
-		GetClientRect(_hWnd, &RC);
-		if (_Icono != NULL) RC.left += ESPACIO_ICONO;
-		IniciarEdicionTextoEx(RC);
-		Repintar();
-	}*/
-
+	// Función que asigna el texto al control utilizando el valor entero especificado
 	void DEdicionTextoEx::Texto(const LONG_PTR ValorEntero, const BOOL nRepintar) {
 		_Texto = DWL::Strings::ToStrF(ValorEntero, 0);
 		_PosCursor = _Texto.size();
 		_PosSeleccion = _PosCursor;
+		_AgregarTextoUndo();
 
 		if (nRepintar != FALSE) Repintar();
 	}
 
+	// Función que asigna el texto al control utilizando el valor decimal especificado
 	void DEdicionTextoEx::Texto(const double ValorDecimal, const int Decimales, const BOOL nRepintar) {
 		_Texto = DWL::Strings::ToStrF(ValorDecimal, Decimales);
 		_PosCursor = _Texto.size();
 		_PosSeleccion = _PosCursor;
+		_AgregarTextoUndo();
 
 		if (nRepintar != FALSE) Repintar();
 	}
 
-
+	// Función que asigna el texto al control 
 	void DEdicionTextoEx::Texto(std::wstring &nTexto, const BOOL nRepintar) {
 		_Texto = nTexto;
 		_PosCursor = _Texto.size();
 		_PosSeleccion = _PosCursor;
+		_AgregarTextoUndo();
 
 		if (nRepintar != FALSE) Repintar();
 	}
 
+	// Función que asigna el texto al control 
 	void DEdicionTextoEx::Texto(const wchar_t *nTexto, const BOOL nRepintar) {
 		_Texto = nTexto;
 		_PosCursor = _Texto.size();
 		_PosSeleccion = _PosCursor;
+		_AgregarTextoUndo();
 
 		if (nRepintar != FALSE) Repintar();
 	}
 
+	// WM_MOUSEMOVE
 	void DEdicionTextoEx::_Evento_MouseMovimiento(const WPARAM wParam, const LPARAM lParam) {
 		if (_MouseEntrando() == TRUE) {
 			// Mouse enter
@@ -490,6 +553,7 @@ namespace DWL {
 		}
 	}
 
+	// WM_MOUSEDOWN
 	void DEdicionTextoEx::_Evento_MousePresionado(const WPARAM wParam, const LPARAM lParam, const int Boton) {
 		DEventoMouse DatosMouse(wParam, lParam, this, Boton);
 
@@ -506,6 +570,7 @@ namespace DWL {
 		#endif
 	}
 
+	// WM_MOUSEUP
 	void DEdicionTextoEx::_Evento_MouseSoltado(const WPARAM wParam, const LPARAM lParam, const int Boton) {
 		ReleaseCapture();	
 		DEventoMouse DatosMouse(wParam, lParam, this, Boton);
@@ -524,11 +589,13 @@ namespace DWL {
 		#endif
 	}
 
+	// WM_MOUSELEAVE
 	void DEdicionTextoEx::_Evento_MouseSaliendo(void) {
 		if (_Presionado == FALSE)	Transicion(DEdicionTextoEx_Transicion_Normal);
 		_MouseDentro = FALSE;
 	}
 
+	// WM_SETFOCUS
 	void DEdicionTextoEx::_Evento_FocoAsignado(void) {
 		if (Entrada != DEdicionTextoEx_Entrada_SinEntrada) {
 			SetTimer(_hWnd, ID_TIMER_CURSOR, 1000, NULL);
@@ -536,6 +603,7 @@ namespace DWL {
 		}
 	}
 
+	// WM_KILLFOCUS
 	void DEdicionTextoEx::_Evento_FocoPerdido(void) {
 		KillTimer(_hWnd, ID_TIMER_CURSOR);
 		// Si se piede el foco, hay que retirar el cursor
@@ -546,6 +614,7 @@ namespace DWL {
 		});
 	}
 
+	// WM_TIMER
 	void DEdicionTextoEx::_Evento_Temporizador(const INT_PTR tID) {
 		// Si es el temporizador del cursor
 		if (tID == ID_TIMER_CURSOR) {			
@@ -563,7 +632,7 @@ namespace DWL {
 		}
 	}
 
-
+	// Función que inicia una animación desde el estado actual al estado especifcado
 	void DEdicionTextoEx::Transicion(const DEdicionTextoEx_Transicion nTransicion) {
 		DWORD Duracion = DhWnd::TiempoAnimaciones;
 		if (_AniTransicion.Animando() == TRUE) {
@@ -620,7 +689,7 @@ namespace DWL {
 		});
 	}
 
-
+	// WindowProcedure
 	LRESULT CALLBACK DEdicionTextoEx::GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg) {
 			case WM_SETFOCUS	:		_Evento_FocoAsignado();									return 0;
@@ -629,8 +698,6 @@ namespace DWL {
 			case WM_KEYDOWN		:		_Evento_TeclaPresionada(wParam, lParam);				return 0;
 			case WM_KEYUP		:		_Evento_TeclaSoltada(wParam, lParam);					return 0;
 			case WM_CHAR		: 		_Evento_Tecla(wParam, lParam);							return 0;
-
-//			case WM_SIZE		:		Repintar();																																	return 0;
 
 			case WM_PAINT		:		_Evento_Pintar();										return 0;
 					

@@ -43,8 +43,8 @@ namespace DWL {
 												// Función que crea la fuente especificada, si no se ha creado una igual antes. Si ya existe una fuente con estas caracteristicas adopta el HFONT de ella.
 		void									CrearFuente(const int nTam, const wchar_t *nNombre, const BOOL nNegrita = FALSE, const BOOL nCursiva = FALSE, const BOOL nSubrayado = FALSE, const BOOL nTachado = FALSE);
 												// Funciones para obtener los valores de la fuente
-		inline const int						Tam(void)			{ return (_Fuente == NULL) ? 0 : _Fuente->Tam;					};
-		inline const wchar_t	               *Nombre(void)		{ return (_Fuente == NULL) ? L"" : _Fuente->Nombre.c_str();		};
+		inline const int						Tam(void)			{ return (_Fuente == NULL) ? 0     : _Fuente->Tam;				};
+		inline const wchar_t	               *Nombre(void)		{ return (_Fuente == NULL) ? L""   : _Fuente->Nombre.c_str();	};
 		inline const BOOL						Negrita(void)		{ return (_Fuente == NULL) ? FALSE : _Fuente->Negrita;			};
 		inline const BOOL						Cursiva(void)		{ return (_Fuente == NULL) ? FALSE : _Fuente->Cursiva;			};
 		inline const BOOL						Subrayado(void)		{ return (_Fuente == NULL) ? FALSE : _Fuente->Subrayado;		};
@@ -57,20 +57,19 @@ namespace DWL {
 		void									Subrayado(const BOOL nSubrayado);
 		void									Tachado(const BOOL nTachado);
 												// Devuelve la altura en pixeles de la fuente
-		inline const int						Alto(void)			{ return (_Fuente == NULL) ? 0 : _Fuente->Alto; }
+		inline const int						Alto(void)			{ return (_Fuente == NULL) ? 0    : _Fuente->Alto;   }
 												// Fuente para utilizar al pintar las ventanas / controles
 		inline HFONT							operator() (void)	{ return (_Fuente == NULL) ? NULL : _Fuente->Fuente; }
 		inline HFONT							Fuente(void)        { return (_Fuente == NULL) ? NULL : _Fuente->Fuente; }
-
+		
 												// Obtiene el tamaño del texto especificado, utilizando la fuente de esta clase
-		inline const SIZE						ObtenerTamTexto(const TCHAR *nTexto)			{ static SIZE Z = { 0, 0 };  return (_Fuente == NULL) ? Z : _Fuente->ObtenerTamTexto(nTexto); };
+		inline const SIZE						ObtenerTamTexto(const TCHAR *nTexto)			{ SIZE Z = { 0, 0 };  return (_Fuente == NULL) ? Z : _Fuente->ObtenerTamTexto(nTexto);		};
 												// Obtiene el tamaño del string especificado, utilizando la fuente de esta clase
-		inline const SIZE						ObtenerTamTexto(std::wstring &nTexto)			{ static SIZE Z = { 0, 0 };  return (_Fuente == NULL) ? Z : _Fuente->ObtenerTamTexto(nTexto); };
+		inline const SIZE						ObtenerTamTexto(std::wstring &nTexto)			{ SIZE Z = { 0, 0 };  return (_Fuente == NULL) ? Z : _Fuente->ObtenerTamTexto(nTexto);		};
 												// Obtiene el tamaño del texto especificado. El DC especificado debe tener seleccionada esta fuente.
-		inline const SIZE						ObtenerTamTexto(HDC DC, const TCHAR *nTexto)	{ static SIZE Z = { 0, 0 };  return (_Fuente == NULL) ? Z : _Fuente->ObtenerTamTexto(DC, nTexto); };
+		inline const SIZE						ObtenerTamTexto(HDC DC, const TCHAR *nTexto)	{ SIZE Z = { 0, 0 };  return (_Fuente == NULL) ? Z : _Fuente->ObtenerTamTexto(DC, nTexto);	};
 												// Obtiene el tamaño del string especificado. El DC especificado debe tener seleccionada esta fuente.
-		inline const SIZE						ObtenerTamTexto(HDC DC, std::wstring &nTexto)	{ static SIZE Z = { 0, 0 };  return (_Fuente == NULL) ? Z : _Fuente->ObtenerTamTexto(DC, nTexto); };
-
+		inline const SIZE						ObtenerTamTexto(HDC DC, std::wstring &nTexto)	{ SIZE Z = { 0, 0 };  return (_Fuente == NULL) ? Z : _Fuente->ObtenerTamTexto(DC, nTexto);	};
 
 												// Elimina todas las fuentes estaticas de la memoria
 		static void								EliminarFuentes(void);
