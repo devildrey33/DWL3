@@ -35,7 +35,7 @@ namespace DWL {
 		_Icono.CrearIconoRecursos(nIDIcono, TAM_ICONO, TAM_ICONO);
 		_Edicion.Entrada = Entrada;
 		_Edicion.Alineacion = DEdicionTextoEx_Alineacion_Izquierda;
-		_Edicion.CrearEdicionTextoEx(this, nTexto, 0, 0, cAncho - cAlto, cAlto, ID_EDICION, &_Icono);
+		_Edicion.CrearEdicionTextoEx(this, &_Icono, nTexto, 0, 0, cAncho - cAlto, cAlto, ID_EDICION);
 	}
 
 

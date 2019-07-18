@@ -26,33 +26,34 @@
 
 namespace DWL {
 	DEdicionTextoEx_Skin::DEdicionTextoEx_Skin(void) :
-		// Colores por defecto
-		FondoNormal				(COLOR_EDICION_FONDO),
-		FondoResaltado			(COLOR_EDICION_FONDO_RESALTADO),
-		FondoPresionado			(COLOR_EDICION_FONDO_PRESIONADO),
-		FondoDesactivado		(COLOR_EDICION_FONDO_DESACTIVADO),
-		FondoSeleccion			(COLOR_EDICION_FONDO_SELECCION),
-		Texto					(COLOR_EDICION_TEXTO),
-		TextoSombra				(COLOR_EDICION_TEXTO_SOMBRA),
-		TextoResaltado			(COLOR_EDICION_TEXTO_RESALTADO),
-		TextoResaltadoSombra	(COLOR_EDICION_TEXTO_RESALTADO_SOMBRA),
-		TextoPresionado			(COLOR_EDICION_TEXTO_PRESIONADO),
-		TextoPresionadoSombra	(COLOR_EDICION_TEXTO_PRESIONADO_SOMBRA),
-		TextoDesactivado		(COLOR_EDICION_TEXTO_DESACTIVADO),
-		TextoDesactivadoSombra  (COLOR_EDICION_TEXTO_DESACTIVADO_SOMBRA),
-		BordeNormal				(COLOR_EDICION_BORDE),
-		BordeResaltado			(COLOR_EDICION_BORDE_RESALTADO),
-		BordePresionado			(COLOR_EDICION_BORDE_PRESIONADO),
-		Cursor					(COLOR_EDICION_CURSOR),
-
-		// Fuente por defecto
-		FuenteTam				(FUENTE_NORMAL),
-		FuenteNombre			(FUENTE_NOMBRE),
-		FuenteNegrita			(FALSE),
-		FuenteCursiva			(FALSE),
-		FuenteSubrayado			(FALSE),
-		FuenteSombraTexto		(TRUE)				{
-	}
+		// Colores por defecto ///////////////////////////////////////////////
+		FondoNormal				(COLOR_EDICION_FONDO),						// Color del fondo normal
+		FondoResaltado			(COLOR_EDICION_FONDO_RESALTADO),			// Color del fondo resaltado
+		FondoPresionado			(COLOR_EDICION_FONDO_PRESIONADO),			// Color del fondo presionado
+		FondoDesactivado		(COLOR_EDICION_FONDO_DESACTIVADO),			// Color del fondo desactivado
+		FondoSeleccion			(COLOR_EDICION_FONDO_SELECCION),			// Color del fondo de la selección
+		Texto					(COLOR_EDICION_TEXTO),						// Color del texto
+		TextoSombra				(COLOR_EDICION_TEXTO_SOMBRA),				// Color de la sombra del texto
+		TextoResaltado			(COLOR_EDICION_TEXTO_RESALTADO),			// Color del texto resaltado
+		TextoResaltadoSombra	(COLOR_EDICION_TEXTO_RESALTADO_SOMBRA),		// Color de la sombra del texto resaltado
+		TextoPresionado			(COLOR_EDICION_TEXTO_PRESIONADO),			// Color del texto presionado
+		TextoPresionadoSombra	(COLOR_EDICION_TEXTO_PRESIONADO_SOMBRA),	// Color de la sombra del texto presionado
+		TextoDesactivado		(COLOR_EDICION_TEXTO_DESACTIVADO),			// Color del texto desactivado
+		TextoDesactivadoSombra  (COLOR_EDICION_TEXTO_DESACTIVADO_SOMBRA),	// Color de la sombra del texto desactivado
+		TextoPlaceholder		(COLOR_EDICION_TEXTO_PLACEHOLDER),			// Color del placeholder
+		TextoPlaceholderSombra  (COLOR_EDICION_TEXTO_PLACEHOLDER_SOMBRA),	// Color de la sombra del placeholder
+		BordeNormal				(COLOR_EDICION_BORDE),						// Color del borde nomral
+		BordeResaltado			(COLOR_EDICION_BORDE_RESALTADO),			// Color del borde resaltado
+		BordePresionado			(COLOR_EDICION_BORDE_PRESIONADO),			// Color del borde presionado
+		Cursor					(COLOR_EDICION_CURSOR),						// Color del cursor
+		// Fuente por defecto ////////////////////////////////////////////////
+		FuenteTam				(FUENTE_NORMAL),							// Tamaño de la fuente  (SOLO SE USA PARA CREAR EL CONTROL)
+		FuenteNombre			(FUENTE_NOMBRE),							// Nombre de la fuente  (SOLO SE USA PARA CREAR EL CONTROL)
+		FuenteNegrita			(FALSE),									// Fuente en negrita	(SOLO SE USA PARA CREAR EL CONTROL)
+		FuenteCursiva			(FALSE),									// Fuente en cursiva	(SOLO SE USA PARA CREAR EL CONTROL)
+		FuenteSubrayado			(FALSE),									// Fuente subrayada		(SOLO SE USA PARA CREAR EL CONTROL)
+		FuenteSombraTexto		(TRUE)										// Pintar sombras a los textos
+	{ }
 
 	/*
 		  _____  ______    _ _      _          _______        _        ______
@@ -63,15 +64,44 @@ namespace DWL {
 		 |_____/|______\__,_|_|\___|_|\___/|_| |_|_|\___/_/\_\\__\___/|______/_/\_\
 
 	*/
-	DEdicionTextoEx::DEdicionTextoEx(void) : DControlEx(), Entrada(DEdicionTextoEx_Entrada_Texto), Alineacion(DEdicionTextoEx_Alineacion_Izquierda), _Presionado(FALSE), _PosCursor(0), _ColorTexto(Skin.Texto), _ColorTextoSombra(Skin.TextoSombra),  _ColorFondo(Skin.FondoNormal), _ColorBorde(Skin.BordeNormal), _ColorCursor(Skin.FondoNormal), _PosSeleccion(0), _PosRedoUndo(0) {
+
+	// Constructor
+	DEdicionTextoEx::DEdicionTextoEx(void) : DControlEx(), Entrada(DEdicionTextoEx_Entrada_Texto), Alineacion(DEdicionTextoEx_Alineacion_Izquierda), _Presionado(FALSE), 
+											_PosCursor(0), _ColorTexto(Skin.Texto), _ColorTextoSombra(Skin.TextoSombra),  _ColorFondo(Skin.FondoNormal), _ColorBorde(Skin.BordeNormal), 
+											_ColorCursor(Skin.FondoNormal), _PosSeleccion(0), _PosRedoUndo(0), _ColorTextoPH(Skin.TextoPlaceholder), _ColorTextoSombraPH(Skin.TextoPlaceholderSombra) {
 	}
 
-
+	// Destructor
 	DEdicionTextoEx::~DEdicionTextoEx(void) {
+		Destruir();
 	}
 
-	// Función para crear el control EdicionTextoEx
-	HWND DEdicionTextoEx::CrearEdicionTextoEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, DIcono *nIcono, const long Estilos) {
+	// Función que crea el control DEdicionTextoEx sin icono
+	HWND DEdicionTextoEx::CrearEdicionTextoEx(DhWnd* nPadre, const TCHAR* nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
+		return CrearEdicionTextoEx(nPadre, nullptr, nTxt, cX, cY, cAncho, cAlto, cID, Estilos);
+	}
+
+
+	// Función que crea el control DEdicionTextoEx utilizando un icono de los recursos
+	HWND DEdicionTextoEx::CrearEdicionTextoEx(DhWnd* nPadre, const UINT IDI_Icono, const TCHAR* nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
+		DIcono Ico(IDI_Icono, 16, 16);
+		return CrearEdicionTextoEx(nPadre, &Ico, nTxt, cX, cY, cAncho, cAlto, cID, Estilos);
+	}
+
+	// Función que crea el control DEdicionTextoEx utilizando un icono del sistema
+	HWND DEdicionTextoEx::CrearEdicionTextoEx(DhWnd* nPadre, const GUID nIconoKnownFolder, const TCHAR* nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
+		DIcono Ico(nIconoKnownFolder, 16, 16);
+		return CrearEdicionTextoEx(nPadre, &Ico, nTxt, cX, cY, cAncho, cAlto, cID, Estilos);
+	}
+
+	// Función que crea el control DEdicionTextoEx utilizando un icono de los recursos
+	HWND DEdicionTextoEx::CrearEdicionTextoEx(DhWnd* nPadre, const wchar_t* nPathIcono, const int nPosIcono, const TCHAR* nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
+		DIcono Ico(nPathIcono, 16, 16, nPosIcono);
+		return CrearEdicionTextoEx(nPadre, &Ico, nTxt, cX, cY, cAncho, cAlto, cID, Estilos);
+	}
+
+	// Función que crea el control DEdicionTextoEx partiendo de una clase DIcono que puede ser nullptr
+	HWND DEdicionTextoEx::CrearEdicionTextoEx(DhWnd *nPadre, DIcono *nIcono, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
 		_hWnd = CrearControlEx(nPadre, L"DEdicionTextoEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL, CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW);
 		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		_Texto				= nTxt;
@@ -82,6 +112,8 @@ namespace DWL {
 		_ColorFondo			= Skin.FondoNormal;
 		_ColorBorde			= Skin.BordeNormal;
 		_ColorCursor		= Skin.FondoNormal; // Inicialmente el color del cursor es el del fondo, y tiene que llegar con una animación a COLOR_EDICION_CURSOR;
+		_ColorTextoPH		= Skin.TextoPlaceholder;
+		_ColorTextoSombraPH = Skin.TextoPlaceholderSombra;
 		_AgregarTextoUndo();
 		Icono(nIcono, FALSE);
 		return hWnd();
@@ -89,7 +121,7 @@ namespace DWL {
 
 	// Función que asigna el icono a mostrar en la izquierda, NULL para no mostrar ningun icono
 	void DEdicionTextoEx::Icono(DIcono *nIcono, const BOOL nRepintar) {
-		if (nIcono == NULL) return;
+		if (nIcono == nullptr) return;
 		_Icono = *nIcono;		
 		if (nRepintar != FALSE) Repintar();
 	}
@@ -103,7 +135,7 @@ namespace DWL {
 		HBITMAP Bmp				= CreateCompatibleBitmap(DC, RC.right, RC.bottom);		// Creo un DC compatible para el buffer
 		HBITMAP vBmp			= static_cast<HBITMAP>(SelectObject(Buffer, Bmp));		// Bitmap compatible para el DC
 		HFONT	vFuente			= static_cast<HFONT>(SelectObject(Buffer, Fuente()));	// Selecciono la fuente del control
-		RECT    EspacioTexto	= { 0, 0, 0, 0 };
+		RECT    EspacioTexto	= { 0, 0, 0, 0 };										// Espacio para el texto (OJO es el espacio disponible)
 
 		// Pinto el fondo
 		HBRUSH BrochaFondo = CreateSolidBrush(_ColorFondo);
@@ -116,7 +148,7 @@ namespace DWL {
 		DeleteObject(BrochaBorde);
 
 		// Pinto el icono (si hay icono)
-		if (_Icono() != NULL) {
+		if (_Icono() != nullptr) {
 			DrawIconEx(Buffer, 2, (RC.bottom - DEDICIONTEXTOEX_TAMICONO) / 2, _Icono(), DEDICIONTEXTOEX_TAMICONO, DEDICIONTEXTOEX_TAMICONO, 0, 0, DI_NORMAL);
 		}
 
@@ -126,19 +158,21 @@ namespace DWL {
 		// Pinto la selección (si existe)
 		if (_PosCursor != _PosSeleccion) {
 			RECT FondoSeleccion = { 0,0,0,0 };
+			// Calculo los tamaños de texto desde el principio hasta _PosCursor y _PosSeleccion
 			SIZE TamTexto1 = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor).c_str());
 			SIZE TamTexto2 = Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosSeleccion).c_str());
+			// Calculo la altura para el texto
 			int Alto	   = (TamTexto1.cy != 0) ? TamTexto1.cy : TamTexto2.cy; // Altura del texto
 			int Top		   = ((RC.bottom - Alto) / 2) + 2;						// valor Top del RECT
 			int Bottom	   = (((RC.bottom - Alto) / 2) + Alto) - 2;				// valor Bottom del RECT
+			// Miro que tamaño de texto es mas grande para extraer el tamaño real de la selección
 			if (TamTexto1.cx > TamTexto2.cx) FondoSeleccion = { PosTexto.left + TamTexto2.cx, Top, PosTexto.left + TamTexto1.cx, Bottom };
 			else                             FondoSeleccion = { PosTexto.left + TamTexto1.cx, Top, PosTexto.left + TamTexto2.cx, Bottom };
-
+			// Pinto el rectangulo de la selección
 			HBRUSH BrochaSeleccion = CreateSolidBrush(Skin.FondoSeleccion);
 			FillRect(Buffer, &FondoSeleccion, BrochaSeleccion);
 			DeleteObject(BrochaSeleccion);
 		}
-
 
 		// Asigno el fondo transparente al pintar el texto
 		SetBkMode(Buffer, TRANSPARENT);
@@ -160,18 +194,18 @@ namespace DWL {
 
 			// Pinto la sombra del texto
 			if (Skin.FuenteSombraTexto == TRUE) {
-				SetTextColor(Buffer, Skin.TextoDesactivadoSombra);
+				SetTextColor(Buffer, _ColorTextoSombraPH);
 				TextOut(Buffer, PosPlaceHoder.left + 1, PosPlaceHoder.top + 1, Placeholder.c_str(), static_cast<int>(Placeholder.size()));
 			}
 
 			// Pinto el texto
-			SetTextColor(Buffer, Skin.TextoDesactivado);
+			SetTextColor(Buffer, _ColorTextoPH);
 			TextOut(Buffer, PosPlaceHoder.left, PosPlaceHoder.top, Placeholder.c_str(), static_cast<int>(Placeholder.size()));
 		}
 
 
 		// Pinto el cursor (si el tipo de entrada lo permite y el control tiene el foco)
-		if (Entrada != DEdicionTextoEx_Entrada_SinEntrada && GetFocus() == _hWnd) {
+		if (Entrada != DEdicionTextoEx_Entrada_SinEntrada && GetFocus() == _hWnd) {			
 			HPEN			PlumaCursor			= CreatePen(PS_SOLID, 1, _ColorCursor);
 			HPEN			VPluma				= static_cast<HPEN>(SelectObject(Buffer, PlumaCursor));
 			SIZE			TamTextoHC			= Fuente.ObtenerTamTexto(Buffer, _Texto.substr(0, _PosCursor).c_str());
@@ -251,7 +285,7 @@ namespace DWL {
 	}
 
 
-	// WM_CHAR
+	//  Función para el mensaje WM_CHAR
 	void DEdicionTextoEx::_Evento_Tecla(WPARAM wParam, LPARAM lParam) {
 		DEventoTeclado DatosTeclado(wParam, lParam, this);
 		switch (DatosTeclado.TeclaVirtual()) {
@@ -286,50 +320,48 @@ namespace DWL {
 				}
 		}		
 		Repintar();
-		SendMessage(GetParent(hWnd()), DWL_EDICIONTEXTOEX_CAMBIO, static_cast<WPARAM>(ID()), 0);
+		
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_Tecla %d.\n", DatosTeclado.TeclaVirtual());
 		#endif
 	}
 
-	// WM_KEYDOWN
+	//  Función para el mensaje WM_KEYDOWN
 	void DEdicionTextoEx::_Evento_TeclaPresionada(WPARAM wParam, LPARAM lParam) {
 		DEventoTeclado DatosTeclado(wParam, lParam, this);
 		switch (DatosTeclado.TeclaVirtual()) {
-//			case VK_SHIFT:
-//				break;
-			case VK_HOME:
+			case VK_HOME:			// Inicio
 				_PosCursor = 0;
 				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
 				break;
-			case VK_END:
+			case VK_END:			// Fin
 				_PosCursor = _Texto.size();
 				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
 				break;
-			case VK_LEFT:
+			case VK_LEFT:			// Cursor izquierda
 				if (_PosCursor > 0) _PosCursor--;
 				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
 				break;
-			case VK_RIGHT:
+			case VK_RIGHT:			// Cursor derecha
 				if (_PosCursor < _Texto.size()) _PosCursor++;
 				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
 				break;
-			case VK_DELETE: // Suprimir
+			case VK_DELETE:			// Suprimir
 				_Suprimir();
 				break;
-			case L'c': case L'C':	
+			case L'c': case L'C':	// Tecla C
 				if (DatosTeclado.Control() == TRUE)	_ControlC();		
 				break;
-			case L'x': case L'X':	
+			case L'x': case L'X':	// Tecla X	
 				if (DatosTeclado.Control() == TRUE)	_ControlX();	
 				break;
-			case L'v': case L'V':
+			case L'v': case L'V':	// Tecla V
 				if (DatosTeclado.Control() == TRUE)	_ControlV();
 				break;
-			case L'z': case L'Z':
+			case L'z': case L'Z':	// Tecla Z
 				if (DatosTeclado.Control() == TRUE)	_ControlZ();
 				break;
-			case L'y': case L'Y':
+			case L'y': case L'Y':	// Tecla Y
 				if (DatosTeclado.Control() == TRUE)	_ControlY();
 				break;
 
@@ -340,9 +372,9 @@ namespace DWL {
 		Repintar();
 	}
 
-	// WM_KEYUP
+	//  Función para el mensaje WM_KEYUP
 	void DEdicionTextoEx::_Evento_TeclaSoltada(WPARAM wParam, LPARAM lParam) {
-//		DEventoTeclado DatosTeclado(wParam, lParam, this);
+		DEventoTeclado DatosTeclado(wParam, lParam, this);
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_TeclaSoltada %d.\n", DatosTeclado.Caracter());
 		#endif
@@ -367,12 +399,15 @@ namespace DWL {
 		#endif
 	}
 
+	// Función que borra el caracter antes del cursor, o la selección
 	void DEdicionTextoEx::_Borrar(void) {
+		// No hay texto o no se permite la entrada del teclado
 		if (Entrada == DEdicionTextoEx_Entrada_SinEntrada || _Texto.size() == 0) return;
 		// No hay selección
 		if (_PosCursor == _PosSeleccion) {
 			if (_PosCursor > 0) {
 				_Texto.erase(--_PosCursor, 1);
+				_PosSeleccion = _PosCursor;
 				_AgregarTextoUndo();
 			}
 		}
@@ -381,7 +416,9 @@ namespace DWL {
 		}
 	}
 
+	// Función que borra el caracter por despues del cursor, o la selección
 	void DEdicionTextoEx::_Suprimir(void) {
+		// No hay texto o no se permite la entrada del teclado
 		if (Entrada == DEdicionTextoEx_Entrada_SinEntrada || _Texto.size() == 0) return;
 		// No hay selección
 		if (_PosCursor == _PosSeleccion) {
@@ -395,6 +432,7 @@ namespace DWL {
 		}
 	}
 
+	// Función que borra el texto seleccionado
 	void DEdicionTextoEx::_BorrarTextoSeleccionado(void) {
 		if (_PosCursor > _PosSeleccion) {
 			_Texto.erase(_PosSeleccion, _PosCursor - _PosSeleccion);
@@ -420,13 +458,15 @@ namespace DWL {
 		}
 		std::wstring TextoSeleccionado = _Texto.substr(Desde, Hasta - Desde);
 		DPortapapeles::AsignarTexto(TextoSeleccionado);
-		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
-			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlX %s.\n", TextoSeleccionado.c_str());
-		#endif
 		std::wstring Tmp = _Texto.substr(0, Desde) + _Texto.substr(Hasta, _Texto.size() - Hasta);
 		_Texto = Tmp;
 		_PosCursor = Desde;
 		_PosSeleccion = _PosCursor;
+
+		_AgregarTextoUndo();
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlX %s.\n", TextoSeleccionado.c_str());
+		#endif
 	}
 
 	// Teclado Control + V (paste)
@@ -442,12 +482,22 @@ namespace DWL {
 			Hasta = _PosSeleccion;
 		}
 
-		std::wstring P, Tmp;
+		std::wstring P, PFiltrado, Tmp;
 		DPortapapeles::ObtenerTexto(_hWnd, P);
-		Tmp = _Texto.substr(0, Desde) + P + _Texto.substr(Hasta, _Texto.size() - Hasta);
+		// Filtro los caracteres de P para que no den problemas según el tipo de entrada establecido en el control
+		// Por ejemplo si el tipo de entrada es decimal no deberiamos aceptar letras
+		for (size_t i = 0; i < P.size(); i++) {
+			if (_EntradaPermitida(P[i] == TRUE)) PFiltrado += P[i];
+		}
+
+		// Construyo el texto final
+		Tmp = _Texto.substr(0, Desde) + PFiltrado + _Texto.substr(Hasta, _Texto.size() - Hasta);
 		_Texto = Tmp;
+		// Establezco la posición del cursor
 		_PosSeleccion = Desde;
-		_PosCursor += P.size() - 1;
+		_PosCursor += PFiltrado.size() - 1;
+
+		_AgregarTextoUndo();
 
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlV %s.\n", P.c_str());
@@ -456,26 +506,26 @@ namespace DWL {
 
 	// Teclado Control + Z (undo)
 	void DEdicionTextoEx::_ControlZ(void) {
-		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
-			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlZ %d %d.\n", _PosRedoUndo, _PosCursor);
-		#endif
 		if (_PosRedoUndo > 1) {
 			_Texto		  = _Textos[(--_PosRedoUndo) - 1];
 			_PosCursor	  = _PosCursores[_PosRedoUndo - 1];
 			_PosSeleccion = _PosCursor;
 		}
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlZ %d %d.\n", _PosRedoUndo, _PosCursor);
+		#endif
 	}
 
 	// Teclado Control + Y (redo)
 	void DEdicionTextoEx::_ControlY(void) {
-		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
-			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlY %d %d.\n", _PosRedoUndo, _PosCursor);
-		#endif
 		if (_PosRedoUndo < _Textos.size()) {
 			_Texto		  = _Textos[(++_PosRedoUndo) - 1];
 			_PosCursor	  = _PosCursores[_PosRedoUndo - 1];
 			_PosSeleccion = _PosCursor;
 		}
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlY %d %d.\n", _PosRedoUndo, _PosCursor);
+		#endif
 	}
 
 	// Función que añade la ultima modificación al texto para poder hacer Control + Z y Control + Y
@@ -488,38 +538,51 @@ namespace DWL {
 		_Textos.push_back(_Texto);
 		_PosCursores.push_back(_PosCursor);
 		_PosRedoUndo = static_cast<long>(_Textos.size());
+		
+		// Notifico que el texto ha cambiado a la ventana padre
+		SendMessage(GetParent(hWnd()), DWL_EDICIONTEXTOEX_CAMBIO, static_cast<WPARAM>(ID()), 0);
+
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_AgregarTextoUndo %d.\n", _PosRedoUndo);
 		#endif
 	}
 
-
+	// Función que determina si el carácter especificado es válido para el tipo de entrada del control
 	const BOOL DEdicionTextoEx::_EntradaPermitida(const wchar_t Caracter) {
 		switch (Entrada) {
-			case DEdicionTextoEx_Entrada_SinEntrada :
+			case DEdicionTextoEx_Entrada_SinEntrada :		// Nada
 				return FALSE;
-			case DEdicionTextoEx_Entrada_Texto :
+			case DEdicionTextoEx_Entrada_Texto :			// Todo
 				return TRUE;
-			case DEdicionTextoEx_Entrada_ValoresEnteros :
+			case DEdicionTextoEx_Entrada_ValoresEnteros :	// Solo números
 				if (Caracter == L'0' || Caracter == L'1' || Caracter == L'2' || Caracter == L'3' || Caracter == L'4' ||
 					Caracter == L'5' || Caracter == L'6' || Caracter == L'7' || Caracter == L'8' || Caracter == L'9') {
 					return TRUE;
 				}
-			case DEdicionTextoEx_Entrada_ValoresDecimales:
+				return FALSE;
+			case DEdicionTextoEx_Entrada_ValoresDecimales:	// Solo números y puntos
 				if (Caracter == L'0' || Caracter == L'1' || Caracter == L'2' || Caracter == L'3' || Caracter == L'4' ||
-					Caracter == L'5' || Caracter == L'6' || Caracter == L'7' || Caracter == L'8' || Caracter == L'9' || Caracter == L'.') {
+					Caracter == L'5' || Caracter == L'6' || Caracter == L'7' || Caracter == L'8' || Caracter == L'9') {
 					return TRUE;
 				}
-			case DEdicionTextoEx_Entrada_ValoresTiempo:
+				// Si es un punto, miro que no existan mas puntos en el texto
+				if (Caracter == L'.') {
+					// No se ha encontrado ningún punto en el texto
+					if (_Texto.find(L'.') == std::wstring::npos) return TRUE;
+				}
+				return FALSE;
+			case DEdicionTextoEx_Entrada_ValoresTiempo:		// Solo números y dos puntos
 				if (Caracter == L'0' || Caracter == L'1' || Caracter == L'2' || Caracter == L'3' || Caracter == L'4' ||
 					Caracter == L'5' || Caracter == L'6' || Caracter == L'7' || Caracter == L'8' || Caracter == L'9' || Caracter == L':') {
 					return TRUE;
 				}
+				return FALSE;
 		}
 		return FALSE;
 	}
 
-	// WM_PAINT
+
+	//  Función para el mensaje WM_PAINT
 	void DEdicionTextoEx::_Evento_Pintar(void) {
 		HDC         DC;
 		PAINTSTRUCT PS;
@@ -575,7 +638,7 @@ namespace DWL {
 		if (nRepintar != FALSE) Repintar();
 	}
 
-	// WM_MOUSEMOVE
+	//  Función para el mensaje WM_MOUSEMOVE
 	void DEdicionTextoEx::_Evento_MouseMovimiento(const WPARAM wParam, const LPARAM lParam) {
 		if (_MouseEntrando() == TRUE) {
 			// Mouse enter
@@ -592,7 +655,7 @@ namespace DWL {
 		}
 	}
 
-	// WM_MOUSEDOWN
+	//  Función para los mensajes WM_MOUSEDOWN*
 	void DEdicionTextoEx::_Evento_MousePresionado(const WPARAM wParam, const LPARAM lParam, const int Boton) {
 		DEventoMouse DatosMouse(wParam, lParam, this, Boton);
 
@@ -609,7 +672,7 @@ namespace DWL {
 		#endif
 	}
 
-	// WM_MOUSEUP
+	//  Función para los mensajes WM_MOUSEUP*
 	void DEdicionTextoEx::_Evento_MouseSoltado(const WPARAM wParam, const LPARAM lParam, const int Boton) {
 		ReleaseCapture();	
 		DEventoMouse DatosMouse(wParam, lParam, this, Boton);
@@ -628,27 +691,32 @@ namespace DWL {
 		#endif
 	}
 
+	// Función para los mensajes WM_DOUBLECLICK*
 	void DEdicionTextoEx::_Evento_MouseDobleClick(const WPARAM wParam, const LPARAM lParam, const int Boton) {
 		_PosSeleccion = 0;
 		_PosCursor = _Texto.size();
 		Repintar();
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DEdicionTextoEx::_Evento_MouseDobleClick %d, %d\n", _PosSeleccion, _PosCursor);
+		#endif
 	}
 
-	// WM_MOUSELEAVE
+	// Función para el mensaje WM_MOUSELEAVE
 	void DEdicionTextoEx::_Evento_MouseSaliendo(void) {
 		if (_Presionado == FALSE)	Transicion(DEdicionTextoEx_Transicion_Normal);
 		_MouseDentro = FALSE;
 	}
 
-	// WM_SETFOCUS
+	// Función para el mensaje WM_SETFOCUS
 	void DEdicionTextoEx::_Evento_FocoAsignado(void) {
 		if (Entrada != DEdicionTextoEx_Entrada_SinEntrada) {
+			_ColorCursor = Skin.Cursor;
 			SetTimer(_hWnd, ID_TIMER_CURSOR, 1000, NULL);
 			_Evento_Temporizador(ID_TIMER_CURSOR);
 		}
 	}
 
-	// WM_KILLFOCUS
+	// Función para el mensaje WM_KILLFOCUS
 	void DEdicionTextoEx::_Evento_FocoPerdido(void) {
 		KillTimer(_hWnd, ID_TIMER_CURSOR);
 		// Si se piede el foco, hay que retirar el cursor
@@ -657,9 +725,11 @@ namespace DWL {
 			_ColorCursor = Datos[0].Color();
 			Repintar();
 		});
+
+		Repintar();
 	}
 
-	// WM_TIMER
+	// Función para el mensaje WM_TIMER
 	void DEdicionTextoEx::_Evento_Temporizador(const INT_PTR tID) {
 		// Si es el temporizador del cursor
 		if (tID == ID_TIMER_CURSOR) {			
@@ -685,52 +755,62 @@ namespace DWL {
 			_AniTransicion.Terminar();
 		}
 
-		COLORREF *FondoHasta = 0, *BordeHasta = 0, *TextoHasta = 0, *TextoSombraHasta = 0;
+		COLORREF *FondoHasta = 0, *BordeHasta = 0, *TextoHasta = 0, *TextoSombraHasta = 0, *TextoPHHasta = 0, *TextoPHSombraHasta = 0;
 		switch (nTransicion) {
 			case DEdicionTextoEx_Transicion_Normal:
 				#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Normal.\n");
 				#endif
-				FondoHasta		 = &Skin.FondoNormal;
-				BordeHasta		 = &Skin.BordeNormal;
-				TextoHasta = &Skin.Texto;
-				//else                                            TextoHasta = &Skin.TextoDesactivado;
-				TextoSombraHasta = &Skin.TextoSombra;
+				FondoHasta			= &Skin.FondoNormal;
+				BordeHasta			= &Skin.BordeNormal;
+				TextoHasta	 		= &Skin.Texto;
+				TextoSombraHasta	= &Skin.TextoSombra;
+				TextoPHHasta		= &Skin.TextoPlaceholder;
+				TextoPHSombraHasta	= &Skin.TextoPlaceholderSombra;
 				break;
 			case DEdicionTextoEx_Transicion_Resaltado:
 				#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Resaltado.\n");
 				#endif			
-				FondoHasta		 = &Skin.FondoResaltado;
-				BordeHasta		 = &Skin.BordeResaltado;
-				TextoHasta		 = &Skin.TextoResaltado;
-				TextoSombraHasta = &Skin.TextoResaltadoSombra;
+				FondoHasta			= &Skin.FondoResaltado;
+				BordeHasta			= &Skin.BordeResaltado;
+				TextoHasta			= &Skin.TextoResaltado;
+				TextoSombraHasta	= &Skin.TextoResaltadoSombra;
+				TextoPHHasta		= &Skin.TextoPlaceholder;
+				TextoPHSombraHasta	= &Skin.TextoPlaceholderSombra;
 				break;
 			case DEdicionTextoEx_Transicion_Presionado:
 				#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Presionado.\n");
 				#endif
-				FondoHasta		 = &Skin.FondoPresionado;
-				BordeHasta	 	 = &Skin.BordePresionado;
-				TextoHasta		 = &Skin.TextoPresionado;
-				TextoSombraHasta = &Skin.TextoPresionadoSombra;
+				FondoHasta			= &Skin.FondoPresionado;
+				BordeHasta	 		= &Skin.BordePresionado;
+				TextoHasta			= &Skin.TextoPresionado;
+				TextoSombraHasta	= &Skin.TextoPresionadoSombra;
+				TextoPHHasta		= &Skin.TextoPlaceholder;
+				TextoPHSombraHasta	= &Skin.TextoPlaceholderSombra;
 				break;
 			case DEdicionTextoEx_Transicion_Desactivado:
 				#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 					Debug_Escribir(L"DEdicionTextoEx::Transicion DEdicionTextoEx_Transicion_Desactivado.\n");
 				#endif			
-				FondoHasta		 = &Skin.FondoDesactivado;
-				BordeHasta		 = &Skin.BordeNormal;
-				TextoHasta		 = &Skin.TextoDesactivado;
-				TextoSombraHasta = &Skin.TextoDesactivadoSombra;
+				FondoHasta			= &Skin.FondoDesactivado;
+				BordeHasta			= &Skin.BordeNormal;
+				TextoHasta			= &Skin.TextoDesactivado;
+				TextoSombraHasta	= &Skin.TextoDesactivadoSombra;
+				TextoPHHasta		= &Skin.TextoDesactivado;
+				TextoPHSombraHasta	= &Skin.TextoDesactivadoSombra;
+
 				break;
 		}
 
-		_AniTransicion.Iniciar({ _ColorFondo, _ColorBorde, _ColorTexto, _ColorTextoSombra }, { FondoHasta, BordeHasta, TextoHasta, TextoSombraHasta }, Duracion, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
+		_AniTransicion.Iniciar({ _ColorFondo, _ColorBorde, _ColorTexto, _ColorTextoSombra, _ColorTextoPH, _ColorTextoSombraPH }, { FondoHasta, BordeHasta, TextoHasta, TextoSombraHasta, TextoPHHasta, TextoPHSombraHasta }, Duracion, [=](DAnimacion::Valores& Datos, const BOOL Terminado) {
 			_ColorFondo			= Datos[0].Color();
 			_ColorBorde			= Datos[1].Color();
 			_ColorTexto			= Datos[2].Color();
 			_ColorTextoSombra	= Datos[3].Color();
+			_ColorTextoPH		= Datos[4].Color();
+			_ColorTextoSombraPH = Datos[5].Color();
 			Repintar();
 		});
 	}

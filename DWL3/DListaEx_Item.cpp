@@ -6,16 +6,6 @@ namespace DWL {
 	
 	DListaEx_Item::DListaEx_Item() : _Lista(NULL), _ColorTexto(0), _ColorTextoSombra(0), _ColorFondo(0), Seleccionado(FALSE), _UltimaTransicion(DListaEx_TransicionItem_Normal) {
 	}
-	
-	/*
-	DListaEx_Item::DListaEx_Item(const TCHAR *nTexto, DListaIconos_Icono *nIcono) : _Icono(nIcono), Seleccionado(FALSE) {
-		Texto = nTexto;
-	}
-
-	DListaEx_Item::DListaEx_Item(std::wstring &nTexto, DListaIconos_Icono *nIcono) : Texto(nTexto), _Icono(nIcono), Seleccionado(FALSE) {
-	}
-
-	*/
 
 	DListaEx_Item::~DListaEx_Item(void)	{
 		for (size_t i = 0; i < _SubItems.size(); i++) {
@@ -35,8 +25,6 @@ namespace DWL {
 	void DListaEx_Item::_TransicionResaltado(void) {
 		_Transicion((Seleccionado == TRUE) ? DListaEx_TransicionItem_SeleccionadoResaltado : DListaEx_TransicionItem_Resaltado);
 	}
-
-//	void DListaEx_Item::_
 
 	void DListaEx_Item::_Transicion(const DListaEx_TransicionItem nTransicion) {
 		DWORD Duracion = DhWnd::TiempoAnimaciones;

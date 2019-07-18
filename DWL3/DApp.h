@@ -10,20 +10,20 @@ namespace DWL {
 	class DApp;
 
 	// Singleton básico para contener la clase aplicación que hereda de DApp
-	template<class T = DApp> class DSingleton {
+	template<class T = DApp> class DSingletonApp {
 	  public:
-					// Función que crea una instancia estática y la devuelve (al ser estatica la instancia solo se crea la pirmera vez que se accede a esta función)
-		static T   &Instancia(void) {
-						static T instancia;
-						return instancia;
-					};
-					// Elimino el constructor copia
-					DSingleton(const DSingleton&) = delete;
-					// Elimino el operador =
-		DSingleton &operator= (const DSingleton) = delete;
+						// Función que crea una instancia estática y la devuelve (al ser estatica la instancia solo se crea la pirmera vez que se accede a esta función)
+		static T	   &Instancia(void) {
+							static T instancia;
+							return instancia;
+						};
+						// Elimino el constructor copia
+						DSingletonApp(const DSingleton&) = delete;
+						// Elimino el operador =
+		DSingletonApp  &operator= (const DSingleton) = delete;
 	  private:
-					// Constructor por defecto des-habilitado
-					DSingleton(void) { }
+						// Constructor por defecto des-habilitado
+						DSingletonApp(void) { }
 	};
 
 
@@ -55,7 +55,7 @@ namespace DWL {
 extern DWL::DApp *_Aplicacion;
 
 // Crea un singleton de la clase aplicación especificada
-#define INICIAR_DWL3(DAPP) class _DWLApp : public DWL::DSingleton<DAPP> { };
+#define INICIAR_DWL3(DAPP) class _DWLApp : public DWL::DSingletonApp<DAPP> { };
 
 // Devuelve la instancia de la clase aplicación
 #define App _DWLApp::Instancia()

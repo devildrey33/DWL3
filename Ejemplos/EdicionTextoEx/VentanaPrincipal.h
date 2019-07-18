@@ -13,8 +13,13 @@ class VentanaPrincipal : public DWL::DVentana {
 
 	LRESULT CALLBACK		GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	DWL::DEdicionTextoEx	Edit1;
-	DWL::DEdicionTextoEx	Edit2;
-	DWL::DEdicionTextoEx	Edit3;
+	DWL::DEdicionTextoEx	EditIzquierda;
+	DWL::DEdicionTextoEx	EditCentrado;
+	DWL::DEdicionTextoEx	EditDerecha;
+
+	DWL::DEdicionTextoEx	EditEnteros;
+	DWL::DEdicionTextoEx	EditDecimales;
+	DWL::DEdicionTextoEx	EditTiempo;
+
 };
 
