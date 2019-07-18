@@ -88,6 +88,8 @@ namespace DWL {
 		DEdicionTextoEx_Alineacion	Alineacion;
 		DEdicionTextoEx_Skin        Skin;
 		const size_t                HitTest(const int cX, const int cY);
+									// Texto que se mostrará en el control antes de tener el foco o un texto al estilo HTML
+		std::wstring                Placeholder;
 	  protected:
 		const BOOL                 _EntradaPermitida(const wchar_t Caracter); // Determina si el caracter introducido es válido para el tipo de entrada actual
 		void					   _Evento_Pintar(void);
@@ -95,6 +97,7 @@ namespace DWL {
 		void					   _Evento_MousePresionado(const WPARAM wParam, const LPARAM lParam, const int Boton);
 		void					   _Evento_MouseSoltado(const WPARAM wParam, const LPARAM lParam, const int Boton);
 		void					   _Evento_MouseSaliendo(void);
+		void					   _Evento_MouseDobleClick(const WPARAM wParam, const LPARAM lParam, const int Boton);
 		void                       _Evento_TeclaPresionada(WPARAM wParam, LPARAM lParam);
 		void					   _Evento_TeclaSoltada(WPARAM wParam, LPARAM lParam);
 		void					   _Evento_Tecla(WPARAM wParam, LPARAM lParam);
@@ -108,6 +111,11 @@ namespace DWL {
 		void                       _ControlZ(void);
 		void                       _ControlY(void);
 
+		void                       _Borrar(void);
+		void                       _Suprimir(void);
+
+		void                       _BorrarTextoSeleccionado(void);
+
 		void                       _AgregarTextoUndo(void);
 
 		DIcono                     _Icono;
@@ -119,7 +127,7 @@ namespace DWL {
 		std::vector<size_t>        _PosCursores;
 		size_t                     _PosRedoUndo;
 
-		const RECT                 _PosicionTexto(RECT &RC);
+		const RECT                 _PosicionTexto(std::wstring& nTexto, RECT &RC);
 
 		COLORREF                   _ColorTexto;
 		COLORREF                   _ColorTextoSombra;

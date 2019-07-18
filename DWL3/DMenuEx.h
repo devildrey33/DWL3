@@ -32,7 +32,7 @@ namespace DWL {
 		BOOL			FuenteSombraTexto;
 	};
 
-	#define DMENUEX_MOSTRARDEBUG	TRUE
+	#define DMENUEX_MOSTRARDEBUG	FALSE
 
 	#define DMENUEX_TAMICONO  16	// Tamaño de los iconos
 	#define DMENUEX_MARGEN_X   6	// Margen horizontal para el texto 

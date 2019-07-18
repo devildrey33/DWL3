@@ -72,7 +72,7 @@ namespace DWL {
 
 	// Función para crear el control EdicionTextoEx
 	HWND DEdicionTextoEx::CrearEdicionTextoEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, DIcono *nIcono, const long Estilos) {
-		_hWnd = CrearControlEx(nPadre, L"DEdicionTextoEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL, CS_HREDRAW | CS_VREDRAW);
+		_hWnd = CrearControlEx(nPadre, L"DEdicionTextoEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL, CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW);
 		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		_Texto				= nTxt;
 		_PosCursor			= _Texto.size();		
@@ -121,7 +121,7 @@ namespace DWL {
 		}
 
 		// Obtengo el rectangulo que ocupará el texto
-		RECT PosTexto = _PosicionTexto(RC);
+		RECT PosTexto		= _PosicionTexto(_Texto, RC);
 
 		// Pinto la selección (si existe)
 		if (_PosCursor != _PosSeleccion) {
@@ -142,15 +142,33 @@ namespace DWL {
 
 		// Asigno el fondo transparente al pintar el texto
 		SetBkMode(Buffer, TRANSPARENT);
-		// Pinto la sombra del texto
-		if (Skin.FuenteSombraTexto == TRUE) {
-			SetTextColor(Buffer, _ColorTextoSombra);
-			TextOut(Buffer, PosTexto.left + 1, PosTexto.top + 1, _Texto.c_str(), static_cast<int>(_Texto.size()));
+
+		// SI hay texto o tiene el foco, pinto el texto normal
+		if (_Texto.size() > 0 || GetFocus() == _hWnd) {
+			// Pinto la sombra del texto
+			if (Skin.FuenteSombraTexto == TRUE) {
+				SetTextColor(Buffer, _ColorTextoSombra);
+				TextOut(Buffer, PosTexto.left + 1, PosTexto.top + 1, _Texto.c_str(), static_cast<int>(_Texto.size()));
+			}
+			// Pinto el texto
+			SetTextColor(Buffer, _ColorTexto);
+			TextOut(Buffer, PosTexto.left, PosTexto.top, _Texto.c_str(), static_cast<int>(_Texto.size()));
+		}
+		// Pinto el texto del placeholder (el control no tiene el foco y no hay texto
+		else {
+			RECT PosPlaceHoder = _PosicionTexto(Placeholder, RC);
+
+			// Pinto la sombra del texto
+			if (Skin.FuenteSombraTexto == TRUE) {
+				SetTextColor(Buffer, Skin.TextoDesactivadoSombra);
+				TextOut(Buffer, PosPlaceHoder.left + 1, PosPlaceHoder.top + 1, Placeholder.c_str(), static_cast<int>(Placeholder.size()));
+			}
+
+			// Pinto el texto
+			SetTextColor(Buffer, Skin.TextoDesactivado);
+			TextOut(Buffer, PosPlaceHoder.left, PosPlaceHoder.top, Placeholder.c_str(), static_cast<int>(Placeholder.size()));
 		}
 
-		// Pinto el texto
-		SetTextColor(Buffer, _ColorTexto);
-		TextOut(Buffer, PosTexto.left, PosTexto.top, _Texto.c_str(), static_cast<int>(_Texto.size()));
 
 		// Pinto el cursor (si el tipo de entrada lo permite y el control tiene el foco)
 		if (Entrada != DEdicionTextoEx_Entrada_SinEntrada && GetFocus() == _hWnd) {
@@ -175,27 +193,21 @@ namespace DWL {
 
 
 	// Función que devuelve un RECT con el tamaño y posición del texto
-	const RECT DEdicionTextoEx::_PosicionTexto(RECT &RC) {
+	const RECT DEdicionTextoEx::_PosicionTexto(std::wstring &nTexto, RECT &RC) {
 		// Calculo el tamaño del icono
 		long TamIcono = (_Icono() != NULL) ? DEDICIONTEXTOEX_TAMICONO + DEDICIONTEXTOEX_MARGEN_X : DEDICIONTEXTOEX_MARGEN_X;
-
 		// Espacio disponible para el texto (por si hay un icono)
 		RECT EspacioTexto = { RC.left + TamIcono, RC.top, RC.right - TamIcono, RC.bottom };
-
 		// Calculo la posición del texto
-		SIZE TamTexto = Fuente.ObtenerTamTexto(_Texto.c_str());
-
+		SIZE TamTexto = Fuente.ObtenerTamTexto(nTexto.c_str());
 		// Calculo la altura del texto
-		int Top = ((EspacioTexto.bottom - EspacioTexto.top) - TamTexto.cy) / 2;
+		int Top    = ((EspacioTexto.bottom - EspacioTexto.top) - TamTexto.cy) / 2;
 		int Bottom = Top + TamTexto.cy;
-
+		// Calculo el espacio según la alineación
 		switch (Alineacion) {
-			case DEdicionTextoEx_Alineacion_Izquierda:
-				return { EspacioTexto.left, Top, EspacioTexto.left + TamTexto.cx, Bottom };
-			case DEdicionTextoEx_Alineacion_Derecha:
-				return { EspacioTexto.right - TamTexto.cx, Top, EspacioTexto.right, Bottom };
-			case DEdicionTextoEx_Alineacion_Centrado:
-				return { (EspacioTexto.right - TamTexto.cx) / 2, Top, ((EspacioTexto.right - TamTexto.cx) / 2) + TamTexto.cx, Bottom };
+			case DEdicionTextoEx_Alineacion_Izquierda:	return { EspacioTexto.left,							Top,	EspacioTexto.left + TamTexto.cx,							Bottom };
+			case DEdicionTextoEx_Alineacion_Derecha:	return { EspacioTexto.right - TamTexto.cx,			Top,	EspacioTexto.right,											Bottom };
+			case DEdicionTextoEx_Alineacion_Centrado:	return { (EspacioTexto.right - TamTexto.cx) / 2,	Top,	((EspacioTexto.right - TamTexto.cx) / 2) + TamTexto.cx,		Bottom };
 		}
 
 		return { 0, 0, 0, 0 };
@@ -206,7 +218,7 @@ namespace DWL {
 	const size_t DEdicionTextoEx::HitTest(const int cX, const int cY) {
 		RECT	RC = { 0, 0, 0, 0 };
 		GetClientRect(_hWnd, &RC);
-		RECT	PosTexto = _PosicionTexto(RC);
+		RECT	PosTexto = _PosicionTexto(_Texto, RC);
 		// La X es mas pequeña que la izquierda del rectangulo del texto
 		if (cX < PosTexto.left) {
 			#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
@@ -243,15 +255,11 @@ namespace DWL {
 	void DEdicionTextoEx::_Evento_Tecla(WPARAM wParam, LPARAM lParam) {
 		DEventoTeclado DatosTeclado(wParam, lParam, this);
 		switch (DatosTeclado.TeclaVirtual()) {
-			case VK_RETURN:
+/*			case VK_RETURN:
 				if (Entrada == DEdicionTextoEx_Entrada_SinEntrada) return;
-				break;
+				break;*/
 			case VK_BACK: // Borrar
-				if (Entrada == DEdicionTextoEx_Entrada_SinEntrada) return;
-				if (_PosCursor > 0) {
-					_Texto.erase(--_PosCursor, 1);
-					_AgregarTextoUndo();
-				}
+				_Borrar();
 				break;
 			case VK_ESCAPE: // Desselecciono todo
 				_PosSeleccion = _PosCursor;
@@ -307,10 +315,7 @@ namespace DWL {
 				if (DatosTeclado.Shift() == FALSE) _PosSeleccion = _PosCursor;
 				break;
 			case VK_DELETE: // Suprimir
-				if (_Texto.size() > 0 && _PosCursor < _Texto.size()) {
-					_Texto.erase(_PosCursor, 1);
-					_AgregarTextoUndo();
-				}
+				_Suprimir();
 				break;
 			case L'c': case L'C':	
 				if (DatosTeclado.Control() == TRUE)	_ControlC();		
@@ -362,6 +367,45 @@ namespace DWL {
 		#endif
 	}
 
+	void DEdicionTextoEx::_Borrar(void) {
+		if (Entrada == DEdicionTextoEx_Entrada_SinEntrada || _Texto.size() == 0) return;
+		// No hay selección
+		if (_PosCursor == _PosSeleccion) {
+			if (_PosCursor > 0) {
+				_Texto.erase(--_PosCursor, 1);
+				_AgregarTextoUndo();
+			}
+		}
+		else {
+			_BorrarTextoSeleccionado();
+		}
+	}
+
+	void DEdicionTextoEx::_Suprimir(void) {
+		if (Entrada == DEdicionTextoEx_Entrada_SinEntrada || _Texto.size() == 0) return;
+		// No hay selección
+		if (_PosCursor == _PosSeleccion) {
+			if (_PosCursor < _Texto.size()) {
+				_Texto.erase(_PosCursor, 1);
+				_AgregarTextoUndo();
+			}
+		}
+		else {
+			_BorrarTextoSeleccionado();
+		}
+	}
+
+	void DEdicionTextoEx::_BorrarTextoSeleccionado(void) {
+		if (_PosCursor > _PosSeleccion) {
+			_Texto.erase(_PosSeleccion, _PosCursor - _PosSeleccion);
+			_PosCursor = _PosSeleccion;
+		}
+		else {
+			_Texto.erase(_PosCursor, _PosSeleccion - _PosCursor);
+			_PosSeleccion = _PosCursor;
+		}
+	}
+
 	// Teclado Control + X (cut)
 	void DEdicionTextoEx::_ControlX(void) {
 		size_t Desde = 0;
@@ -383,7 +427,6 @@ namespace DWL {
 		_Texto = Tmp;
 		_PosCursor = Desde;
 		_PosSeleccion = _PosCursor;
-//		Repintar();
 	}
 
 	// Teclado Control + V (paste)
@@ -405,7 +448,6 @@ namespace DWL {
 		_Texto = Tmp;
 		_PosSeleccion = Desde;
 		_PosCursor += P.size() - 1;
-//		Repintar();
 
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlV %s.\n", P.c_str());
@@ -414,32 +456,29 @@ namespace DWL {
 
 	// Teclado Control + Z (undo)
 	void DEdicionTextoEx::_ControlZ(void) {
-//		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlZ %d %d.\n", _PosRedoUndo, _PosCursor);
-//		#endif
+		#endif
 		if (_PosRedoUndo > 1) {
 			_Texto		  = _Textos[(--_PosRedoUndo) - 1];
 			_PosCursor	  = _PosCursores[_PosRedoUndo - 1];
 			_PosSeleccion = _PosCursor;
 		}
-//		Repintar();
 	}
 
 	// Teclado Control + Y (redo)
 	void DEdicionTextoEx::_ControlY(void) {
-//		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_ControlY %d %d.\n", _PosRedoUndo, _PosCursor);
-//		#endif
-//		if (_PosRedoUndo == 0) return;
+		#endif
 		if (_PosRedoUndo < _Textos.size()) {
 			_Texto		  = _Textos[(++_PosRedoUndo) - 1];
 			_PosCursor	  = _PosCursores[_PosRedoUndo - 1];
 			_PosSeleccion = _PosCursor;
 		}
-//		Repintar();
 	}
 
-
+	// Función que añade la ultima modificación al texto para poder hacer Control + Z y Control + Y
 	void DEdicionTextoEx::_AgregarTextoUndo(void) {
 		if (_PosRedoUndo < _Textos.size()) {
 			_Textos.resize(_PosRedoUndo);
@@ -449,9 +488,9 @@ namespace DWL {
 		_Textos.push_back(_Texto);
 		_PosCursores.push_back(_PosCursor);
 		_PosRedoUndo = static_cast<long>(_Textos.size());
-//		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
+		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_AgregarTextoUndo %d.\n", _PosRedoUndo);
-//		#endif
+		#endif
 	}
 
 
@@ -589,6 +628,12 @@ namespace DWL {
 		#endif
 	}
 
+	void DEdicionTextoEx::_Evento_MouseDobleClick(const WPARAM wParam, const LPARAM lParam, const int Boton) {
+		_PosSeleccion = 0;
+		_PosCursor = _Texto.size();
+		Repintar();
+	}
+
 	// WM_MOUSELEAVE
 	void DEdicionTextoEx::_Evento_MouseSaliendo(void) {
 		if (_Presionado == FALSE)	Transicion(DEdicionTextoEx_Transicion_Normal);
@@ -648,7 +693,8 @@ namespace DWL {
 				#endif
 				FondoHasta		 = &Skin.FondoNormal;
 				BordeHasta		 = &Skin.BordeNormal;
-				TextoHasta	 	 = &Skin.Texto;
+				TextoHasta = &Skin.Texto;
+				//else                                            TextoHasta = &Skin.TextoDesactivado;
 				TextoSombraHasta = &Skin.TextoSombra;
 				break;
 			case DEdicionTextoEx_Transicion_Resaltado:
@@ -709,6 +755,10 @@ namespace DWL {
 			case WM_LBUTTONUP	:		_Evento_MouseSoltado(wParam, lParam, 0);				return 0;
 			case WM_RBUTTONUP	:		_Evento_MouseSoltado(wParam, lParam, 1);				return 0;
 			case WM_MBUTTONUP	:		_Evento_MouseSoltado(wParam, lParam, 2);				return 0;
+				// Mouse doble click
+			case WM_LBUTTONDBLCLK:		_Evento_MouseDobleClick(wParam, lParam, 0);				return 0;
+			case WM_RBUTTONDBLCLK:		_Evento_MouseDobleClick(wParam, lParam, 1);				return 0;
+			case WM_MBUTTONDBLCLK:		_Evento_MouseDobleClick(wParam, lParam, 2);				return 0;
 
 			case WM_TIMER		:		_Evento_Temporizador(static_cast<UINT_PTR>(wParam));	return 0;
 
