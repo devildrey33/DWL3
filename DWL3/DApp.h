@@ -18,9 +18,9 @@ namespace DWL {
 							return instancia;
 						};
 						// Elimino el constructor copia
-						DSingletonApp(const DSingleton&) = delete;
+						DSingletonApp(const DSingletonApp &) = delete;
 						// Elimino el operador =
-		DSingletonApp  &operator= (const DSingleton) = delete;
+		DSingletonApp  &operator= (const DSingletonApp) = delete;
 	  private:
 						// Constructor por defecto des-habilitado
 						DSingletonApp(void) { }

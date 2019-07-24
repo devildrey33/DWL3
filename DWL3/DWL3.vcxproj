@@ -163,6 +163,7 @@
     <ClInclude Include="DApp.h" />
     <ClInclude Include="DArbolEx.h" />
     <ClInclude Include="DArbolEx_Nodo.h" />
+    <ClInclude Include="DArchivoBinario.h" />
     <ClInclude Include="DBarraDesplazamientoEx.h" />
     <ClInclude Include="DBarraProgresoEx.h" />
     <ClInclude Include="DBarraScrollEx.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="DApp.cpp" />
     <ClCompile Include="DArbolEx.cpp" />
     <ClCompile Include="DArbolEx_Nodo.cpp" />
+    <ClCompile Include="DArchivoBinario.cpp" />
     <ClCompile Include="DBarraDesplazamientoEx.cpp" />
     <ClCompile Include="DBarraProgresoEx.cpp" />
     <ClCompile Include="DBarraScrollEx.cpp" />

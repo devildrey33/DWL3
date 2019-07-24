@@ -52,12 +52,13 @@
 
 
 			/* Convierte una cadena a un tipo básico */
-			template <typename T> T StrTo(std::wstring &Tmp, T &output) {
+			template <typename T> T StrTo(std::wstring& Tmp, T& output) {
 				//			T output;
 				std::wistringstream in(Tmp);
 				in >> output;
 				return output;
 			}
+
 
 
 			static const int AnsiToWide(const char *IN_Ansi, std::wstring &OUT_Wide) {

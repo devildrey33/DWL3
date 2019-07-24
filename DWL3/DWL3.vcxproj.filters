@@ -112,6 +112,9 @@
     <Filter Include="Sistema\Portapapeles">
       <UniqueIdentifier>{126c1e28-defc-4985-902a-cfc5c9f15626}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sistema\ArchivoBinario">
+      <UniqueIdentifier>{e85e4c35-a4ff-4f62-8bb0-b39b4fe98282}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DAnimacion.h">
@@ -261,6 +264,9 @@
     <ClInclude Include="DPortapapeles.h">
       <Filter>Sistema\Portapapeles</Filter>
     </ClInclude>
+    <ClInclude Include="DArchivoBinario.h">
+      <Filter>Sistema\ArchivoBinario</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DAnimacion.cpp">
@@ -385,6 +391,9 @@
     </ClCompile>
     <ClCompile Include="DPortapapeles.cpp">
       <Filter>Sistema\Portapapeles</Filter>
+    </ClCompile>
+    <ClCompile Include="DArchivoBinario.cpp">
+      <Filter>Sistema\ArchivoBinario</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
