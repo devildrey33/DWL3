@@ -11,6 +11,8 @@ namespace DWL {
 											DArchivoBinario(void);
 											// Constructor que abre el archivo especificado para lectura y escritura
 											DArchivoBinario(const wchar_t *nPath, const BOOL Abrir_si_no_existe = TRUE);
+											// Constructor que abre el archivo especificado para lectura y escritura
+											DArchivoBinario(std::wstring &Path, const BOOL Abrir_si_no_existe = TRUE);
 											// Destructor (cierra el archivo y elimina los datos de la memória)
 			                               ~DArchivoBinario(void);
 											// Función que abre el archivo para lectura y escritura (si ya habia un archivo abierto lo cierra)
@@ -38,26 +40,26 @@ namespace DWL {
 											// Función que devuelve el path del archivo
 		inline const wchar_t               *Path(void)				{ return _Path.c_str();		}	
 											// Función para leer datos del archivo
-		const BOOL							Leer(char *Buffer, const size_t Longitud_en_caracteres);
+		const BOOL							Leer(char *Buffer, const DWORD Longitud_en_caracteres);
 											// Función para guardar datos en el archivo
-		const BOOL							Guardar(const char *Buffer, const size_t Longitud_en_caracteres);
+		const BOOL							Guardar(const char *Buffer, const DWORD Longitud_en_caracteres);
 											// Función plantilla para leer datos del tipo especificado (NO USAR CON PUNTEROS)
-		template <typename T> const BOOL	Leer(T &Buffer, const size_t Longitud_en_bytes = sizeof(T)) { 
+		template <typename T> const BOOL	Leer(T &Buffer, const DWORD Longitud_en_bytes = sizeof(T)) { 
 												_BytesLeidos = 0;
-												BOOL Ret = ReadFile(_Archivo, reinterpret_cast<LPVOID>(Buffer), LongitudEnBytes, &_CaracteresLeidos, NULL);
-												_FinalDelArchivo = (_BytesLeidos < LongitudEnCaracteres) ? TRUE : FALSE;
+												BOOL Ret = ReadFile(_Archivo, reinterpret_cast<LPVOID>(Buffer), Longitud_en_bytes, &_BytesLeidos, NULL);
+												_FinalDelArchivo = (_BytesLeidos < Longitud_en_bytes) ? TRUE : FALSE;
 												return Ret;
 											};
 											// Función plantilla para guardar datos del tipo especificado
-		template <typename T> const BOOL	Guardar(const T &Buffer, const size_t Longitud_en_bytes = sizeof(T)) {
+		template <typename T> const BOOL	Guardar(const T &Buffer, const DWORD Longitud_en_bytes = sizeof(T)) {
 												DWORD Guardado = 0;
-												WriteFile(_Archivo, reinterpret_cast<LPCVOID>(Buffer), LongitudEnBytes, &Guardado, NULL);
-												return static_cast<BOOL>(Guardado == LongitudEnBytes);
+												WriteFile(_Archivo, reinterpret_cast<LPCVOID>(Buffer), Longitud_en_bytes, &Guardado, NULL);
+												return static_cast<BOOL>(Guardado == Longitud_en_bytes);
 											};
 											// Función para leer un std::wstring
 		const BOOL							Leer(std::wstring &Texto);
-											// Función para guardar un std::wstring
-		const BOOL							Guardar(std::wstring &Texto);
+											// Función para guardar un std::wstring (Si GuardarTam es TRUE, se guardará el tamaño del string antes del string)
+		const BOOL							Guardar(std::wstring &Texto, const BOOL GuardarTam = TRUE);
 											// Función que genera y devuelve el hash MD5 del archivo
 		std::wstring                       &MD5(void);
 	  protected :  ///////////////////////////

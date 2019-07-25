@@ -9,8 +9,13 @@ namespace DWL {
 	}
 	
 	// Constructor que abre el archivo especificado para lectura y escritura
-	DArchivoBinario::DArchivoBinario(const wchar_t* nPath, const BOOL Abrir_si_no_existe = TRUE) : _Archivo(INVALID_HANDLE_VALUE), _FinalDelArchivo(FALSE), _BytesLeidos(0) {
+	DArchivoBinario::DArchivoBinario(const wchar_t* nPath, const BOOL Abrir_si_no_existe) : _Archivo(INVALID_HANDLE_VALUE), _FinalDelArchivo(FALSE), _BytesLeidos(0) {
 		AbrirArchivo(nPath, Abrir_si_no_existe);
+	}
+
+	// Constructor que abre el archivo especificado para lectura y escritura
+	DArchivoBinario::DArchivoBinario(std::wstring &nPath, const BOOL Abrir_si_no_existe) : _Archivo(INVALID_HANDLE_VALUE), _FinalDelArchivo(FALSE), _BytesLeidos(0) {
+		AbrirArchivo(nPath.c_str(), Abrir_si_no_existe);
 	}
 
 	// Destructor (cierra el archivo y elimina los datos de la memória)
@@ -81,7 +86,7 @@ namespace DWL {
 	}
 
 	// Función para leer datos del archivo
-	const BOOL DArchivoBinario::Leer(char *Buffer, const size_t LongitudEnCaracteres) {
+	const BOOL DArchivoBinario::Leer(char *Buffer, const DWORD LongitudEnCaracteres) {
 		_BytesLeidos = 0;
 		BOOL	Ret = ReadFile(_Archivo, reinterpret_cast<LPVOID>(Buffer), LongitudEnCaracteres * sizeof(char), &_BytesLeidos, NULL);
 		_FinalDelArchivo = (_BytesLeidos < LongitudEnCaracteres) ? TRUE : FALSE;
@@ -89,18 +94,18 @@ namespace DWL {
 	}
 
 	// Función para guardar datos en el archivo
-	const BOOL DArchivoBinario::Guardar(const char *Buffer, const size_t LongitudEnCaracteres) {
+	const BOOL DArchivoBinario::Guardar(const char *Buffer, const DWORD LongitudEnCaracteres) {
 		DWORD Guardado = 0;
 		return WriteFile(_Archivo, reinterpret_cast<LPCVOID>(Buffer), LongitudEnCaracteres * sizeof(char), &Guardado, NULL);
 	}
 
 	// Función para leer un std::wstring
-	const BOOL DArchivoBinario::Leer(std::wstring& Texto) {
+	const BOOL DArchivoBinario::Leer(std::wstring &Texto) {
 		size_t   TamStr = 0;
 		wchar_t* TmpChar = NULL;
 		if (Leer<size_t>(TamStr) == FALSE) return FALSE; // Leo el tamaño
 		TmpChar = new wchar_t[TamStr + 1];
-		BOOL Ret = Leer(TmpChar, TamStr * sizeof(wchar_t));
+		BOOL Ret = Leer(TmpChar, static_cast<DWORD>(TamStr * sizeof(wchar_t)));
 		if (Ret != static_cast<int>(TamStr * sizeof(TCHAR))) {
 			delete[] TmpChar;
 			return FALSE;
@@ -109,15 +114,16 @@ namespace DWL {
 		Texto = TmpChar;
 		delete[] TmpChar;
 		return Ret; // + sizeof(size_t);
-
 	}
 
 	// Función para guardar un std::wstring
-	const BOOL DArchivoBinario::Guardar(std::wstring& Texto) {
+	const BOOL DArchivoBinario::Guardar(std::wstring &Texto, const BOOL GuardarTam) {
 		BOOL	Ret = 0;
-		Ret = Guardar<size_t>(Texto.size(), sizeof(size_t));
-		if (Ret == 0)	return FALSE;
-		return Guardar(&Texto[0], Texto.size() * sizeof(wchar_t));
+		if (GuardarTam == TRUE) {
+			Ret = Guardar<size_t>(Texto.size(), sizeof(size_t));
+			if (Ret == 0)	return FALSE;
+		}
+		return Guardar(&Texto[0], static_cast<DWORD>(Texto.size() * sizeof(wchar_t)));
 	}
 
 
