@@ -22,7 +22,7 @@ namespace DWL {
 										};
 
 										//! Constructor que define todos los valores
-										/*!	Constructor asignador de datos.
+										/*!	Constructor que define todos los valores
 											\fn			DEventoMouse(const int cX, const int cY, const UINT cID, const UINT nBoton);
 											\param[in]	wParam	: WPARAM del evento.
 											\param[in]	lParam  : LPARAM del evento.
@@ -31,7 +31,7 @@ namespace DWL {
 											\param[in]	cBoton	: Botón del mouse pulsado (si es -1 es que no se ha pulsado ningún botón).
 											\return		No devuelve nada.
 										*/
-										DEventoMouse(WPARAM nwParam, LPARAM nlParam, DhWnd *Control, const int cBoton = -1) :
+										DEventoMouse(WPARAM nwParam, LPARAM nlParam, DhWnd* Control, const int cBoton = -1) :
 											wParam(nwParam), lParam(nlParam), Wnd(Control), Boton(cBoton) {
 										};
 

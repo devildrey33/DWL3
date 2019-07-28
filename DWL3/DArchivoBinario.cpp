@@ -165,6 +165,7 @@ namespace DWL {
 		}
 
 		while (bResult = ReadFile(_Archivo, rgbFile, BUFSIZE, &cbRead, NULL)) {
+			// Si no se han leido caracteres, salgo del bucle
 			if (0 == cbRead) {
 				break;
 			}
