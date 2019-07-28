@@ -100,13 +100,13 @@ namespace DWL {
 	}
 
 	// Función para leer un std::wstring
-	const BOOL DArchivoBinario::Leer(std::wstring &Texto) {
+	const BOOL DArchivoBinario::Leer(std::wstring& Texto) {
 		size_t   TamStr = 0;
 		wchar_t* TmpChar = NULL;
 		if (Leer<size_t>(TamStr) == FALSE) return FALSE; // Leo el tamaño
 		TmpChar = new wchar_t[TamStr + 1];
 		BOOL Ret = Leer(TmpChar, static_cast<DWORD>(TamStr * sizeof(wchar_t)));
-		if (Ret != static_cast<int>(TamStr * sizeof(TCHAR))) {
+		if (Ret != static_cast<int>(TamStr * sizeof(wchar_t))) {
 			delete[] TmpChar;
 			return FALSE;
 		}
@@ -117,13 +117,41 @@ namespace DWL {
 	}
 
 	// Función para guardar un std::wstring
-	const BOOL DArchivoBinario::Guardar(std::wstring &Texto, const BOOL GuardarTam) {
+	const BOOL DArchivoBinario::Guardar(std::wstring& Texto, const BOOL GuardarTam) {
 		BOOL	Ret = 0;
 		if (GuardarTam == TRUE) {
 			Ret = Guardar<size_t>(Texto.size(), sizeof(size_t));
 			if (Ret == 0)	return FALSE;
 		}
 		return Guardar(&Texto[0], static_cast<DWORD>(Texto.size() * sizeof(wchar_t)));
+	}
+
+
+	// Función para leer un std::wstring
+	const BOOL DArchivoBinario::Leer(std::string& Texto) {
+		size_t  TamStr = 0;
+		char   *TmpChar = NULL;
+		if (Leer<size_t>(TamStr) == FALSE) return FALSE; // Leo el tamaño
+		TmpChar = new char[TamStr + 1];
+		BOOL Ret = Leer(TmpChar, static_cast<DWORD>(TamStr * sizeof(char)));
+		if (Ret != static_cast<int>(TamStr * sizeof(char))) {
+			delete[] TmpChar;
+			return FALSE;
+		}
+		TmpChar[TamStr] = 0;
+		Texto = TmpChar;
+		delete[] TmpChar;
+		return Ret; // + sizeof(size_t);
+	}
+
+	// Función para guardar un std::wstring
+	const BOOL DArchivoBinario::Guardar(std::string& Texto, const BOOL GuardarTam) {
+		BOOL	Ret = 0;
+		if (GuardarTam == TRUE) {
+			Ret = Guardar<size_t>(Texto.size(), sizeof(size_t));
+			if (Ret == 0)	return FALSE;
+		}
+		return Guardar(&Texto[0], static_cast<DWORD>(Texto.size() * sizeof(char)));
 	}
 
 
@@ -134,28 +162,95 @@ namespace DWL {
 	// Función que genera y devuelve el hash MD5 del archivo
 	// https://docs.microsoft.com/es-es/windows/win32/seccrypto/example-c-program--creating-an-md-5-hash-from-file-content
 	// https://stackoverflow.com/questions/13256446/compute-md5-hash-value-by-c-winapi
-	std::wstring &DArchivoBinario::MD5(void) {
+	std::wstring& DArchivoBinario::MD5(void) {
 		static std::wstring	Ret;
 
 		// El archivo no es válido
 		if (_Archivo == INVALID_HANDLE_VALUE) return Ret;
 
-		BOOL				bResult				= FALSE;
-		HCRYPTPROV			hProv				= 0;
-		HCRYPTHASH			hHash				= 0;
-		DWORD				cbRead				= 0;
-		DWORD				cbHash				= 0;
-		CHAR				rgbDigits[]			= "0123456789abcdef";
+		BOOL				bResult = FALSE;
+		HCRYPTPROV			hProv = 0;
+		HCRYPTHASH			hHash = 0;
+		DWORD				cbRead = 0;
+		DWORD				cbHash = 0;
+		CHAR				rgbDigits[] = "0123456789abcdef";
 		BYTE				rgbFile[BUFSIZE];
 		BYTE				rgbHash[MD5LEN];
-	
+
 		Ret.resize(0);
 
 		// Situo el puntero del archivo al principio
 		Posicion(0);
 
 		// Get handle to the crypto provider
-		if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL,	CRYPT_VERIFYCONTEXT)) {
+		if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
+			return Ret;
+		}
+
+		if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash)) {
+			CryptReleaseContext(hProv, 0);
+			return Ret;
+		}
+
+		while (bResult = ReadFile(_Archivo, rgbFile, BUFSIZE, &cbRead, NULL)) {
+			// Si no se han leido caracteres, salgo del bucle
+			if (0 == cbRead) {
+				break;
+			}
+
+			if (!CryptHashData(hHash, rgbFile, cbRead, 0)) {
+				CryptReleaseContext(hProv, 0);
+				CryptDestroyHash(hHash);
+				return Ret;
+			}
+		}
+
+		if (!bResult) {
+			CryptReleaseContext(hProv, 0);
+			CryptDestroyHash(hHash);
+			return Ret;
+		}
+
+		cbHash = MD5LEN;
+		if (CryptGetHashParam(hHash, HP_HASHVAL, rgbHash, &cbHash, 0)) {
+			for (DWORD i = 0; i < cbHash; i++) {
+				Ret += rgbDigits[rgbHash[i] >> 4];
+				Ret += rgbDigits[rgbHash[i] & 0xf];
+			}
+		}
+		else {
+			Ret.resize(0);
+		}
+
+		CryptDestroyHash(hHash);
+		CryptReleaseContext(hProv, 0);
+
+		return Ret;
+	}
+
+
+	std::string &DArchivoBinario::MD5_char(void) {
+		static std::string	Ret;
+
+		// El archivo no es válido
+		if (_Archivo == INVALID_HANDLE_VALUE) return Ret;
+
+		BOOL				bResult = FALSE;
+		HCRYPTPROV			hProv = 0;
+		HCRYPTHASH			hHash = 0;
+		DWORD				cbRead = 0;
+		DWORD				cbHash = 0;
+		CHAR				rgbDigits[] = "0123456789abcdef";
+		BYTE				rgbFile[BUFSIZE];
+		BYTE				rgbHash[MD5LEN];
+
+		Ret.resize(0);
+
+		// Situo el puntero del archivo al principio
+		Posicion(0);
+
+		// Get handle to the crypto provider
+		if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
 			return Ret;
 		}
 

@@ -60,8 +60,14 @@ namespace DWL {
 		const BOOL							Leer(std::wstring &Texto);
 											// Función para guardar un std::wstring (Si GuardarTam es TRUE, se guardará el tamaño del string antes del string)
 		const BOOL							Guardar(std::wstring &Texto, const BOOL GuardarTam = TRUE);
-											// Función que genera y devuelve el hash MD5 del archivo
+											// Función para leer un std::wstring
+		const BOOL							Leer(std::string &Texto);
+											// Función para guardar un std::wstring (Si GuardarTam es TRUE, se guardará el tamaño del string antes del string)
+		const BOOL							Guardar(std::string &Texto, const BOOL GuardarTam = TRUE);
+											// Función que genera y devuelve el hash MD5 del archivo en un string de 16 bytes
 		std::wstring                       &MD5(void);
+											// Función que genera y devuelve el hash MD5 del archivo en un string de 8 bytes
+		std::string                        &MD5_char(void);
 	  protected :  ///////////////////////////
 											// Handle para el archivo
 		HANDLE                             _Archivo;
