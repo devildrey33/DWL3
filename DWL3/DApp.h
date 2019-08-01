@@ -11,8 +11,7 @@ namespace DWL {
 
 	// Singleton básico para contener la clase aplicación que hereda de DApp
 	template<class T = DApp> class DSingletonApp {
-	  public:
-						// Función que crea una instancia estática y la devuelve (al ser estatica la instancia solo se crea la pirmera vez que se accede a esta función)
+	  public: //////////// Función que crea una instancia estática y la devuelve (al ser estatica la instancia solo se crea la pirmera vez que se accede a esta función)
 		static T	   &Instancia(void) {
 							static T instancia;
 							return instancia;
@@ -21,15 +20,14 @@ namespace DWL {
 						DSingletonApp(const DSingletonApp &) = delete;
 						// Elimino el operador =
 		DSingletonApp  &operator= (const DSingletonApp) = delete;
-	  private:
-						// Constructor por defecto des-habilitado
+	  private: /////////// Constructor por defecto des-habilitado
 						DSingletonApp(void) { }
 	};
 
 
 
 	class DApp {
-	  public :							// Constructor
+	  public : /////////////////////////// Constructor
 										DApp(void);
 										// Función que vacia la cola de mensajes de esta aplicación
 		void							Eventos_Mirar(void);
@@ -47,6 +45,22 @@ namespace DWL {
 		inline void						TerminarBucleMensajes(int CodigoSalida = 0)					{ PostQuitMessage(CodigoSalida); }
 										// Función que inicia un bucle de mensajes hasta que se llama a PostQuitMessage o App.TerminarBucleMensajes()
 		virtual int						BucleMensajes(void);
+										// Función que devuelve la linea de comandos especificada (si especificas una posición inválida se devolvera la linea 0)
+		inline std::wstring			   &LineaComandos(const size_t Pos)								{ return (Pos >= _LineaComandos.size()) ? _LineaComandos[0] :  _LineaComandos[Pos]; }
+										// Función que devuelve el total de comandos introducidos al arrancar la aplicación
+		inline const size_t				TotalLineaComandos(void)									{ return _LineaComandos.size(); };
+										// Función que devuelve el path completo de la aplicación sin el ejecutable
+		std::wstring				   &Path(void);
+										// Función que devuelve el path actual del sistema
+		std::wstring                   &PathActual(void);
+										// Función que asigna el path del sistema donde se está ejecutando la aplicación 
+		const BOOL						PathActual(const wchar_t *Path);
+										// Función que asigna el path del sistema donde se está ejecutando la aplicación 
+		const BOOL						PathActual(std::wstring &Path);
+ 	  protected: ///////////////////////// Función que obtiene la linea de comandos y la almacena en el vector _LineaComandos
+		void                           _ObtenerLineaComandos(void);
+										// Vector que contiene la linea de comandos separada
+		std::vector<std::wstring>	   _LineaComandos;
 	};
 
 };
