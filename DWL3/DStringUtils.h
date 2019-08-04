@@ -9,7 +9,8 @@
 	#include <sstream>
 
 	namespace DWL {
-		namespace Strings {
+		class Strings {
+		  public:
 			/* Split para separar una cadena por un carácter delimitador 
 				NOTA : si no encuentra el delimitador, devuelve la cadena completa */
 			class Split {
@@ -25,12 +26,9 @@
 				std::vector<std::wstring>  _TextoSeparado;
 			};
 
-			// Cuenta dentro de un string las veces que aparece un carácter
-			const size_t ContarCaracter(std::wstring &Texto, wchar_t Caracter);
-
 
 			/* Convierte cualquier valor decimal a cadena de caracteres, se puede especificar si se quiere un número de decimales. */
-			template <typename T> std::wstring ToStrF(T Tmp, int Decimales = 0) {
+			template <typename T> static std::wstring ToStrF(T Tmp, int Decimales = 0) {
 				std::wostringstream out;
 				out << std::fixed << std::setprecision(Decimales) << Tmp;
 				return out.str();
@@ -39,7 +37,7 @@
 
 			/* Convierte cualquier tipo básico a cadena, se puede especificar si se quiere un número fijo de digitos */
 			// UTILIZAR std::to_wstring y no esta función
-			template <typename T> std::wstring ToStr(T Tmp, int Digitos = 0) {
+			template <typename T> static std::wstring ToStr(T Tmp, int Digitos = 0) {
 				std::wostringstream out;
 
 				if (Digitos > 1)
@@ -52,7 +50,7 @@
 
 
 			/* Convierte una cadena a un tipo básico */
-			template <typename T> T StrTo(std::wstring& Tmp, T& output) {
+			template <typename T> static T StrTo(std::wstring& Tmp, T& output) {
 				//			T output;
 				std::wistringstream in(Tmp);
 				in >> output;
@@ -60,39 +58,24 @@
 			}
 
 
+			// Cuenta dentro de un string las veces que aparece un carácter
+			static const size_t ContarCaracter(std::wstring& Texto, wchar_t Caracter);
 
-			static const int AnsiToWide(const char *IN_Ansi, std::wstring &OUT_Wide) {
-				wchar_t TmpWTxt[4096];
-				int Ret = MultiByteToWideChar(CP_UTF8, MB_PRECOMPOSED, IN_Ansi, -1, TmpWTxt, 4096);
-				OUT_Wide = TmpWTxt;
-				return (Ret > 0) ? TRUE : FALSE;
-			}
+			// char a std::wstring
+			static const int AnsiToWide(const char* IN_Ansi, std::wstring& OUT_Wide);
 
-
-			static const int WideToAnsi(const wchar_t *IN_Wide, std::string &OUT_Ansi) {
-				char TmpTxt[4096];
-				int	Ret = WideCharToMultiByte(CP_UTF8, NULL, IN_Wide, -1, TmpTxt, 4096, NULL, NULL);
-				OUT_Ansi = TmpTxt;
-				return (Ret > 0) ? TRUE : FALSE;
-			}
-
-
+			// wchar_t a std::string
+			static const int WideToAnsi(const wchar_t* IN_Wide, std::string& OUT_Ansi);
 
 			/* Devuelve un string con el numero de bytes en formato legible (Bytes, KiloBytes, MegaBytes, GigaBytes, TeraBytes) */
-			static std::wstring &FormatoBytes(const unsigned long long nBytes, std::wstring &OUT_StrBytes) {
-				const wchar_t      *Medidas[5]	= { L"B", L"KB", L"MB", L"GB", L"TB" };
-				int					PosMedidas	= 0;
-				long double			Resultado	= static_cast<long double>(nBytes);
-				unsigned long long  Bytes = nBytes;
-				for (PosMedidas = 0; PosMedidas < 5 && Bytes >= 1024; PosMedidas++, Bytes /= 1024) {
-					Resultado = static_cast<long double>(Bytes) / 1024.0f;
-				}
+			static std::wstring& FormatoBytes(const unsigned long long nBytes, std::wstring& OUT_StrBytes);
 
-				OUT_StrBytes = ToStrF(Resultado, 2) + Medidas[PosMedidas];
+			// Devuelve un string con el nombre de archivo sin el resto del path
+			static std::wstring& Path_BaseName(const wchar_t* nPath, const BOOL Extension = FALSE);
 
-				return OUT_StrBytes;
-			}
-
+			// Devuelve un string con el path sin el nombre de archivo
+			// Puedes hacer que devuelva uno o varios directorios inferiores si ajustas la variable BajarPaths
+			static std::wstring& Path_DirName(const wchar_t* nPath, const UINT BajarPaths = 0);
 		};
 	};
 #endif

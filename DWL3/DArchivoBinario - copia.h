@@ -2,84 +2,9 @@
 #define DARCHIVOBINARIO_H
 
 #include <string>
-#include <fstream>
 
 namespace DWL {
 
-	class DArchivoBinario {
-	  public :	//////////////////////////////
-											// Constructor por defecto
-											DArchivoBinario(void);
-											// Constructor que abre el archivo especificado para lectura y escritura
-											DArchivoBinario(const wchar_t *nPath, const BOOL Abrir_si_no_existe = TRUE);
-											// Constructor que abre el archivo especificado para lectura y escritura
-											DArchivoBinario(std::wstring &Path, const BOOL Abrir_si_no_existe = TRUE);
-											// Destructor (cierra el archivo y elimina los datos de la memória)
-			                               ~DArchivoBinario(void);
-											// Función que abre el archivo para lectura y escritura (si ya habia un archivo abierto lo cierra)
-		const BOOL							AbrirArchivo(const wchar_t* nPath, const BOOL Abrir_si_no_existe = FALSE);
-											// Función que abre el archivo para lectura (si ya habia un archivo abierto lo cierra)
-		const BOOL							AbrirArchivoLectura(const wchar_t* nPath);
-											// Función que abre el archivo para escritura (si ya habia un archivo abierto lo cierra)
-		const BOOL							AbrirArchivoEscritura(const wchar_t* nPath);
-											// Función que cierra el archivo y libera la memória
-		void								Cerrar(void);
-											// Función que devuelve TRUE si hay algun archivo abierto por este objeto, FALSE en caso contrario
-		const BOOL							EstaAbierto(void);
-											// Función que devuelve el tamaño del archivo en bytes en formato 64 bits
-//		const LARGE_INTEGER					Longitud64(void);
-											// Función que devuelve el tamaño del archivo en bytes en formato 32 bits
-		const size_t						Longitud(void);
-											// Función que asigna la posición de lectura dentro del archivo
-		const size_t						PosicionLectura(const long Pos, const BOOL Desde_El_Final = FALSE);
-											// Devuelve la posición de lectura desde el principio dentro del archivo
-		const size_t						PosicionLectura(void);
-											// Función que asigna la posición de escritura dentro del archivo
-		const size_t						PosicionEscritura(const long Pos, const BOOL Desde_El_Final = FALSE);
-											// Devuelve la posición de escritura desde el principio dentro del archivo
-		const size_t						PosicionEscritura(void);
-											// Función que devuelve si se ha llegado al final del archivo en la ultima operación de lectura
-		inline const BOOL					FinalDelArchivo(void)	{ return _Archivo.eof();	}
-											// Función que devuelve el total de bytes leidos en la ultima operación de lectura
-		inline const size_t					BytesLeidos(void)		{ return _Archivo.gcount();	}
-											// Función que devuelve el path del archivo
-		inline const wchar_t               *Path(void)				{ return _Path.c_str();		}	
-											// Función para leer datos del archivo
-		const size_t						Leer(char *Buffer, const size_t Longitud_en_caracteres);
-											// Función para guardar datos en el archivo
-		void								Guardar(const char *Buffer, const size_t Longitud_en_caracteres);
-											// Función plantilla para leer datos del tipo especificado 
-		template <typename T> const size_t	Leer(T *Buffer, const size_t Longitud_en_bytes = sizeof(T)) { 
-												_Archivo.read((char *)Buffer, Longitud_en_bytes);
-												size_t TT = _Archivo.gcount();;
-												return _Archivo.gcount();
-											};
-											// Función plantilla para guardar datos del tipo especificado
-		template <typename T> void			Guardar(const T *Buffer, const size_t Longitud_en_bytes = sizeof(T)) {
-												char *B = (char *)Buffer;
-												_Archivo.write((char *)Buffer, Longitud_en_bytes);
-											};
-											// Función para leer un std::wstring
-		const size_t						LeerString(std::wstring &Texto);
-											// Función para guardar un std::wstring (Si GuardarTam es TRUE, se guardará el tamaño del string antes del string)
-		const BOOL							GuardarString(std::wstring &Texto, const BOOL GuardarTam = TRUE);
-											// Función para leer un std::wstring
-		const size_t						LeerString(std::string &Texto);
-											// Función para guardar un std::wstring (Si GuardarTam es TRUE, se guardará el tamaño del string antes del string)
-		const BOOL							GuardarString(std::string &Texto, const BOOL GuardarTam = TRUE);
-											// Función que genera y devuelve el hash MD5 del archivo en un string de 16 bytes
-		std::wstring                       &MD5(void);
-											// Función que genera y devuelve el hash MD5 del archivo en un string de 8 bytes
-		std::string                        &MD5_char(void);
-	  protected:
-											// Path del archivo
-		std::wstring                       _Path;
-											// FileStream que se usa internamente para las operaciones lectura/escritura de esta clase
-		std::fstream	                   _Archivo;
-
-	};
-
-	/*
 	class DArchivoBinario {
 	  public :	//////////////////////////////
 											// Constructor por defecto
@@ -153,7 +78,7 @@ namespace DWL {
 											// Path del archivo
 		std::wstring                       _Path;
 	};
-	*/
+
 };
 
 #endif

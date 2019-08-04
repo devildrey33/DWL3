@@ -50,7 +50,7 @@ namespace DWL {
 										// Función que devuelve el total de comandos introducidos al arrancar la aplicación
 		inline const size_t				TotalLineaComandos(void)									{ return _LineaComandos.size(); };
 										// Función que devuelve el path completo de la aplicación sin el ejecutable
-		std::wstring				   &Path(void);
+		std::wstring				   &Path(const BOOL SinEjecutable = TRUE);
 										// Función que devuelve el path actual del sistema
 		std::wstring                   &PathActual(void);
 										// Función que asigna el path del sistema donde se está ejecutando la aplicación 

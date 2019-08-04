@@ -14,14 +14,13 @@ namespace DWL {
 	}
 
 	// Devuelve el path de la aplicación sin el ejecutable
-	std::wstring &DApp::Path(void) {
+	std::wstring &DApp::Path(const BOOL SinEjecutable) {
 		static std::wstring AppPath;
 
-		if (AppPath.size() == 0) {
-			// Obtengo el directorio actual de la aplicación, para ello debo obtener el path del ejecutable, y recortarlo
-			TCHAR PathApp[1024];
-			DWORD Size = GetModuleFileName(NULL, PathApp, 1024);
-			std::wstring AppExe = PathApp;
+		// Obtengo el directorio actual de la aplicación, para ello debo obtener el path del ejecutable, y recortarlo
+		TCHAR PathApp[1024];
+		DWORD Size = GetModuleFileName(NULL, PathApp, 1024);
+		if (SinEjecutable == TRUE) {
 			for (Size; Size > 0; Size--) {
 				if (PathApp[Size] == TCHAR('\\')) {
 					PathApp[Size + 1] = 0;
@@ -30,6 +29,10 @@ namespace DWL {
 				}
 			}
 		}
+		else {
+			AppPath = PathApp;
+		}
+
 		return AppPath;
 	}
 
