@@ -20,11 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{A2418A42-E3A1-41A1-A448-59A5F128A69B}</ProjectGuid>
+    <ProjectGuid>{F6E434AE-5B3F-427C-BD40-F484B60B382A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ListaEx</RootNamespace>
+    <RootNamespace>TestArchivoBinario</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Ejemplo ListaEx</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -165,27 +164,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="main.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="VentanaPrincipal.h" />
+    <ClInclude Include="Test ArchivoBinario.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="ListaEx.rc" />
+    <ClCompile Include="Test ArchivoBinario.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\Iconos\IDI_Analizar.ico" />
-    <Image Include="..\..\Iconos\IDI_Genero.ico" />
-    <Image Include="..\..\Iconos\IDI_Grupo.ico" />
-    <Image Include="..\..\Iconos\IDI_Momento.ico" />
-    <Image Include="..\..\Iconos\IDI_Nota.ico" />
-    <Image Include="..\..\Iconos\IDI_PistaAudio.ico" />
-    <Image Include="ListaEx.ico" />
+    <ResourceCompile Include="Test ArchivoBinario.rc" />
+  </ItemGroup>
+  <ItemGroup>
     <Image Include="small.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="VentanaPrincipal.cpp" />
+    <Image Include="Test ArchivoBinario.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

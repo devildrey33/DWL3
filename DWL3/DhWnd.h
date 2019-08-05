@@ -61,7 +61,7 @@ namespace DWL {
 		inline virtual void			Repintar(void)					{ RedrawWindow(hWnd(), NULL, NULL, RDW_INVALIDATE | RDW_INTERNALPAINT); };
 									// Función que repinta la ventana si no se ha utilizado esta función hace 15 milisegundos (de esta forma aseguramos que no se repinte 1000 veces un control, pero que se repinte a 60fps)
 									// Ideal para utilizar con DAnimacion con multiples animaciones
-		inline virtual void			RepintarAni(void)				{ static DWORD Tick = 0; DWORD T = GetTickCount(); if (T > Tick + 15) { RedrawWindow(hWnd(), NULL, NULL, RDW_INVALIDATE | RDW_INTERNALPAINT);  Tick = T; } };
+		inline virtual void			RepintarAni(void)				{ static ULONGLONG Tick = 0; ULONGLONG T = GetTickCount64(); if (T > Tick + 15) { RedrawWindow(hWnd(), NULL, NULL, RDW_INVALIDATE | RDW_INTERNALPAINT);  Tick = T; } };
 
 		ATOM						RegistrarClase(const TCHAR *nNombre, WNDPROC WindowProcedureInicial, UINT Estilos = 0, const int nIconoRecursos = 0, HBRUSH nColorFondo = NULL, HINSTANCE hInstance = NULL);
 									

@@ -29,19 +29,19 @@ namespace DWL {
 											// Función que devuelve el tamaño del archivo en bytes en formato 64 bits
 //		const LARGE_INTEGER					Longitud64(void);
 											// Función que devuelve el tamaño del archivo en bytes en formato 32 bits
-		const size_t						Longitud(void);
+		const std::streamsize				Longitud(void);
 											// Función que asigna la posición de lectura dentro del archivo
-		const size_t						PosicionLectura(const long Pos, const BOOL Desde_El_Final = FALSE);
+		const std::streampos				PosicionLectura(const long Pos, const BOOL Desde_El_Final = FALSE);
 											// Devuelve la posición de lectura desde el principio dentro del archivo
-		const size_t						PosicionLectura(void);
+		const std::streampos				PosicionLectura(void);
 											// Función que asigna la posición de escritura dentro del archivo
-		const size_t						PosicionEscritura(const long Pos, const BOOL Desde_El_Final = FALSE);
+		const std::streampos				PosicionEscritura(const long Pos, const BOOL Desde_El_Final = FALSE);
 											// Devuelve la posición de escritura desde el principio dentro del archivo
-		const size_t						PosicionEscritura(void);
+		const std::streampos				PosicionEscritura(void);
 											// Función que devuelve si se ha llegado al final del archivo en la ultima operación de lectura
 		inline const BOOL					FinalDelArchivo(void)	{ return _Archivo.eof();	}
 											// Función que devuelve el total de bytes leidos en la ultima operación de lectura
-		inline const size_t					BytesLeidos(void)		{ return _Archivo.gcount();	}
+		inline const size_t					BytesLeidos(void)		{ return (size_t)_Archivo.gcount();	}
 											// Función que devuelve el path del archivo
 		inline const wchar_t               *Path(void)				{ return _Path.c_str();		}	
 											// Función para leer datos del archivo
@@ -49,15 +49,14 @@ namespace DWL {
 											// Función para guardar datos en el archivo
 		void								Guardar(const char *Buffer, const size_t Longitud_en_caracteres);
 											// Función plantilla para leer datos del tipo especificado 
-		template <typename T> const size_t	Leer(T *Buffer, const size_t Longitud_en_bytes = sizeof(T)) { 
-												_Archivo.read((char *)Buffer, Longitud_en_bytes);
-												size_t TT = _Archivo.gcount();;
-												return _Archivo.gcount();
+		template <typename T> const size_t	Leer(T *Buffer, const size_t Longitud_en_caracteres = sizeof(T)) { 
+												_Archivo.read((char *)Buffer, Longitud_en_caracteres);
+												return (size_t)_Archivo.gcount();
 											};
 											// Función plantilla para guardar datos del tipo especificado
-		template <typename T> void			Guardar(const T *Buffer, const size_t Longitud_en_bytes = sizeof(T)) {
+		template <typename T> void			Guardar(const T *Buffer, const size_t Longitud_en_caracteres = sizeof(T)) {
 												char *B = (char *)Buffer;
-												_Archivo.write((char *)Buffer, Longitud_en_bytes);
+												_Archivo.write((char *)Buffer, Longitud_en_caracteres);
 											};
 											// Función para leer un std::wstring
 		const size_t						LeerString(std::wstring &Texto);

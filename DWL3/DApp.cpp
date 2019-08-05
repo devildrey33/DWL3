@@ -127,6 +127,24 @@ namespace DWL {
 		return static_cast<int>(Msg.wParam);
 	}
 
+	// Obtiene la descripción del ultimo error de windows
+	std::wstring& DApp::UltimoError(void) {
+		static std::wstring Texto;
+
+		LPTSTR Error = 0;
+		if (!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPTSTR)& Error, 0, NULL) == 0) {
+			Texto = Error;
+		}
+		else {
+			Texto = L"";
+		}
+
+		if (Error) LocalFree(Error);
+
+		return Texto;
+	}
+
+
 	
 };
 

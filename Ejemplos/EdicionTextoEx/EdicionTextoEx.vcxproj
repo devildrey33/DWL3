@@ -75,25 +75,25 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)..\..\DWL3\;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\Intermedio\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)..\..\DWL3\;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\Intermedio\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir)..\..\DWL3\;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\Intermedio\Intermedio\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir)..\..\DWL3\;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <IntDir>$(SolutionDir)Build\Ejemplos\EdicionTextoEx\$(PlatformShortName)\$(Configuration)\Intermedio\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

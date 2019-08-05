@@ -57,6 +57,8 @@ namespace DWL {
 		const BOOL						PathActual(const wchar_t *Path);
 										// Función que asigna el path del sistema donde se está ejecutando la aplicación 
 		const BOOL						PathActual(std::wstring &Path);
+										// Obtiene la descripción del ultimo error de windows
+		std::wstring                   &UltimoError(void);
  	  protected: ///////////////////////// Función que obtiene la linea de comandos y la almacena en el vector _LineaComandos
 		void                           _ObtenerLineaComandos(void);
 										// Vector que contiene la linea de comandos separada

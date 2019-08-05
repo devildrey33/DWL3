@@ -66,103 +66,112 @@ namespace DWL {
 	}*/
 
 	// Función que devuelve el tamaño del archivo en bytes en formato 32 bits
-	const size_t DArchivoBinario::Longitud(void) {
-		size_t Pos = _Archivo.tellg();
+	const std::streamsize DArchivoBinario::Longitud(void) {
+//		size_t Pos = (size_t)_Archivo.tellg();
+		_Archivo.clear();
 		_Archivo.seekg(0, _Archivo.end);
-		size_t Tam = _Archivo.tellg();
-		_Archivo.seekg(Pos, _Archivo.beg);
+		std::streamsize Tam = _Archivo.tellg();
+		_Archivo.seekg(0, _Archivo.beg);
 		return Tam;
 	}
 
 	// Función que asigna la posición dentro del archivo
-	const size_t DArchivoBinario::PosicionLectura(const long Pos, const BOOL Desde_El_Final) {
+	const std::streampos DArchivoBinario::PosicionLectura(const long Pos, const BOOL Desde_El_Final) {
 		_Archivo.seekg(Pos, (Desde_El_Final == FALSE) ? std::ios_base::beg : std::ios_base::end);
 		return _Archivo.tellg();
 	}
 
 	// Devuelve la posición desde el principio dentro del archivo
-	const size_t DArchivoBinario::PosicionLectura(void) {
+	const std::streampos DArchivoBinario::PosicionLectura(void) {
 		return _Archivo.tellg();
 	}
 
 	// Función que asigna la posición dentro del archivo
-	const size_t DArchivoBinario::PosicionEscritura(const long Pos, const BOOL Desde_El_Final) {
+	const std::streampos DArchivoBinario::PosicionEscritura(const long Pos, const BOOL Desde_El_Final) {
 		_Archivo.seekp(Pos, (Desde_El_Final == FALSE) ? std::ios_base::beg : std::ios_base::end);
 		return _Archivo.tellp();
 	}
 
 	// Devuelve la posición desde el principio dentro del archivo
-	const size_t DArchivoBinario::PosicionEscritura(void) {
+	const std::streampos DArchivoBinario::PosicionEscritura(void) {
 		return _Archivo.tellp();
 	}
 
-	// Función para leer datos del archivo
+	// Función para leer datos del archivo, devuelve los caracteres leidos
 	const size_t DArchivoBinario::Leer(char *Buffer, const size_t LongitudEnCaracteres) {
-		_Archivo.read(Buffer, LongitudEnCaracteres * sizeof(char));
-		return _Archivo.gcount();
+		if (!_Archivo.read(Buffer, LongitudEnCaracteres * sizeof(char))) {
+			char c[256];
+			strerror_s(c, errno);
+			return 0;
+		}
+		return (size_t)_Archivo.gcount();
 	}
 
 	// Función para guardar datos en el archivo
 	void DArchivoBinario::Guardar(const char *Buffer, const size_t LongitudEnCaracteres) {
-		_Archivo.write(Buffer, LongitudEnCaracteres * sizeof(char));
+		_Archivo.write(Buffer, LongitudEnCaracteres);
 	}
 
+
 	// Función para leer un std::wstring
-	const size_t DArchivoBinario::LeerString(std::wstring& Texto) {
+	const size_t DArchivoBinario::LeerString(std::wstring &Texto) {
 		size_t   TamStr = 0;
-		wchar_t* TmpChar = NULL;
-		if (Leer<size_t>(&TamStr) == FALSE) return FALSE; // Leo el tamaño
+		wchar_t *TmpChar = nullptr;
+		Leer<size_t>(&TamStr);// Leo el tamaño
+		if (TamStr == 0)
+			return FALSE; 
 		TmpChar = new wchar_t[TamStr + 1];
-		size_t Ret = Leer(TmpChar, TamStr * sizeof(wchar_t));
-		if (Ret != static_cast<int>(TamStr * sizeof(wchar_t))) {
+		size_t Ret = Leer<wchar_t>(TmpChar, TamStr * sizeof(wchar_t));
+		if (Ret != TamStr * sizeof(wchar_t)) {
 			delete[] TmpChar;
 			return FALSE;
 		}
-		TmpChar[TamStr] = 0;
+		TmpChar[TamStr] = L'\0';
 		Texto = TmpChar;
 		delete[] TmpChar;
 		return Ret; // + sizeof(size_t);
 	}
 
+
 	// Función para guardar un std::wstring
-	const BOOL DArchivoBinario::GuardarString(std::wstring& Texto, const BOOL GuardarTam) {
+	const BOOL DArchivoBinario::GuardarString(std::wstring &Texto, const BOOL GuardarTam) {
 		BOOL	Ret = 0;
 		if (GuardarTam == TRUE) {
 			size_t T = Texto.size();
-			Guardar<size_t>(&T, sizeof(size_t));
-			//if (Ret == 0) return FALSE;
+			Guardar<size_t>(&T);
 		}
-		Guardar(Texto.c_str(), Texto.size() * sizeof(wchar_t));
+		Guardar<wchar_t>(Texto.c_str(), Texto.size() * sizeof(wchar_t));
 		return TRUE;
 	}
 
 
 	// Función para leer un std::wstring
-	const size_t DArchivoBinario::LeerString(std::string& Texto) {
+	const size_t DArchivoBinario::LeerString(std::string &Texto) {
 		size_t  TamStr = 0;
-		char   *TmpChar = NULL;
-		if (Leer<size_t>(&TamStr) == FALSE) return FALSE; // Leo el tamaño
+		char   *TmpChar = nullptr;
+		Leer<size_t>(&TamStr); // Leo el tamaño
+		if (TamStr == 0)
+			return FALSE; 
 		TmpChar = new char[TamStr + 1];
-		size_t Ret = Leer(TmpChar, TamStr * sizeof(char));
-		if (Ret != static_cast<int>(TamStr * sizeof(char))) {
+		size_t Ret = Leer<char>(TmpChar, TamStr * sizeof(char));
+		if (Ret != TamStr) {
 			delete[] TmpChar;
 			return FALSE;
 		}
-		TmpChar[TamStr] = 0;
+		TmpChar[TamStr] = '\0';
 		Texto = TmpChar;
 		delete[] TmpChar;
 		return Ret; // + sizeof(size_t);
 	}
 
 	// Función para guardar un std::wstring
-	const BOOL DArchivoBinario::GuardarString(std::string& Texto, const BOOL GuardarTam) {
+	const BOOL DArchivoBinario::GuardarString(std::string &Texto, const BOOL GuardarTam) {
 		BOOL	Ret = 0;
 		if (GuardarTam == TRUE) {
 			size_t T = Texto.size();
-			Guardar<size_t>(&T, sizeof(size_t));
-			//if (Ret == 0)	return FALSE;
+			Guardar<size_t>(&T);
 		}
-		Guardar(&Texto[0], static_cast<DWORD>(Texto.size() * sizeof(char)));
+		Guardar<char>(Texto.c_str(), Texto.size() * sizeof(char));
 		return TRUE;
 	}
 
@@ -174,7 +183,7 @@ namespace DWL {
 	// Función que genera y devuelve el hash MD5 del archivo
 	// https://docs.microsoft.com/es-es/windows/win32/seccrypto/example-c-program--creating-an-md-5-hash-from-file-content
 	// https://stackoverflow.com/questions/13256446/compute-md5-hash-value-by-c-winapi
-	std::wstring& DArchivoBinario::MD5(void) {
+	std::wstring &DArchivoBinario::MD5(void) {
 		static std::wstring	Ret;
 
 		// El archivo no es válido
@@ -218,6 +227,7 @@ namespace DWL {
 			if (!CryptHashData(hHash, rgbFile, cbRead, 0)) {
 				CryptReleaseContext(hProv, 0);
 				CryptDestroyHash(hHash);
+				_Archivo.clear();
 				return Ret;
 			}
 		}
@@ -241,6 +251,8 @@ namespace DWL {
 
 		CryptDestroyHash(hHash);
 		CryptReleaseContext(hProv, 0);
+
+		_Archivo.clear();
 
 		return Ret;
 	}
@@ -268,8 +280,8 @@ namespace DWL {
 		// Situo el puntero del archivo al principio
 		PosicionLectura(0);
 
-		size_t p = PosicionLectura();
-		p = PosicionEscritura();
+//		size_t p = PosicionLectura();
+//		p = PosicionEscritura();
 //		PosicionEscritura(0);
 
 		// Get handle to the crypto provider
@@ -294,6 +306,7 @@ namespace DWL {
 			if (!CryptHashData(hHash, rgbFile, cbRead, 0)) {
 				CryptReleaseContext(hProv, 0);
 				CryptDestroyHash(hHash);
+				_Archivo.clear();
 				return Ret;
 			}
 		}
@@ -317,6 +330,7 @@ namespace DWL {
 
 		CryptDestroyHash(hHash);
 		CryptReleaseContext(hProv, 0);
+		_Archivo.clear();
 
 		return Ret;
 	}

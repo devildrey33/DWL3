@@ -107,9 +107,9 @@ namespace DWL {
 
 	const BOOL DConsola::MostrarUltimoError(void) {
 		WaitForSingleObject(_Mutex, INFINITE);
-		const wchar_t Texto[] = L"GetLastError() : ";
-		LPVOID lpMsgBuf;
-		LPVOID lpDisplayBuf;
+		const wchar_t Texto[]	= L"GetLastError() : ";
+		LPVOID lpMsgBuf			= nullptr;
+		LPVOID lpDisplayBuf		= nullptr;
 		DWORD dw = GetLastError();
 		if (dw == 0) {
 			ReleaseMutex(_Mutex);
@@ -119,11 +119,13 @@ namespace DWL {
 
 		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |	FORMAT_MESSAGE_IGNORE_INSERTS, NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
 
-		// Display the error message and exit the process
-		lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)Texto) + 40) * sizeof(TCHAR));
-		StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR), TEXT("%s failed with error %d: %s\n"), Texto, dw, lpMsgBuf);
-		std::wstring TmpTxt = (LPCTSTR)lpDisplayBuf;
-		EscribirMS(TmpTxt);
+		if (lpMsgBuf != nullptr) {
+			// Display the error message and exit the process
+			lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (long)lstrlen((LPCTSTR)lpMsgBuf + (long)lstrlen((LPCTSTR)Texto) + 40l) * sizeof(TCHAR));
+			StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR), TEXT("%s failed with error %d: %s\n"), Texto, dw, lpMsgBuf);
+			std::wstring TmpTxt = (LPCTSTR)lpDisplayBuf;
+			EscribirMS(TmpTxt);
+		}
 		
 //		MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
 

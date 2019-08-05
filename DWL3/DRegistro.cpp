@@ -12,10 +12,12 @@ namespace DWL {
 
 	DRegistro::~DRegistro(void) {
 	}
+
+
 	//
 	// Función que agrega / modifica un valor tipo string del registro 
 	// static LONG AsignarValor_String(HKEY Root, const TCHAR *Key, const TCHAR *Nombre, TCHAR *TextoAGuardar);
-	LONG DRegistro::AsignarValor_String(HKEY Root, const TCHAR* Key, const TCHAR* Nombre, const TCHAR* TextoAGuardar) { //
+	LONG DRegistro::AsignarValor_String(HKEY Root, const TCHAR *Key, const TCHAR *Nombre, const TCHAR *TextoAGuardar) { //
 		HKEY                hParentKey;																					// Clave a guardar
 		SECURITY_ATTRIBUTES SA;																							// Atributos de Seguridad
 		SA.nLength = sizeof(SA);																						// Longitud de la estructura
@@ -31,10 +33,12 @@ namespace DWL {
 		RegCloseKey(hParentKey);																						// Cierro la clave
 		return Ret;
 	};
+
+
 	//
-	// Función que agrega / modifica un valor tipo string del registro 
-	// static LONG AsignarValor_String(HKEY Root, const TCHAR *Key, const TCHAR *Nombre, TCHAR *TextoAGuardar);
-	LONG DRegistro::AsignarValor_DWORD(HKEY Root, const TCHAR* Key, const TCHAR* Nombre, DWORD DWORDAGuardar) { //            //
+	// Función que agrega / modifica un valor tipo DWORD del registro 
+	// static LONG DRegistro::AsignarValor_DWORD(HKEY Root, const TCHAR *Key, const TCHAR *Nombre, DWORD DWORDAGuardar);
+	LONG DRegistro::AsignarValor_DWORD(HKEY Root, const TCHAR *Key, const TCHAR *Nombre, DWORD DWORDAGuardar) { // 
 		HKEY                hParentKey;                                                                         // Clave a guardar
 		SECURITY_ATTRIBUTES SA;                                                                                 // Atributos de Seguridad
 		SA.nLength = sizeof(SA);																		        // Longitud de la estructura
@@ -49,22 +53,26 @@ namespace DWL {
 		RegCloseKey(hParentKey);																				// Cierro la clave
 		return Ret;
 	};
+
+
 	//
 	// Función para obtener el valor de un string del registro
 	// static LONG ObtenerValor_String(HKEY Root, const TCHAR *Key, const TCHAR *Nombre, TCHAR *Resultado, DWORD ResTam);
 	LONG DRegistro::ObtenerValor_String(HKEY Root, const TCHAR* Key, const TCHAR* Nombre, TCHAR* Resultado, DWORD ResTam) {
 		HKEY hParentKey;																		// Clave a abrir
 		RegOpenKeyEx(Root, Key, 0, KEY_READ, &hParentKey);										// Abro la clave
-		LONG Ret = RegQueryValueEx(hParentKey, Nombre, 0, NULL, (BYTE*)Resultado, &ResTam);	// Obtengo los datos
+		LONG Ret = RegQueryValueEx(hParentKey, Nombre, 0, NULL, (BYTE*)Resultado, &ResTam);		// Obtengo los datos
 		RegCloseKey(hParentKey);																// Cierro la Clave
 		return Ret;
 	};
+
+
 	//
 	// Función para obtener el valor de un string del registro
 	// static LONG ObtenerValor_String(HKEY Root, const TCHAR *Key, const TCHAR *Nombre, std::wstring &Resultado);
 	LONG DRegistro::ObtenerValor_String(HKEY Root, const TCHAR* Key, const TCHAR* Nombre, std::wstring& Resultado) {
 		HKEY			hParentKey;													// Clave a abrir
-		static TCHAR	Tmp[2048] = TEXT("");									    // String temporal
+		static TCHAR	Tmp[2048] = L"";										    // String temporal
 		DWORD			Tam = 2048;
 		RegOpenKeyEx(Root, Key, 0, KEY_READ, &hParentKey);							// Abro la clave
 		LONG Ret = RegQueryValueEx(hParentKey, Nombre, 0, NULL, (BYTE*)Tmp, &Tam);	// Obtengo los datos
@@ -72,6 +80,8 @@ namespace DWL {
 		Resultado = Tmp;															// Copio el string al resultado
 		return Ret;
 	};
+
+
 	//
 	// Función para eliminar un valor del registro de cualquier tipo
 	//  static LONG EliminarValor(HKEY Root, const TCHAR *Key, const TCHAR *Nombre);
@@ -85,6 +95,8 @@ namespace DWL {
 		RegCloseKey(hParentKey);								// Cierro la clave
 		return Ret;
 	};
+
+
 	//
 	// Función para eliminar una clave del registro de cualquier tipo
 	//  static LONG EliminarClave(HKEY Root, const TCHAR *Key, const TCHAR *Nombre);
