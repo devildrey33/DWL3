@@ -81,16 +81,17 @@ namespace DWL {
 			bPresionado   = 1;
 		}
 
-		// Pinto el marco para el check
+		// Calculo la posición del marco
 		int  YMarco = (RC.bottom - (DMARCAEX_TAMICONO + 2)) / 2;
 		RECT Marco  = { 0, YMarco, DMARCAEX_TAMICONO + 2, (DMARCAEX_TAMICONO + 2) + YMarco };
-		
+		// Creo los objetos GDSI necesarios para pintar el marco
 		HBRUSH	ColorFondoMarco = CreateSolidBrush(_ColorFondoMarca);
 		HPEN	ColorBordeMarco = CreatePen(PS_SOLID, 1, _ColorBorde);
 		HBRUSH  BrochaViejo		= static_cast<HBRUSH>(SelectObject(Buffer, ColorFondoMarco));
 		HPEN    PlumaViejo		= static_cast<HPEN>(SelectObject(Buffer, ColorBordeMarco));
+		// Pinto el marco para el check
 		Rectangle(Buffer, Marco.left, Marco.top, Marco.right, Marco.bottom);
-
+		// Des-selecciono ogjetos GDI y libero su memória
 		SelectObject(Buffer, BrochaViejo);
 		SelectObject(Buffer, PlumaViejo);
 		DeleteObject(ColorFondoMarco);
@@ -101,16 +102,20 @@ namespace DWL {
 			DrawIconEx(Buffer, 1, YMarco + 1, _Icono(), DMARCAEX_TAMICONO, DMARCAEX_TAMICONO, 0, 0, DI_NORMAL);			
 		}
 
-		// Pinto el texto
+		// Fondo transparente para pintar texto
 		SetBkMode(Buffer, TRANSPARENT);
+		// Calculo la altura donde debe empezar el texto
+		SIZE AltoTexto = Fuente.ObtenerTamTexto(Buffer, L"W");
+		int YTexto = (RC.bottom - AltoTexto.cy) / 2;
+
+		// Pinto la sombra del texto
 		if (Skin.FuenteSombraTexto == TRUE) {
 			SetTextColor(Buffer, Skin.TextoSombra);
-			TextOut(Buffer, DMARCAEX_TAMICONO + 7, bPresionado + YMarco + 1, _Texto.c_str(), static_cast<int>(_Texto.size()));
+			TextOut(Buffer, DMARCAEX_TAMICONO + 7, bPresionado + YTexto + 1, _Texto.c_str(), static_cast<int>(_Texto.size()));
 		}
-
+		// Pinto el texto
 		SetTextColor(Buffer, _ColorTexto);
-		TextOut(Buffer, DMARCAEX_TAMICONO + 6, bPresionado + YMarco, _Texto.c_str(), static_cast<int>(_Texto.size()));
-
+		TextOut(Buffer, DMARCAEX_TAMICONO + 6, bPresionado + YTexto, _Texto.c_str(), static_cast<int>(_Texto.size()));
 
 		// Copio el buffer al DC
 		BitBlt(DC, RC.left, RC.top, RC.right, RC.bottom, Buffer, 0, 0, SRCCOPY);

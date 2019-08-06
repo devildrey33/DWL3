@@ -264,7 +264,8 @@ namespace DWL {
 		static std::string	Ret;
 
 		// El archivo no es válido
-		if (_Archivo.is_open() == FALSE) return Ret;
+		if (_Archivo.is_open() == FALSE) 
+			return Ret;
 
 //		BOOL				bResult = FALSE;
 		HCRYPTPROV			hProv = 0;
