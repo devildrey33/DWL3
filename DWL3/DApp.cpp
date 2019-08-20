@@ -11,6 +11,8 @@ namespace DWL {
 	DApp::DApp(void) {
 		_Aplicacion = this;
 		_ObtenerLineaComandos();
+		// Inicializo la librería COM (para el TaskBarList)
+		HRESULT CIE = CoInitializeEx(0, COINIT_MULTITHREADED | COINIT_SPEED_OVER_MEMORY);
 	}
 
 	// Devuelve el path de la aplicación sin el ejecutable

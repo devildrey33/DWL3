@@ -18,9 +18,14 @@ namespace DWL {
 
 		// Afegit expresament per borrar el fondo amb els colors del RAVE
 		HBRUSH ColFondo = CreateSolidBrush(COLOR_FONDO); // NO ELIMINAR LA BROCHA DE MEMORIA, HO FA EL WINDOWS
-
+		
 		ATOM RetRgistrarClase = RegistrarClase(nNombre, reinterpret_cast<WNDPROC>(_GestorMensajes), nEstilosClase, nIconoRecursos, ColFondo);
-		_hWnd = CreateWindowEx(nEstilosExtendidos, nNombre, nTexto, nEstilos, cX, cY, cAncho, cAlto, hWndPadre, nMenu, GetModuleHandle(NULL), this);
+		
+		// Recalculo el espacio para que el área cliente de la ventana mida exactamente el ancho y alto especificados
+		RECT RC = { cX, cY, cX + cAncho, cY + cAlto };
+		AdjustWindowRectEx(&RC, nEstilos, FALSE, nEstilosExtendidos);
+
+		_hWnd = CreateWindowEx(nEstilosExtendidos, nNombre, nTexto, nEstilos, RC.left, RC.top, RC.right - RC.left, RC.bottom - RC.top, hWndPadre, nMenu, GetModuleHandle(NULL), this);
 		Debug_MostrarUltimoError();
 //		SendMessage(hWnd(), WM_SETFONT, (WPARAM)Fuente18Normal(), 0);
 		BarraTareas._Iniciar(_hWnd);
