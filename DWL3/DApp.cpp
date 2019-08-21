@@ -2,15 +2,20 @@
 #include "DApp.h"
 #include <versionhelpers.h>
 #include <Shellapi.h>
+#include "DArchivoInternet.h"
 
-DWL::DApp *_Aplicacion = NULL;
+DWL::DApp *_Aplicacion = nullptr;
 
 namespace DWL {
 
 	// Constructor
 	DApp::DApp(void) {
+		// Asigno esta clase al puntero global de la aplicación
 		_Aplicacion = this;
+		// Obtengo la línea de comandos
 		_ObtenerLineaComandos();
+		// Creo la ventana para los mensajes multithread
+		_CrearVentanaMensajes();
 		// Inicializo la librería COM (para el TaskBarList)
 		HRESULT CIE = CoInitializeEx(0, COINIT_MULTITHREADED | COINIT_SPEED_OVER_MEMORY);
 	}
@@ -147,6 +152,73 @@ namespace DWL {
 	}
 
 
+
+	// Función que crea una ventana invisible para manejar mensajes de multiples threads
+	void DApp::_CrearVentanaMensajes(void) {
+		// La ventana ya no existe pero tenemos el hWnd, por lo que elimino toda la memória
+		if (_hWnd != NULL && IsWindow(_hWnd) == 0) { Destruir(); }
+
+		// Registro la clase para la ventana invisible de los mensajes
+		ATOM RetRgistrarClase = RegistrarClase(L"DWL_Mensajes", reinterpret_cast<WNDPROC>(_GestorMensajesEstatico));
+		// Creo la ventana para los mensajes
+		_hWnd = CreateWindowEx(NULL, L"DWL_Mensajes", L"", WS_POPUP, 0, 0, 10, 10, HWND_MESSAGE , NULL, GetModuleHandle(NULL), this);
+		// Muestro un error por la consola si no se ha creado
+//		Debug_MostrarUltimoError();
+	}
+
+
+	// Gestor de mensajes estático que busca el gestor de mensajes asociado a la clase aplicación
+	LRESULT CALLBACK DApp::_GestorMensajesEstatico(HWND nhWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+		static DApp *PreVentana = nullptr;
+		switch (uMsg) {
+			case WM_CREATE: 
+				PreVentana = reinterpret_cast<DApp*>(((CREATESTRUCT*)lParam)->lpCreateParams);
+				if (PreVentana == NULL) return FALSE;
+				PreVentana->_hWnd = nhWnd;
+				SetWindowLongPtr(nhWnd, GWLP_USERDATA, (LONG_PTR)PreVentana);
+				PreVentana->GestorMensajes(uMsg, wParam, lParam);
+				return TRUE;			
+			default: 
+				PreVentana = reinterpret_cast<DApp*>(::GetWindowLongPtr(nhWnd, GWLP_USERDATA));
+				if (PreVentana != NULL) {
+					return PreVentana->GestorMensajes(uMsg, wParam, lParam);
+				}
+		}
+		return DefWindowProc(nhWnd, uMsg, wParam, lParam);
+	}
+
+
+	// Función para eliminar peticiones de descarga
+	void DApp::_Internet_Eliminar(const UINT nID) {
+		DArchivoInternet::_EliminarPeticion(nID);
+	}
+
+	// Función para los errores en una petición de descarga
+	void DApp::_Internet_Error(const UINT nError, const UINT nID) {
+		DArchivoInternet::_Buscar(nID)->_LambdaError(nError);
+		DArchivoInternet::_EliminarPeticion(nID);
+	}
+
+	// Función que recibe el porcentaje de la descarga
+	void DApp::_Internet_Porcentaje(const float nValor, const UINT nID) {
+		DArchivoInternet::_Buscar(nID)->_LambdaPorcentaje(nValor);
+	}
+
+	// Función que indica que la descarga ha finalizado correctamente
+	void DApp::_Internet_Terminado(const char *Datos, const UINT nID) {
+		DArchivoInternet::_Buscar(nID)->_LambdaTerminado(Datos);
+	}
+
+
+	LRESULT CALLBACK DApp::_GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
+		switch (uMsg) {
+			case DWL_INTERNET_ELIMINAR		:	_Internet_Eliminar((UINT)lParam);										return 0;
+			case DWL_INTERNET_ERROR			:	_Internet_Error((UINT)wParam, (UINT)lParam);							return 0;
+			case DWL_INTERNET_PORCENTAJE	:	_Internet_Porcentaje((float)wParam, (UINT)lParam);						return 0;
+			case DWL_INTERNET_TERMINADO		:	_Internet_Terminado((const char *)LongToPtr(wParam), (UINT)lParam);		return 0;
+		}
+		return GestorMensajes(uMsg, wParam, lParam);
+	}
 	
 };
 

@@ -12,7 +12,7 @@ namespace DWL {
 
 
 	DIcono::DIcono(void) : _Icono(NULL) {
-		// Agrego un primer icono transparente
+		// Agrego un primer icono transparente con la id 0
 		if (_Iconos.size() == 0) {
 			_Iconos.push_back(new DIcono_Datos(0, 0, 128, 128));
 		}

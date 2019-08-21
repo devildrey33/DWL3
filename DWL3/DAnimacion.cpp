@@ -140,6 +140,7 @@ namespace DWL {
 		_Timer = NULL;
 	}
 
+
 	void CALLBACK DAnimacion::_TimerProc(PVOID lpParameter, BOOLEAN TimerOrWaitFired) {
 		DAnimacion *This = static_cast<DAnimacion *>(lpParameter);
 		#if DANIMACION_MOSTRARDEBUG == TRUE 

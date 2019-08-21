@@ -99,4 +99,12 @@
 
 	// DDlgDirectorios //////////////////////////////////////////////////////
 	#define DWL_DLGDIRECTORIOS_POSTAM_CAMBIADO				WM_USER + 360
+
+
+	// DInternet ////////////////////////////////////////////////////////////
+	#define DWL_INTERNET_PORCENTAJE							WM_USER + 370
+	#define DWL_INTERNET_TERMINADO							WM_USER + 371
+	#define DWL_INTERNET_ERROR								WM_USER + 372
+	#define DWL_INTERNET_ELIMINAR							WM_USER + 373
+
 #endif

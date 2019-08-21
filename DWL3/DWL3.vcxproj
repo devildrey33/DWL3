@@ -188,6 +188,7 @@
     <ClInclude Include="DGDI.h" />
     <ClInclude Include="DhWnd.h" />
     <ClInclude Include="DIcono.h" />
+    <ClInclude Include="DArchivoInternet.h" />
     <ClInclude Include="DListaDesplegableEx.h" />
     <ClInclude Include="DListaEx.h" />
     <ClInclude Include="DListaEx_Columna.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="DGDI.cpp" />
     <ClCompile Include="DhWnd.cpp" />
     <ClCompile Include="DIcono.cpp" />
+    <ClCompile Include="DArchivoInternet.cpp" />
     <ClCompile Include="DListaDesplegableEx.cpp" />
     <ClCompile Include="DListaEx.cpp" />
     <ClCompile Include="DListaEx_Columna.cpp" />

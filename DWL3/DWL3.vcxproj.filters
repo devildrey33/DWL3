@@ -115,6 +115,9 @@
     <Filter Include="Sistema\ArchivoBinario">
       <UniqueIdentifier>{e85e4c35-a4ff-4f62-8bb0-b39b4fe98282}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sistema\ArchivoInternet">
+      <UniqueIdentifier>{fd53a755-536d-4340-a5c3-6ea94ba375dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DAnimacion.h">
@@ -267,6 +270,9 @@
     <ClInclude Include="DArchivoBinario.h">
       <Filter>Sistema\ArchivoBinario</Filter>
     </ClInclude>
+    <ClInclude Include="DArchivoInternet.h">
+      <Filter>Sistema\ArchivoInternet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DAnimacion.cpp">
@@ -394,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="DArchivoBinario.cpp">
       <Filter>Sistema\ArchivoBinario</Filter>
+    </ClCompile>
+    <ClCompile Include="DArchivoInternet.cpp">
+      <Filter>Sistema\ArchivoInternet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

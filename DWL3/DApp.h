@@ -26,7 +26,7 @@ namespace DWL {
 
 
 
-	class DApp {
+	class DApp : protected DhWnd {
 	  public : /////////////////////////// Constructor
 										DApp(void);
 										// Función que vacia la cola de mensajes de esta aplicación
@@ -59,8 +59,27 @@ namespace DWL {
 		const BOOL						PathActual(std::wstring &Path);
 										// Obtiene la descripción del ultimo error de windows
 		std::wstring                   &UltimoError(void);
+										// Gestor de mensajes virtual para la ventana invisible de mensajes
+		virtual LRESULT CALLBACK		GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam)		{ return DefWindowProc(_hWnd, uMsg, wParam, lParam); };
+										// Función que devuelve el HWND de la ventana para los mensajes multi thread
+		inline HWND						hWndMensajes(void)											{ return _hWnd; }
  	  protected: ///////////////////////// Función que obtiene la linea de comandos y la almacena en el vector _LineaComandos
 		void                           _ObtenerLineaComandos(void);
+										// Gestor de mensajes predeterminado para la DWL
+		LRESULT CALLBACK		       _GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
+										// Función que crea una ventana invisible para manejar mensajes de multiples threads
+		void						   _CrearVentanaMensajes(void);
+										// Gestor de mensajes estatico inicial
+		static LRESULT CALLBACK        _GestorMensajesEstatico(HWND HandleVentana, UINT uMsg, WPARAM wParam, LPARAM lParam);
+										// Función para eliminar peticiones de descarga
+		void						   _Internet_Eliminar(const UINT nID);
+										// Función para los errores en una petición de descarga
+		void						   _Internet_Error(const UINT nError, const UINT nID);
+										// Función que recibe el porcentaje de la descarga
+		void						   _Internet_Porcentaje(const float nValor, const UINT nID);
+										// Función que indica que la descarga ha finalizado correctamente
+		void						   _Internet_Terminado(const char *Datos, const UINT nID);
+
 										// Vector que contiene la linea de comandos separada
 		std::vector<std::wstring>	   _LineaComandos;
 	};
