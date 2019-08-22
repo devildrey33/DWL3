@@ -12,18 +12,31 @@
 		class Strings {
 		  public:
 			/* Split para separar una cadena por un carácter delimitador 
-				NOTA : si no encuentra el delimitador, devuelve la cadena completa */
+				NOTA : si no encuentra el delimitador, devuelve la cadena completa en el operador [0] */
 			class Split {
 			  public:
-											Split(std::wstring &Texto, const TCHAR Separador);
-											Split(const TCHAR *Texto, const TCHAR Separador);
+											Split(std::wstring &Texto, const wchar_t Separador);
+											Split(const wchar_t*Texto, const wchar_t Separador);
 				                           ~Split(void);
 				inline const size_t			Total(void) { return _TextoSeparado.size(); };
 				std::wstring               &operator[] (const size_t Pos);
 				const bool					operator() (void);
 			  protected:
-				void					   _SepararWide(const TCHAR *Texto, const TCHAR Separador);
+				void					   _SepararWide(const wchar_t *Texto, const wchar_t Separador);
 				std::vector<std::wstring>  _TextoSeparado;
+			};
+
+			class SplitA {
+			  public:
+											SplitA(std::string &Texto, const char Separador);
+											SplitA(const char *Texto, const char Separador);
+				                           ~SplitA(void);
+				inline const size_t			Total(void) { return _TextoSeparado.size(); };
+				std::string                &operator[] (const size_t Pos);
+				const bool					operator() (void);
+			  protected:
+				void					   _SepararAnsi(const char *Texto, const char Separador);
+				std::vector<std::string>   _TextoSeparado;
 			};
 
 
@@ -60,6 +73,12 @@
 
 			// Cuenta dentro de un string las veces que aparece un carácter
 			static const size_t ContarCaracter(std::wstring& Texto, wchar_t Caracter);
+
+			// char a std::wstring
+/*			static const int UTF8ToWide(const char* IN_UTF8, std::wstring& OUT_Wide);
+
+			// wchar_t a std::string
+			static const int WideToUTF8(const wchar_t* IN_Wide, std::string& OUT_UTF8);*/
 
 			// char a std::wstring
 			static const int AnsiToWide(const char* IN_Ansi, std::wstring& OUT_Wide);

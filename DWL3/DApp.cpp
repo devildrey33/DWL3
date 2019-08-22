@@ -176,12 +176,12 @@ namespace DWL {
 				if (PreVentana == NULL) return FALSE;
 				PreVentana->_hWnd = nhWnd;
 				SetWindowLongPtr(nhWnd, GWLP_USERDATA, (LONG_PTR)PreVentana);
-				PreVentana->GestorMensajes(uMsg, wParam, lParam);
+				PreVentana->_GestorMensajes(uMsg, wParam, lParam);
 				return TRUE;			
 			default: 
 				PreVentana = reinterpret_cast<DApp*>(::GetWindowLongPtr(nhWnd, GWLP_USERDATA));
 				if (PreVentana != NULL) {
-					return PreVentana->GestorMensajes(uMsg, wParam, lParam);
+					return PreVentana->_GestorMensajes(uMsg, wParam, lParam);
 				}
 		}
 		return DefWindowProc(nhWnd, uMsg, wParam, lParam);
@@ -195,27 +195,30 @@ namespace DWL {
 
 	// Función para los errores en una petición de descarga
 	void DApp::_Internet_Error(const UINT nError, const UINT nID) {
-		DArchivoInternet::_Buscar(nID)->_LambdaError(nError);
+		DPeticion *P = DArchivoInternet::Buscar(nID);
+		if (P != nullptr)	P->_LambdaError(nError);
 		DArchivoInternet::_EliminarPeticion(nID);
 	}
 
 	// Función que recibe el porcentaje de la descarga
 	void DApp::_Internet_Porcentaje(const float nValor, const UINT nID) {
-		DArchivoInternet::_Buscar(nID)->_LambdaPorcentaje(nValor);
+		DPeticion *P = DArchivoInternet::Buscar(nID);
+		if (P != nullptr)	P->_LambdaPorcentaje(nValor);
 	}
 
 	// Función que indica que la descarga ha finalizado correctamente
-	void DApp::_Internet_Terminado(const char *Datos, const UINT nID) {
-		DArchivoInternet::_Buscar(nID)->_LambdaTerminado(Datos);
+	void DApp::_Internet_Terminado(const UINT nID) {
+		DPeticion *P = DArchivoInternet::Buscar(nID);
+		if (P != nullptr)	P->_LambdaTerminado(*P);
 	}
 
 
 	LRESULT CALLBACK DApp::_GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg) {
-			case DWL_INTERNET_ELIMINAR		:	_Internet_Eliminar((UINT)lParam);										return 0;
-			case DWL_INTERNET_ERROR			:	_Internet_Error((UINT)wParam, (UINT)lParam);							return 0;
-			case DWL_INTERNET_PORCENTAJE	:	_Internet_Porcentaje((float)wParam, (UINT)lParam);						return 0;
-			case DWL_INTERNET_TERMINADO		:	_Internet_Terminado((const char *)LongToPtr(wParam), (UINT)lParam);		return 0;
+			case DWL_INTERNET_ELIMINAR		:	_Internet_Eliminar((UINT)lParam);							return 0;
+			case DWL_INTERNET_ERROR			:	_Internet_Error((UINT)wParam, (UINT)lParam);				return 0;
+			case DWL_INTERNET_PORCENTAJE	:	_Internet_Porcentaje((float)wParam, (UINT)lParam);			return 0;
+			case DWL_INTERNET_TERMINADO		:	_Internet_Terminado((UINT)lParam);							return 0;
 		}
 		return GestorMensajes(uMsg, wParam, lParam);
 	}

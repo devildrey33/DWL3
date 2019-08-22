@@ -11,11 +11,11 @@ namespace DWL {
 
 		
 
-	Strings::Split::Split(std::wstring &Texto, const TCHAR Separador) {
+	Strings::Split::Split(std::wstring& Texto, const wchar_t Separador) {
 		_SepararWide(Texto.c_str(), Separador);
 	}
 
-	Strings::Split::Split(const TCHAR *Texto, const TCHAR Separador) {
+	Strings::Split::Split(const wchar_t* Texto, const wchar_t Separador) {
 		_SepararWide(Texto, Separador);
 	}
 
@@ -24,7 +24,7 @@ namespace DWL {
 	}
 
 
-	std::wstring &Strings::Split::operator[](const size_t Pos) {
+	std::wstring& Strings::Split::operator[](const size_t Pos) {
 		static std::wstring StringVacio;
 		if (Pos >= _TextoSeparado.size())	return StringVacio;
 		else								return _TextoSeparado[Pos];
@@ -35,7 +35,7 @@ namespace DWL {
 	}
 
 
-	void Strings::Split::_SepararWide(const TCHAR *Texto, const TCHAR Separador) {
+	void Strings::Split::_SepararWide(const wchar_t* Texto, const wchar_t Separador) {
 		std::wstringstream Stream(Texto);
 		std::wstring Tmp;
 		while (std::getline(Stream, Tmp, Separador)) {
@@ -43,6 +43,56 @@ namespace DWL {
 				_TextoSeparado.push_back(Tmp);
 		}
 	}
+
+
+
+
+
+	Strings::SplitA::SplitA(std::string &Texto, const char Separador) {
+		_SepararAnsi(Texto.c_str(), Separador);
+	}
+
+	Strings::SplitA::SplitA(const char *Texto, const char Separador) {
+		_SepararAnsi(Texto, Separador);
+	}
+
+
+	Strings::SplitA::~SplitA(void) {
+	}
+
+
+	std::string& Strings::SplitA::operator[](const size_t Pos) {
+		static std::string StringVacio;
+		if (Pos >= _TextoSeparado.size())	return StringVacio;
+		else								return _TextoSeparado[Pos];
+	}
+
+	const bool Strings::SplitA::operator() (void) {
+		return (_TextoSeparado.size() > 0);
+	}
+
+
+	void Strings::SplitA::_SepararAnsi(const char *Texto, const char Separador) {
+		std::stringstream Stream(Texto);
+		std::string Tmp;
+		while (std::getline(Stream, Tmp, Separador)) {
+			if (!Tmp.empty())
+				_TextoSeparado.push_back(Tmp);
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -57,6 +107,20 @@ namespace DWL {
 		return Total;
 	}
 
+	/*
+	const int Strings::UTF8ToWide(const char* IN_UTF8, std::wstring& OUT_Wide) {
+		wchar_t TmpWTxt[4096];
+		int Ret = MultiByteToWideChar(CP_UTF8, MB_PRECOMPOSED, IN_UTF8, -1, TmpWTxt, 4096);
+		OUT_Wide = TmpWTxt;
+		return (Ret > 0) ? TRUE : FALSE;
+	}
+
+	const int Strings::WideToUTF8(const wchar_t* IN_Wide, std::string& OUT_UTF8) {
+		char TmpTxt[4096];
+		int	Ret = WideCharToMultiByte(CP_UTF8, NULL, IN_Wide, -1, TmpTxt, 4096, NULL, NULL);
+		OUT_UTF8 = TmpTxt;
+		return (Ret > 0) ? TRUE : FALSE;
+	}*/
 
 	const int Strings::AnsiToWide(const char* IN_Ansi, std::wstring& OUT_Wide) {
 		wchar_t TmpWTxt[4096];
@@ -64,7 +128,6 @@ namespace DWL {
 		OUT_Wide = TmpWTxt;
 		return (Ret > 0) ? TRUE : FALSE;
 	}
-
 
 	const int Strings::WideToAnsi(const wchar_t* IN_Wide, std::string& OUT_Ansi) {
 		char TmpTxt[4096];

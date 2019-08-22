@@ -78,7 +78,7 @@ namespace DWL {
 										// Función que recibe el porcentaje de la descarga
 		void						   _Internet_Porcentaje(const float nValor, const UINT nID);
 										// Función que indica que la descarga ha finalizado correctamente
-		void						   _Internet_Terminado(const char *Datos, const UINT nID);
+		void						   _Internet_Terminado(const UINT nID);
 
 										// Vector que contiene la linea de comandos separada
 		std::vector<std::wstring>	   _LineaComandos;

@@ -273,6 +273,9 @@
     <ClInclude Include="DArchivoInternet.h">
       <Filter>Sistema\ArchivoInternet</Filter>
     </ClInclude>
+    <ClInclude Include="DPeticion.h">
+      <Filter>Sistema\ArchivoInternet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DAnimacion.cpp">
@@ -402,6 +405,9 @@
       <Filter>Sistema\ArchivoBinario</Filter>
     </ClCompile>
     <ClCompile Include="DArchivoInternet.cpp">
+      <Filter>Sistema\ArchivoInternet</Filter>
+    </ClCompile>
+    <ClCompile Include="DPeticion.cpp">
       <Filter>Sistema\ArchivoInternet</Filter>
     </ClCompile>
   </ItemGroup>

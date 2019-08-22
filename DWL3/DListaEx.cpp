@@ -723,8 +723,10 @@ namespace DWL {
 			// Comprueba si el item resaltado es el mismo que la ultima vez, y si no lo és repinta el control
 			if (_ItemResaltado != _ItemUResaltado || _SubItemResaltado != _SubItemUResaltado) {
 
-				if (_ItemUResaltado != -1) _Items[_ItemUResaltado]->_TransicionNormal();
-				if (_ItemResaltado != -1)  _Items[_ItemResaltado]->_TransicionResaltado();
+				if (_ItemUResaltado > -1) 
+					_Items[_ItemUResaltado]->_TransicionNormal();
+				if (_ItemResaltado > -1)  
+					_Items[_ItemResaltado]->_TransicionResaltado();
 
 				_ItemUResaltado = _ItemResaltado;
 				_SubItemUResaltado = _SubItemResaltado;
