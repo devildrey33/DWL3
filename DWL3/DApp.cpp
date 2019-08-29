@@ -152,7 +152,6 @@ namespace DWL {
 	}
 
 
-
 	// Función que crea una ventana invisible para manejar mensajes de multiples threads
 	void DApp::_CrearVentanaMensajes(void) {
 		// La ventana ya no existe pero tenemos el hWnd, por lo que elimino toda la memória
@@ -173,14 +172,14 @@ namespace DWL {
 		switch (uMsg) {
 			case WM_CREATE: 
 				PreVentana = reinterpret_cast<DApp*>(((CREATESTRUCT*)lParam)->lpCreateParams);
-				if (PreVentana == NULL) return FALSE;
+				if (PreVentana == nullptr) return FALSE;
 				PreVentana->_hWnd = nhWnd;
 				SetWindowLongPtr(nhWnd, GWLP_USERDATA, (LONG_PTR)PreVentana);
 				PreVentana->_GestorMensajes(uMsg, wParam, lParam);
 				return TRUE;			
 			default: 
 				PreVentana = reinterpret_cast<DApp*>(::GetWindowLongPtr(nhWnd, GWLP_USERDATA));
-				if (PreVentana != NULL) {
+				if (PreVentana != nullptr) {
 					return PreVentana->_GestorMensajes(uMsg, wParam, lParam);
 				}
 		}
@@ -215,10 +214,10 @@ namespace DWL {
 
 	LRESULT CALLBACK DApp::_GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg) {
-			case DWL_INTERNET_ELIMINAR		:	_Internet_Eliminar((UINT)lParam);							return 0;
-			case DWL_INTERNET_ERROR			:	_Internet_Error((UINT)wParam, (UINT)lParam);				return 0;
-			case DWL_INTERNET_PORCENTAJE	:	_Internet_Porcentaje((float)wParam, (UINT)lParam);			return 0;
-			case DWL_INTERNET_TERMINADO		:	_Internet_Terminado((UINT)lParam);							return 0;
+			case DWL_INTERNET_ELIMINAR		:	_Internet_Eliminar((UINT)lParam);											return 0;
+			case DWL_INTERNET_ERROR			:	_Internet_Error((UINT)wParam, (UINT)lParam);								return 0;
+			case DWL_INTERNET_PORCENTAJE	:	_Internet_Porcentaje(reinterpret_cast<float &>(wParam), (UINT)lParam);		return 0;
+			case DWL_INTERNET_TERMINADO		:	_Internet_Terminado((UINT)lParam);											return 0;
 		}
 		return GestorMensajes(uMsg, wParam, lParam);
 	}
