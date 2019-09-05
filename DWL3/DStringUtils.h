@@ -75,10 +75,10 @@
 			static const size_t ContarCaracter(std::wstring& Texto, wchar_t Caracter);
 
 			// char a std::wstring
-/*			static const int UTF8ToWide(const char* IN_UTF8, std::wstring& OUT_Wide);
+			static const int UTF8ToWide(const char* IN_UTF8, std::wstring& OUT_Wide);
 
 			// wchar_t a std::string
-			static const int WideToUTF8(const wchar_t* IN_Wide, std::string& OUT_UTF8);*/
+			static const int WideToUTF8(const wchar_t* IN_Wide, std::string& OUT_UTF8);
 
 			// char a std::wstring
 			static const int AnsiToWide(const char* IN_Ansi, std::wstring& OUT_Wide);
