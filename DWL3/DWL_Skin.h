@@ -129,6 +129,8 @@ ____                       ______
 #define COLOR_BARRA_TEXTO							RGB( 30,  30,  30)
 #define COLOR_BARRA_TEXTO_SOMBRA					RGB(225, 225, 225)
 
+#define COLOR_BARRA2								RGB(255, 170, 168)
+
 /*
   ____        _              ______
  |  _ \      | |            |  ____|

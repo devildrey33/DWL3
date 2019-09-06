@@ -91,14 +91,23 @@ namespace DWL {
 		virtual inline const float			Valor(void)												{ return _Valor;					}
 
 		void								PintarBarraEx(HDC DC, const int nX = 0, const int nY = 0);
+											// Calcula la recta de la barra con los valores especificados según la alineación actual)
+		void								CalcularBarra(float nMinimo, float nMaximo, float nValor, RECT &IN_RectaCliente, RECT &OUT_Barra);
 
-		// virtuales
-		virtual void						Evento_PintarBorde(HDC DC, RECT &RBorde);
+		////////////////////////////////////// Los eventos de pintado se ejecutan en el mismo orden que están declarados											
+											// Evento virtual para pintar la parte de la barra ocupada
 		virtual void						Evento_PintarBarra(HDC DC, RECT &RBarra);
+											// Evento virtual para pintar el fondo
 		virtual void						Evento_PintarFondo(HDC DC, RECT &RFondo);
-		virtual void						Evento_PintarValor(HDC DC, RECT &RFondo);
+											// Evento virtual en el que puedes pintar lo que quieras encima de la barra ya pintada
+		virtual void						Evento_PintarPersonalizado(HDC DC, RECT &RFondo)		{ }
 											// Permite modificar el valor formateado antes de pintarlo en el Evento_PintarValor
 		virtual void						Evento_FormatearValor(std::wstring &ValorFormateado)	{ };
+											// Evento virtual para pintar el valor
+		virtual void						Evento_PintarValor(HDC DC, RECT &RFondo);
+											// Evento virtual para pintar el borde de la barra
+		virtual void						Evento_PintarBorde(HDC DC, RECT &RBorde);
+		//////////////////////////////////////
 
 		virtual void						Transicion(const DBarraEx_Transicion nTransicion);
 		LRESULT CALLBACK					GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -127,6 +136,10 @@ namespace DWL {
 		DBarraEx_Alineacion                _Alineacion;
 
 		DFuente                            _Fuente;
+											// Recta del area roja de la barra
+		RECT                               _RBarra;
+											// Recta solo con el fondo blanco restante
+		RECT							   _RFondo;
 
 		friend class DMenuEx;
 	};	

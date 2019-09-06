@@ -82,8 +82,35 @@ namespace DWL {
 		Repintar();
 	}
 
+	void DBarraProgresoEx::CalcularBarra(float nMinimo, float nMaximo, float nValor, RECT &IN_RectaCliente, RECT &OUT_Barra) {
+		float Parte = 0.0f;		
+		OUT_Barra = IN_RectaCliente;
+/*		OUT_Barra.left++;
+		OUT_Barra.top++;
+		OUT_Barra.right--;
+		OUT_Barra.bottom--;*/
+		switch (_Alineacion) {
+			case IzquierdaDerecha:
+				Parte = static_cast<float>(IN_RectaCliente.right - IN_RectaCliente.left) / (nMaximo - nMinimo);
+				OUT_Barra.right = static_cast<int>(Parte * (nValor - nMinimo));
+				break;
+			case DerechaIzquierda :
+				Parte = static_cast<float>(IN_RectaCliente.right - IN_RectaCliente.left) / (nMaximo - nMinimo);
+				OUT_Barra.left = OUT_Barra.right - static_cast<int>(Parte * (nValor - nMinimo));
+				break;
+			case ArribaAbajo:
+				Parte = static_cast<float>(IN_RectaCliente.bottom - IN_RectaCliente.top) / (nMaximo - nMinimo);
+				OUT_Barra.bottom = static_cast<int>(Parte * (nValor - nMinimo));
+				break;
+			case AbajoArriba :
+				Parte = static_cast<float>(IN_RectaCliente.bottom - IN_RectaCliente.top) / (nMaximo - nMinimo);
+				OUT_Barra.top = OUT_Barra.bottom - static_cast<int>(Parte * (nValor - nMinimo));
+				break;
+		}
+	}
+
 	void DBarraProgresoEx::PintarBarraEx(HDC DC, const int nX, const int nY) {
-		RECT    RC, RBarra, RFondo;
+		static RECT RC;
 		GetClientRect(hWnd(), &RC);
 		// Creo un buffer en memória para pintar el control
 		HDC		Buffer = CreateCompatibleDC(NULL);
@@ -92,38 +119,17 @@ namespace DWL {
 		HBITMAP BmpViejo = static_cast<HBITMAP>(SelectObject(Buffer, Bmp));
 
 		// Calculo el tamaño de la barra para el valor actual
-		RBarra = RC; RFondo = RC;
+		_RFondo = RC;
 //		RBarra.left++; RBarra.top++; RBarra.bottom--; RBarra.right--; // Evito los bordes
 //		RFondo.top++; RFondo.bottom--; RFondo.left++; RFondo.right--; // Evito los bordes
-		float Parte = 0.0f;
 		
-
-
+		CalcularBarra(_Minimo, _Maximo, _Valor, RC, _RBarra);
+		// 
 		switch (_Alineacion) {
-			case IzquierdaDerecha:
-				Parte = static_cast<float>(RC.right - RC.left) / (_Maximo - _Minimo);
-				RBarra.right = static_cast<int>(Parte * (_Valor - _Minimo));
-//				if (_Valor >= _Maximo) RBarra.right = RC.right - 1;
-				RFondo.left = RBarra.right;
-				break;
-			case DerechaIzquierda :
-				Parte = static_cast<float>(RC.right - RC.left) / (_Maximo - _Minimo);
-				RBarra.left = RBarra.right - static_cast<int>(Parte * (_Valor - _Minimo));
-//				if (_Valor >= _Maximo) RBarra.left = RC.left - 1;
-				RFondo.right = RBarra.left;
-				break;
-			case ArribaAbajo:
-				Parte = static_cast<float>(RC.bottom - RC.top) / (_Maximo - _Minimo);
-				RBarra.bottom = static_cast<int>(Parte * (_Valor - _Minimo));
-//				if (_Valor >= _Maximo) RBarra.bottom = RC.bottom - 1;
-				RFondo.top = RBarra.bottom;
-				break;
-			case AbajoArriba :
-				Parte = static_cast<float>(RC.bottom - RC.top) / (_Maximo - _Minimo);
-				RBarra.top = RBarra.bottom - static_cast<int>(Parte * (_Valor - _Minimo));
-//				if (_Valor >= _Maximo) RBarra.top = RC.top - 1;
-				RFondo.bottom = RBarra.top;
-				break;
+			case IzquierdaDerecha	:	_RFondo.left	= _RBarra.right;		break;
+			case DerechaIzquierda	:	_RFondo.right	= _RBarra.left;			break;
+			case ArribaAbajo		:	_RFondo.top		= _RBarra.bottom;		break;
+			case AbajoArriba		:	_RFondo.bottom	= _RBarra.top;			break;
 		}
 
 
@@ -134,16 +140,19 @@ namespace DWL {
 
 
 		// Pinto la barra
-		Evento_PintarBarra(Buffer, RBarra);
+		Evento_PintarBarra(Buffer, _RBarra);
 
 		// Pinto el fondo
-		Evento_PintarFondo(Buffer, RFondo);
+		Evento_PintarFondo(Buffer, _RFondo);
 
-		// Pinto el borde
-		Evento_PintarBorde(Buffer, RC);
+		// Evento de post pintado personalizado 
+		Evento_PintarPersonalizado(Buffer, RC);
 
 		// Pinto el valor (si es necesario)
 		Evento_PintarValor(Buffer, RC);
+
+		// Pinto el borde
+		Evento_PintarBorde(Buffer, RC);
 
 		// Copio el buffer al DC
 		BitBlt(DC, nX + RC.left, nY + RC.top, RC.right, RC.bottom, Buffer, 0, 0, SRCCOPY);
