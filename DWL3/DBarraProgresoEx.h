@@ -110,6 +110,9 @@ namespace DWL {
 		//////////////////////////////////////
 
 		virtual void						Transicion(const DBarraEx_Transicion nTransicion);
+
+		virtual const DhWnd_Tipo			TipoWnd(void) { return DhWnd_Tipo_BarraProgresoEx; };
+
 		LRESULT CALLBACK					GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 		inline void							MostrarValor(const DBarraEx_MostrarValor nMostrarValor)	{ _MostrarValor = nMostrarValor;	}

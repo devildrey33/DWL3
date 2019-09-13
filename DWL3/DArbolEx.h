@@ -97,15 +97,18 @@ namespace DWL {
 
 														// Crea el control ArbolEx
 		HWND											CrearArbolEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, DWORD nEstilos = WS_CHILD);
+
+														// Funcion que destruye el arbol y libera su memória
 		const BOOL										Destruir(void);
 
+														// Función para expandir / contraer un nodo
 		void											Expandir(DArbolEx_Nodo *nNodo, const BOOL nExpandir);
 
 														// Obtiene el nodo de la posición especificada (El máximo de hijos se obtiene con la función 'const size_t TotalHijos')
 		inline DArbolEx_Nodo                           *Nodo(const size_t nPos) { return _Raiz.Hijo(nPos); };
 														// Nodo raiz
 		inline DArbolEx_Nodo                           *NodoRaiz(void)			{ return &_Raiz; }
-														// Total de nodos
+														// Función que devuelve el total de nodos
 		inline const size_t								TotalNodos(void)		{ return _Raiz._Hijos.size(); }
 		const size_t                                    TotalNodosSeleccionados(void);
 
@@ -200,6 +203,8 @@ namespace DWL {
 		
 		inline const DArbolEx_Expansor					ExpansorPorDefecto(void)								{ return _ExpansorPorDefecto; };
 		void                                            ExpansorPorDefecto(const DArbolEx_Expansor nExpansor)	{ _ExpansorPorDefecto = nExpansor; }
+
+		virtual const DhWnd_Tipo						TipoWnd(void) { return DhWnd_Tipo_ArbolEx; };
 
 		LRESULT CALLBACK								GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 

@@ -56,6 +56,8 @@ namespace DWL {
 		inline DExplorarDirectoriosEx_Nodo     *PathMiPC(void)					{ return _NodoMiPC; };
 		inline DExplorarDirectoriosEx_Nodo     *PathRed(void)					{ return _NodoRed; };
 
+		virtual const DhWnd_Tipo				TipoWnd(void) { return DhWnd_Tipo_ExplorarDirectoriosEx; };
+
 	  protected:
 //		void								   _ObtenerPathNodo(DExplorarDirectoriosEx_Nodo *nNodo, std::wstring &oPath);
 		void									Evento_Nodo_Expandido(DWL::DArbolEx_Nodo *nNodo, const BOOL nExpandido);

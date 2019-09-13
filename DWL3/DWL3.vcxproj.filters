@@ -118,6 +118,9 @@
     <Filter Include="Sistema\ArchivoInternet">
       <UniqueIdentifier>{fd53a755-536d-4340-a5c3-6ea94ba375dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ventanas\ControlesEx\MarcoScrollEx">
+      <UniqueIdentifier>{d1a31b8b-91b3-4f4a-a3c8-132eeed346b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DAnimacion.h">
@@ -276,6 +279,9 @@
     <ClInclude Include="DPeticion.h">
       <Filter>Sistema\ArchivoInternet</Filter>
     </ClInclude>
+    <ClInclude Include="DMarcoScrollEx.h">
+      <Filter>Ventanas\ControlesEx\MarcoScrollEx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DAnimacion.cpp">
@@ -409,6 +415,9 @@
     </ClCompile>
     <ClCompile Include="DPeticion.cpp">
       <Filter>Sistema\ArchivoInternet</Filter>
+    </ClCompile>
+    <ClCompile Include="DMarcoScrollEx.cpp">
+      <Filter>Ventanas\ControlesEx\MarcoScrollEx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

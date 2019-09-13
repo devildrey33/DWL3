@@ -61,10 +61,10 @@
 
 
 	// DWLBaseWnd //////////////////////////////////////////////////////////
-	#define DWL_CUSTOM_DRAWDLG								WM_USER + 112 //! Mensaje para responder a notificaciones de colores en dialogos (solo para controles estandar de windows)
-	#define DWL_CUSTOM_DRAWWND								WM_USER + 113 //! Mensaje para responder a notificaciones de colores en ventanas (solo para controles estandar de windows)
+//	#define DWL_CUSTOM_DRAWDLG								WM_USER + 112 //! Mensaje para responder a notificaciones de colores en dialogos (solo para controles estandar de windows)
+//	#define DWL_CUSTOM_DRAWWND								WM_USER + 113 //! Mensaje para responder a notificaciones de colores en ventanas (solo para controles estandar de windows)
     ////////////////////////////////////////////////////////////////////////
-    #define DWL_NOTIFICACION                                WM_USER + 114 // Indica que se ha recibido una notificacion de un control que se la devolveremos para especificar mejor que tipo de control la manda.
+//    #define DWL_NOTIFICACION                                WM_USER + 114 // Indica que se ha recibido una notificacion de un control que se la devolveremos para especificar mejor que tipo de control la manda.
 
 	// DArbolEx ////////////////////////////////////////////////////////////
 	#define DWL_ARBOLEX_MOUSEPRESIONADO						WM_USER + 200

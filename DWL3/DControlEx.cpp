@@ -1,23 +1,45 @@
 #include "pch.h"
 #include "DControlEx.h"
 #include "DEventoTeclado.h"
+#include "DMarcoScrollEx.h"
 
 namespace DWL {
 
 	HWND DControlEx::CrearControlEx(DhWnd *nPadre, const TCHAR *nNombre, const TCHAR *nTexto, const INT_PTR cID, const int cX, const int cY, const int cAncho, const int cAlto, DWORD nEstilos, DWORD nEstilosExtendidos, UINT nEstilosClase, HBRUSH nColorFondo) {
-		BOOL Is = IsWindow(_hWnd);
 		// Si existe el hWnd pero la ventana / control ya no existe
 		if (_hWnd != NULL && IsWindow(_hWnd) == 0) { Destruir(); }
-		if (hWnd()) { Debug_Escribir(L"DControlEx::Crear() Error : ya se ha creado el control extendido\n"); return hWnd(); }
+		// Si el control ya se habia creado anteriormente
+		if (hWnd()) { 
+			Debug_Escribir(L"DControlEx::Crear() Error : ya se ha creado el control extendido\n"); 
+			// Devuelvo el hWnd del control que ya estaba creado
+			return hWnd();
+		}
+		// Registro la clase para este control
 		ATOM CA = RegistrarClase(nNombre, _GestorMensajes, nEstilosClase);
+		// Guardo el padre
 		_Padre = nPadre;
-		// Si el DhWnd padre es NULL pasamos NULL al hWndPadre
-		HWND hWndPadre = (nPadre != NULL) ? nPadre->hWnd() : NULL;
+		// HWND padre, por defecto es HWND_DESKTOP si nPadre es NULL
+		HWND hWndPadre = HWND_DESKTOP;
+		// Compruebo si existe el padre
+		if (nPadre != nullptr) {
+			// Si el padre es un control del tipo MarcoScrollEx y este control no es del tipo DhWnd_Tipo_MarcoScrollEx_Pagina, tengo que crear el control dentro de su hijo _Pagina			
+			// En caso contrario es una ventana / control normal, le paso su HWND 
+//			if (nPadre->TipoWnd() == DhWnd_Tipo_MarcoScrollEx && TipoWnd() != DhWnd_Tipo_MarcoScrollEx_Pagina) 	hWndPadre = static_cast<DMarcoScrollEx *>(nPadre)->_Pagina.hWnd();
+			if (nPadre->TipoWnd() == DhWnd_Tipo_MarcoScrollEx && TipoWnd() != DhWnd_Tipo_MarcoScrollEx_Marco) 	hWndPadre = static_cast<DMarcoScrollEx *>(nPadre)->_Marco.hWnd();
+			else																								hWndPadre = nPadre->hWnd();
+		}
+		// Aseguro que el mouse no este marcado como que está dentro del control
 		_MouseDentro = FALSE;
+		// Creo el control
 		_hWnd = CreateWindowEx(nEstilosExtendidos, nNombre, nTexto, nEstilos, cX, cY, cAncho, cAlto, hWndPadre, reinterpret_cast<HMENU>(cID), GetModuleHandle(NULL), this);
 		#ifdef _DEBUG
-			if (_hWnd == NULL) Debug_MostrarUltimoError();
+			// Si hay un error lo muestro en la consola
+			if (_hWnd == nullptr) Debug_MostrarUltimoError();
 		#endif
+
+		// Evento control creado del padre
+		if (nPadre != nullptr) nPadre->Evento_ControlCreado(this);
+
 		return _hWnd;
 	};
 

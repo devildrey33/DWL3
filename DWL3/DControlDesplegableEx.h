@@ -29,6 +29,8 @@ namespace DWL {
 		const std::wstring		   &Texto(void)                     { return _Edicion.Texto(); }
 		inline void                 Texto(std::wstring &nTexto)		{ _Edicion.Texto(nTexto);	};
 		inline void                 Texto(const wchar_t *nTexto)	{ _Edicion.Texto(nTexto);	};
+
+		virtual const DhWnd_Tipo	TipoWnd(void) { return DhWnd_Tipo_DesplegableEx; };
       protected:
 		DBotonDesplegable          _Boton;
 		DEdicionTextoEx            _Edicion;

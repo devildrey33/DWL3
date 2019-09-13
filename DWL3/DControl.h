@@ -13,6 +13,8 @@ namespace DWL {
 
 		HWND						CrearControl(DhWnd *nPadre, const TCHAR *nNombre, const TCHAR *nTexto, const INT_PTR cID, const int cX, const int cY, const int cAncho, const int cAlto, DWORD nEstilos, DWORD nEstilosExtendidos, HBRUSH nColorFondo = NULL);
 
+		virtual const DhWnd_Tipo	TipoWnd(void) { return DhWnd_Tipo_Control; };
+
 		virtual LRESULT CALLBACK	GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	  protected:
 		void					   _ConectarControl(const UINT nID, DhWnd *nPadre);

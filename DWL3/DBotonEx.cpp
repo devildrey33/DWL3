@@ -86,7 +86,6 @@ namespace DWL {
 		return hWnd();
 	}
 
-#if DBOTONEX_GDIPLUS == FALSE
 
 	void DBotonEx::Pintar(HDC DC, const int nX, const int nY) {
 		RECT    RC, RCF, RCT, RCS;
@@ -151,54 +150,6 @@ namespace DWL {
 		DeleteObject(Bmp);
 		DeleteDC(Buffer);
 	}
-
-#else
-
-	void DBotonEx::PintarP(HDC DC, const int nX, const int nY) {
-		Gdiplus::ClientRectF	RC(_hWnd);
-		Gdiplus::RectF			RF(RC);
-		RF.X++; RF.Y++; RF.Width--; RF.Height--;
-		Gdiplus::RectF			RCTS(RC);
-		RCTS.X++; RCTS.Y++; RCTS.Width++; RCTS.Height++;
-
-
-		Gdiplus::Bitmap			BufferBmp(RC.Width, RC.Height);
-		Gdiplus::Graphics		Graficos(DC);
-		Gdiplus::Graphics	   *Buffer(Gdiplus::Graphics::FromImage(&BufferBmp));
-		Gdiplus::Color			ColorBorde(GetRValue(_ColorBorde), GetGValue(_ColorBorde), GetBValue(_ColorBorde));
-		Gdiplus::Color			ColorFondo(GetRValue(_ColorFondo), GetGValue(_ColorFondo), GetBValue(_ColorFondo));
-		Gdiplus::Color			ColorTexto(GetRValue(_ColorTexto), GetGValue(_ColorTexto), GetBValue(_ColorTexto));
-		Gdiplus::Color			ColorSombra(GetRValue(Skin.TextoSombra), GetGValue(Skin.TextoSombra), GetBValue(Skin.TextoSombra));
-		Gdiplus::Pen			PlumaBorde(ColorBorde, 1.0f);
-		Gdiplus::SolidBrush		BrochaFondo(ColorFondo);
-		Gdiplus::SolidBrush		BrochaTexto(ColorTexto);
-		Gdiplus::SolidBrush		BrochaTextoSombra(ColorSombra);
-
-		// Pinto el fondo
-		Buffer->FillRectangle(&BrochaFondo, RF);
-
-		// Pinto el borde 
-		Buffer->DrawRectangle(&PlumaBorde, 0.0f, 0.0f, RC.Width - 1.0f, RC.Height - 1.0f);
-
-		// Si tiene texto
-		if (_Texto.size() > 0) {
-			Gdiplus::StringFormat SF;
-			SF.SetAlignment(Gdiplus::StringAlignmentCenter);
-			SF.SetLineAlignment(Gdiplus::StringAlignmentCenter);
-			// Pinto la sombra
-			Buffer->DrawString(_Texto.c_str(), _Texto.size(), Fuente(), RCTS, &SF , &BrochaTextoSombra);
-			// Pinto el texto
-			Buffer->DrawString(_Texto.c_str(), _Texto.size(), Fuente(), RC, &SF, &BrochaTexto);
-		}
-
-		// Si tiene icono
-		if (_Icono() != NULL) {
-			Buffer->DrawImage(_Icono(), _PosIconoX, _PosIconoY);
-		}
-
-		Graficos.DrawImage(&BufferBmp, PointF(0,0));
-	}
-#endif
 
 	void DBotonEx::Activado(const BOOL nActivar) {
 		BOOL Ret = FALSE;

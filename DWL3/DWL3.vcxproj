@@ -195,6 +195,7 @@
     <ClInclude Include="DListaEx_Item.h" />
     <ClInclude Include="DListaEx_SubItem.h" />
     <ClInclude Include="DMarcaEx.h" />
+    <ClInclude Include="DMarcoScrollEx.h" />
     <ClInclude Include="DMensajesWnd.h" />
     <ClInclude Include="DMenuEx.h" />
     <ClInclude Include="DMouse.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="DListaEx_Item.cpp" />
     <ClCompile Include="DListaEx_SubItem.cpp" />
     <ClCompile Include="DMarcaEx.cpp" />
+    <ClCompile Include="DMarcoScrollEx.cpp" />
     <ClCompile Include="DMenuEx.cpp" />
     <ClCompile Include="DMouse.cpp" />
     <ClCompile Include="DPeticion.cpp" />

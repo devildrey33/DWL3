@@ -26,6 +26,7 @@ namespace DWL {
 		void						Evento_BotonEx_Mouse_Click(DWL::DEventoMouse &DatosMouse);
 		void						Evento_BorraFondo(HDC DC);
 		void                        Evento_CambiandoTam(const UINT Lado, RECT* Rectangulo);	
+		virtual const DhWnd_Tipo	TipoWnd(void) { return DhWnd_Tipo_DlgDirectorios; };
 		virtual LRESULT CALLBACK	GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	  protected :
 		void                       _AjustarControles(RECT &RW);

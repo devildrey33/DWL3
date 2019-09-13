@@ -29,23 +29,19 @@ namespace DWL {
 	class DEtiquetaEx : public DControlEx {
 	  public:
 
-								DEtiquetaEx(void);
-				               ~DEtiquetaEx(void);
-		HWND					CrearEtiquetaEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const DEtiquetaEx_Alineacion nAlineacion = DEtiquetaEx_Alineacion_Izquierda, const long Estilos = WS_CHILD | WS_VISIBLE);
-		void					Pintar(HDC DC);
-		void					Texto(std::wstring &nTexto);
-		LRESULT CALLBACK		GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
+									DEtiquetaEx(void);
+				                   ~DEtiquetaEx(void);
+		HWND						CrearEtiquetaEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const DEtiquetaEx_Alineacion nAlineacion = DEtiquetaEx_Alineacion_Izquierda, const long Estilos = WS_CHILD | WS_VISIBLE);
+		void						Pintar(HDC DC);
+		void						Texto(std::wstring &nTexto);
+		virtual const DhWnd_Tipo	TipoWnd(void) { return DhWnd_Tipo_EtiquetaEx; };
+		LRESULT CALLBACK			GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-/*		COLORREF                ColorFondo;
-		COLORREF                ColorTexto;
-		COLORREF                ColorTextoSombra;*/
-	
-		DFuente		            Fuente;
-		DEtiquetaEx_Skin		Skin;
-		DEtiquetaEx_Alineacion  Alineacion;
+		DFuente						Fuente;
+		DEtiquetaEx_Skin			Skin;
+		DEtiquetaEx_Alineacion		Alineacion;
 	  protected:
-//		UINT				   _Formato;
-		std::wstring           _Texto;
+		std::wstring               _Texto;
 	};
 
 }

@@ -102,6 +102,8 @@ namespace DWL {
 		const DBarraScrollEx_Estado	   &ScrollH_Estado(void) { return _ScrollH_Estado; }
 		const DBarraScrollEx_Estado    &ScrollV_Estado(void) { return _ScrollV_Estado; }
 
+		virtual const DhWnd_Tipo		TipoWnd(void) { return DhWnd_Tipo_BarraScrollEx; };
+
 	  protected:
 		void				    	   _PintarBarraScrollEx(HDC hDC, RECT &RectaScroll, RECT &RectaBarra, const COLORREF pColorBarra, const COLORREF pColorFondo);
 		const float			    	   _CalcularPosScrollH(const UINT nTam, const int nPos);

@@ -120,6 +120,8 @@ namespace DWL {
 		const size_t                HitTest(const int cX, const int cY);
 									// Texto que se mostrará en el control antes de tener el foco o un texto al estilo HTML
 		std::wstring                Placeholder;
+									// Devuelve el tipo de HWND
+		virtual const DhWnd_Tipo	TipoWnd(void) { return DhWnd_Tipo_EdicionTextoEx; };
 									// Gestor de mensajes para este control
 		LRESULT CALLBACK			GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	  protected: /////////////////////

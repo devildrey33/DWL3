@@ -41,6 +41,8 @@ namespace DWL {
 
 //	   virtual void                             Resaltar(const BOOL Resaltado);
 
+	   virtual const DhWnd_Tipo					TipoWnd(void) { return DhWnd_Tipo_BarraDesplazamientoEx; };
+
 	   LRESULT CALLBACK							GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	  protected:
 		void								   _Evento_MouseMovimiento(WPARAM wParam, LPARAM lParam);

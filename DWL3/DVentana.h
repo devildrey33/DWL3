@@ -24,6 +24,8 @@ namespace DWL {
 
 		inline virtual void			Repintar(void) { RedrawWindow(hWnd(), NULL, NULL, RDW_INVALIDATE | RDW_INTERNALPAINT | RDW_FRAME); };
 
+		virtual const DhWnd_Tipo	TipoWnd(void)		{ return DhWnd_Tipo_Ventana; };
+
 		virtual LRESULT CALLBACK	GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	protected:
 		static LRESULT CALLBACK    _GestorMensajes(HWND HandleVentana, UINT uMsg, WPARAM wParam, LPARAM lParam);

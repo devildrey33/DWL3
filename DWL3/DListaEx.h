@@ -162,6 +162,8 @@ namespace DWL {
 		BOOL                                            MultiSeleccion;
 		BOOL                                            MoverItemsDrag;
 
+		virtual const DhWnd_Tipo						TipoWnd(void) { return DhWnd_Tipo_ListaEx; };
+
 		LRESULT CALLBACK								GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 		DFuente			                                Fuente;

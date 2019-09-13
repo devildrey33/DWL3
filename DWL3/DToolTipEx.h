@@ -29,24 +29,24 @@ namespace DWL {
 
 	class DToolTipEx : public DVentana {
 	  public:
-							DToolTipEx(void);
-		                   ~DToolTipEx(void);
-							// Función que crea la ventana del tooltip para futuras interacciones
-		HWND				CrearToolTipEx(DhWnd *nPadre);
-		SIZE                CalcularTam(std::wstring &Str);
-		void				Mostrar(const int cX, const int cY, std::wstring &Str);
-		void				Mostrar(const int cX, const int cY, std::wstring &Str, const int cAncho, const int cAlto);
-		void				Ocultar(void);
-		void				OcultarAnimado(void);
-		virtual void		Pintar(HDC DC);
+									DToolTipEx(void);
+								   ~DToolTipEx(void);
+									// Función que crea la ventana del tooltip para futuras interacciones
+		HWND						CrearToolTipEx(DhWnd *nPadre);
+		SIZE					    CalcularTam(std::wstring &Str);
+		void						Mostrar(const int cX, const int cY, std::wstring &Str);
+		void						Mostrar(const int cX, const int cY, std::wstring &Str, const int cAncho, const int cAlto);
+		void						Ocultar(void);
+		void						OcultarAnimado(void);
+		virtual void				Pintar(HDC DC);
+		virtual const DhWnd_Tipo	TipoWnd(void) { return DhWnd_Tipo_MenuEx; };
+		LRESULT CALLBACK			GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
+		HWND					    Padre;
 
-		LRESULT CALLBACK	GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
-		HWND                Padre;
-
-		DToolTipEx_Skin		Skin;
+		DToolTipEx_Skin				Skin;
 	  protected:
-		std::wstring	   _Str;
-		DFuente            _Fuente;
+		std::wstring	           _Str;
+		DFuente                    _Fuente;
 	};
 
 }

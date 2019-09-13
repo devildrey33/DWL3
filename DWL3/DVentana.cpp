@@ -7,14 +7,14 @@ namespace DWL {
 	
 	HWND DVentana::CrearVentana(DhWnd *nPadre, const TCHAR *nNombre, const TCHAR *nTexto, const int cX, const int cY, const int cAncho, const int cAlto, DWORD nEstilos, DWORD nEstilosExtendidos, UINT nEstilosClase, HMENU nMenu, HBRUSH nColorFondo, const int nIconoRecursos) {
 		// La ventana ya no existe pero tenemos el hWnd, por lo que elimino toda la memória
-		if (_hWnd != NULL && IsWindow(_hWnd) == 0) { Destruir(); }
+		if (_hWnd != nullptr && IsWindow(_hWnd) == 0) { Destruir(); }
 
 		if (_hWnd) {
 //			Debug_Escribir(L"DVentana::Crear() Error : ya se ha creado la ventana\n"); 
 			return hWnd(); 
 		}
 		// hWnd del padre
-		HWND hWndPadre = (nPadre != NULL) ? nPadre->hWnd() : HWND_DESKTOP;
+		HWND hWndPadre = (nPadre != nullptr) ? nPadre->hWnd() : HWND_DESKTOP;
 
 		// Afegit expresament per borrar el fondo amb els colors del RAVE
 		HBRUSH ColFondo = CreateSolidBrush(COLOR_FONDO); // NO ELIMINAR LA BROCHA DE MEMORIA, HO FA EL WINDOWS
@@ -29,6 +29,10 @@ namespace DWL {
 		Debug_MostrarUltimoError();
 //		SendMessage(hWnd(), WM_SETFONT, (WPARAM)Fuente18Normal(), 0);
 		BarraTareas._Iniciar(_hWnd);
+
+		// Evento control creado del padre
+		if (nPadre != nullptr) nPadre->Evento_ControlCreado(this);
+
 		return hWnd();
 	}
 
