@@ -16,9 +16,9 @@ namespace DWL {
 		// hWnd del padre
 		HWND hWndPadre = (nPadre != nullptr) ? nPadre->hWnd() : HWND_DESKTOP;
 
-		// Afegit expresament per borrar el fondo amb els colors del RAVE
-		HBRUSH ColFondo = CreateSolidBrush(COLOR_FONDO); // NO ELIMINAR LA BROCHA DE MEMORIA, HO FA EL WINDOWS
-		
+		// Establezco el color del fondo, si es null se utilizará el del skin
+		HBRUSH ColFondo = (nColorFondo == nullptr) ? _Aplicacion->_ColorFondoVentana : nColorFondo;
+
 		ATOM RetRgistrarClase = RegistrarClase(nNombre, reinterpret_cast<WNDPROC>(_GestorMensajes), nEstilosClase, nIconoRecursos, ColFondo);
 		
 		// Recalculo el espacio para que el área cliente de la ventana mida exactamente el ancho y alto especificados

@@ -24,7 +24,10 @@ namespace DWL {
 						DSingletonApp(void) { }
 	};
 
-
+	class DVentana;
+	class DMarcoScrollEx;
+	class DMarcoScrollEx_Marco;
+	class DMarcoScrollEx_Pagina;
 
 	class DApp : protected DhWnd {
 	  public : /////////////////////////// Constructor
@@ -79,9 +82,15 @@ namespace DWL {
 		void						   _Internet_Porcentaje(const float nValor, const UINT nID);
 										// Función que indica que la descarga ha finalizado correctamente
 		void						   _Internet_Terminado(const UINT nID);
-
+										// Color para le fondo de las ventanas
+		HBRUSH                         _ColorFondoVentana;
 										// Vector que contiene la linea de comandos separada
 		std::vector<std::wstring>	   _LineaComandos;
+
+		friend class DVentana;
+		friend class DMarcoScrollEx;
+		friend class DMarcoScrollEx_Marco;
+		friend class DMarcoScrollEx_Pagina;
 	};
 
 };

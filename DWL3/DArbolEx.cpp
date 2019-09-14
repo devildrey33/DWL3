@@ -105,6 +105,7 @@ namespace DWL {
 		_NodoResaltado			= NULL;
 		_NodoUResaltado			= NULL;
 		_NodoShift				= NULL;
+		_NodoUltimaBusqueda		= NULL;
 		_PosShift				= 0;
 		_NodoPaginaVDif			= 0;
 		_NodoPaginaHDif			= 0;
@@ -1159,7 +1160,6 @@ namespace DWL {
 				if (_NodoPresionadoParte == DArbolEx_ParteNodo_Expansor) {
 					_NodoPresionado->_TransicionExpansor(DArbolEx_TransicionExpansor_Normal);
 				}
-				//NodoSoltado->_Seleccionado = TRUE; 
 			}
 		}
 
@@ -1179,6 +1179,16 @@ namespace DWL {
 		Evento_MouseSoltado(DatosMouse);
 		// Envio el evento mouseup a la ventana padre
 		SendMessage(GetParent(hWnd()), DWL_ARBOLEX_MOUSESOLTADO, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
+		// Compruebo si el mouse está dentro del control
+		RECT RC;
+		POINT Pt = { DatosMouse.X(), DatosMouse.Y() };
+		GetClientRect(_hWnd, &RC);
+		if (PtInRect(&RC, Pt) == TRUE) {
+			// Envio el evento del click a la ventana padre (solo si el mouse está dentro de la lista)
+			SendMessage(GetParent(hWnd()), DWL_ARBOLEX_CLICK, reinterpret_cast<WPARAM>(&DatosMouse), 0);
+		}
+
+
 		// reasigno el estado presionado y Repinto
 		_NodoPresionadoParte = DArbolEx_ParteNodo_Nada;
 		_NodoPresionado = NULL;

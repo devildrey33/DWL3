@@ -219,7 +219,7 @@ namespace DWL {
 		std::vector<DListaEx_Item *>                   _Items;
 		std::vector<DListaEx_Columna *>                _Columnas;
 
-		DWORD                                          _TiempoItemPresionado; // Tiempo que lleva presionado el item (para hacer drag)
+		ULONGLONG                                      _TiempoItemPresionado; // Tiempo que lleva presionado el item (para hacer drag)
 		LONG_PTR                                       _ItemResaltado;
 		LONG_PTR	                                   _ItemUResaltado;
 		LONG_PTR                                       _SubItemResaltado; // es en número de columa partiendo de la _FilaRsaltada
@@ -248,6 +248,7 @@ namespace DWL {
 		HFONT                                          _BufferItemFuenteViejo;
 
 		BOOL                                           _PintarIconos;
+		BOOL										   _EnDrag;
 /*		int                                            _MouseX;
 		int                                            _MouseY;*/
 

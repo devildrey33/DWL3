@@ -7,13 +7,17 @@ namespace DWL {
 
 	// Función para crear el marco
 	HWND DMarcoScrollEx::CrearMarcoScrollEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
+		// Establezco el color del fondo, si es null se utilizará el del skin
+//		HBRUSH ColFondo = (nColorFondo == nullptr) ? _Aplicacion->_ColorFondoVentana : nColorFondo;
+
+
 		// Creo el control principal con el marco y las barras de scroll
-		_hWnd = CrearControlEx(nPadre, L"DMarcoScrollEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL); 
+		_hWnd = CrearControlEx(nPadre, L"DMarcoScrollEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL, NULL, _Aplicacion->_ColorFondoVentana);
 		// Creo un control para que sea el marco sin las barras de scroll
-		_Marco.CrearControlEx(this, L"DMarcoScrollEx_Marco", L"", ID_PAGINA, 0, 0, cAncho, cAlto, WS_CHILD | WS_VISIBLE, NULL);
+		_Marco.CrearControlEx(this, L"DMarcoScrollEx_Marco", L"", ID_PAGINA, 0, 0, cAncho, cAlto, WS_CHILD | WS_VISIBLE, NULL, NULL, _Aplicacion->_ColorFondoVentana);
 		// Creo un control dentro que se usara para mover todo el contenido
 		// Todos los controles creados dentro del MarcoScroll realmente se crean dentro del control _Pagina (Se redirige automáticamente desde DControlEx::CrearControlEx)
-		_Pagina.CrearControlEx(&_Marco, L"DMarcoScrollEx_Pagina", L"", ID_PAGINA, 0, 0, cAncho, cAlto, WS_CHILD | WS_VISIBLE, NULL);
+		_Pagina.CrearControlEx(&_Marco, L"DMarcoScrollEx_Pagina", L"", ID_PAGINA, 0, 0, cAncho, cAlto, WS_CHILD | WS_VISIBLE, NULL, NULL, _Aplicacion->_ColorFondoVentana);
 		// Devuelvo el hWnd de este control
 		return _hWnd;
 	}
@@ -42,7 +46,7 @@ namespace DWL {
 		_AnchoPagina = RC.right;
 		_AltoPagina  = RC.bottom;
 		// Enumero los controles
-		EnumChildWindows(_Pagina.hWnd(), _EnumChildProc, PtrToLong(this));
+		EnumChildWindows(_Pagina.hWnd(), _EnumChildProc, reinterpret_cast<LPARAM>(this));
 
 		BOOL SV = FALSE, SH = FALSE;
 		// Determino si se necesita scroll horizontal
@@ -87,7 +91,7 @@ namespace DWL {
 
 	// Función que enumera las ventanas hijo
 	BOOL CALLBACK DMarcoScrollEx::_EnumChildProc(_In_ HWND hwnd, _In_ LPARAM lParam) {
-		DMarcoScrollEx *This = static_cast<DMarcoScrollEx *>(LongToPtr(lParam));
+		DMarcoScrollEx *This = reinterpret_cast<DMarcoScrollEx *>(lParam);
 		RECT RVM, RVC;
 		// Obtengo la posición de la ventana
 		GetWindowRect(This->hWnd(), &RVM);	// Recta del marco
@@ -101,6 +105,9 @@ namespace DWL {
 		if (This->_AnchoPagina < RVC.right) This->_AnchoPagina = RVC.right;
 		// Compruebo si el alto es mas grande que el que hay guardado
 		if (This->_AltoPagina < RVC.right)  This->_AltoPagina = RVC.bottom;
+		
+		// Continuo la enumeración
+		return TRUE;
 	}
 
 

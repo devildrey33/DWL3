@@ -44,7 +44,7 @@ namespace DWL {
 								_SubItemResaltado(-1)	, _SubItemUResaltado(-1)	, _SubItemPresionado(-1)	, MostrarSeleccion(TRUE)	, MultiSeleccion(FALSE) , MoverItemsDrag(FALSE),
 								_ItemResaltado(-1)		, _ItemUResaltado(-1)		, _ItemMarcado(-1)			, _PintarIconos(TRUE),	    
 								_ItemPresionado(-1)		, _ItemShift(-1)			, _Repintar(FALSE)			, _TimerDragArriba(0)       , _TimerDragAbajo(0),
-								_TotalAnchoVisible(0)	, _TotalAltoVisible(0)		, _TiempoItemPresionado(0)  , _PItemPresionado(NULL)    , 
+								_TotalAnchoVisible(0)	, _TotalAltoVisible(0)		, _TiempoItemPresionado(0)  , _PItemPresionado(NULL)    , _EnDrag(FALSE),
 								_BufferItem(NULL)		, _BufferItemBmp(NULL)		, _BufferItemBmpViejo(NULL)	, _BufferItemFuenteViejo(NULL) {
 
 	}
@@ -738,7 +738,8 @@ namespace DWL {
 		else {			
 			if (MoverItemsDrag == TRUE) {
 				// Se ha sobrepasado el tiempo para un click simple, es una operación drag
-				if (GetTickCount() > _TiempoItemPresionado + 300) {
+				if (GetTickCount64() > _TiempoItemPresionado + 300) {
+					_EnDrag = TRUE;
 					_Drag(DatosMouse);
 				}
 			}
@@ -857,7 +858,6 @@ namespace DWL {
 		}
 
 		Repintar();
-
 	}
 
 	void DListaEx::_SubirItemsSeleccionados(void) {
@@ -1033,23 +1033,36 @@ namespace DWL {
 			DesSeleccionarTodo();
 		}
 
-
+		// Libero la captura del mouse
 		ReleaseCapture();
+
+		// Si el evento del moouse pertenece al scroll, salgo.
 		if (Scrolls_MouseSoltado(DatosMouse) == TRUE) { return; }
 
+		// Transiciones para el item presionado
 		LONG_PTR T = HitTest(DatosMouse.X(), DatosMouse.Y(), &_SubItemPresionado);
 		if (_ItemPresionado != -1) {
 			if (T == _ItemPresionado) _Items[_ItemPresionado]->_TransicionResaltado();
 			else                      _Items[_ItemPresionado]->_TransicionNormal();
 		}
-/*		if (_ItemPresionado != -1) {
-			_Items[_ItemPresionado]->Seleccionado = TRUE;
-		}*/
 
 		// Evento virtual
 		Evento_MouseSoltado(DatosMouse);
 		// Envio el evento mouseup a la ventana padre
 		SendMessage(GetParent(hWnd()), DWL_LISTAEX_MOUSESOLTADO, reinterpret_cast<WPARAM>(&DatosMouse), 0);
+		// Envio el evento DragTerminado si ha habido una operación de Drag & Drop
+		if (_EnDrag == TRUE) 	SendMessage(GetParent(hWnd()), DWL_LISTAEX_DRAGTERMINADO, 0, 0);
+		_EnDrag = FALSE;
+		
+		// Compruebo si el mouse está dentro del control
+		RECT RC;
+		POINT Pt = { DatosMouse.X(), DatosMouse.Y() };
+		GetClientRect(_hWnd, &RC);
+		if (PtInRect(&RC, Pt) == TRUE) {
+			// Envio el evento del click a la ventana padre (solo si el mouse está dentro de la lista)
+			SendMessage(GetParent(hWnd()), DWL_LISTAEX_CLICK, reinterpret_cast<WPARAM>(&DatosMouse), 0);
+		}
+
 		// Establezco que no hay ningún item presionado, y repinto
 		// TODO : El -1 está malament lo millor seria fer servir el objecte DListaEx_Item * directament com a l'arbre
 		_ItemPresionado = -1;

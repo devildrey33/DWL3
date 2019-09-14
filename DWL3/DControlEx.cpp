@@ -15,7 +15,7 @@ namespace DWL {
 			return hWnd();
 		}
 		// Registro la clase para este control
-		ATOM CA = RegistrarClase(nNombre, _GestorMensajes, nEstilosClase);
+		ATOM CA = RegistrarClase(nNombre, _GestorMensajes, nEstilosClase, 0, nColorFondo);
 		// Guardo el padre
 		_Padre = nPadre;
 		// HWND padre, por defecto es HWND_DESKTOP si nPadre es NULL
@@ -25,7 +25,7 @@ namespace DWL {
 			// Si el padre es un control del tipo MarcoScrollEx y este control no es del tipo DhWnd_Tipo_MarcoScrollEx_Pagina, tengo que crear el control dentro de su hijo _Pagina			
 			// En caso contrario es una ventana / control normal, le paso su HWND 
 //			if (nPadre->TipoWnd() == DhWnd_Tipo_MarcoScrollEx && TipoWnd() != DhWnd_Tipo_MarcoScrollEx_Pagina) 	hWndPadre = static_cast<DMarcoScrollEx *>(nPadre)->_Pagina.hWnd();
-			if (nPadre->TipoWnd() == DhWnd_Tipo_MarcoScrollEx && TipoWnd() != DhWnd_Tipo_MarcoScrollEx_Marco) 	hWndPadre = static_cast<DMarcoScrollEx *>(nPadre)->_Marco.hWnd();
+			if (nPadre->TipoWnd() == DhWnd_Tipo_MarcoScrollEx && TipoWnd() != DhWnd_Tipo_MarcoScrollEx_Marco) 	hWndPadre = static_cast<DMarcoScrollEx *>(nPadre)->_Pagina.hWnd();
 			else																								hWndPadre = nPadre->hWnd();
 		}
 		// Aseguro que el mouse no este marcado como que está dentro del control

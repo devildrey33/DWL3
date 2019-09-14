@@ -9,7 +9,7 @@ DWL::DApp *_Aplicacion = nullptr;
 namespace DWL {
 
 	// Constructor
-	DApp::DApp(void) {
+	DApp::DApp(void) : _ColorFondoVentana(nullptr) {
 		// Asigno esta clase al puntero global de la aplicación
 		_Aplicacion = this;
 		// Obtengo la línea de comandos
@@ -18,6 +18,8 @@ namespace DWL {
 		_CrearVentanaMensajes();
 		// Inicializo la librería COM (para el TaskBarList)
 		HRESULT CIE = CoInitializeEx(0, COINIT_MULTITHREADED | COINIT_SPEED_OVER_MEMORY);
+		// Creo el color que se usara para el fondo de las ventanas (NO BORRAR lo hace el windows)
+		_ColorFondoVentana = CreateSolidBrush(COLOR_FONDO);
 	}
 
 	// Devuelve el path de la aplicación sin el ejecutable

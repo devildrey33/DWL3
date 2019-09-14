@@ -68,17 +68,18 @@
 
 	// DArbolEx ////////////////////////////////////////////////////////////
 	#define DWL_ARBOLEX_MOUSEPRESIONADO						WM_USER + 200
-	#define DWL_ARBOLEX_MOUSESOLTADO						WM_USER + 201				// Click y MouseSoltado son lo mismo
+	#define DWL_ARBOLEX_MOUSESOLTADO						WM_USER + 201
 	#define DWL_ARBOLEX_MOUSEMOVIMIENTO						WM_USER + 202
-	#define	DWL_ARBOLEX_CLICK                               DWL_ARBOLEX_MOUSESOLTADO	// Click y MouseSoltado son lo mismo
-	#define DWL_ARBOLEX_DOBLECLICK							WM_USER + 203
+	#define	DWL_ARBOLEX_CLICK                               WM_USER + 203
+	#define DWL_ARBOLEX_DOBLECLICK							WM_USER + 204
 
 	// DListaEx ////////////////////////////////////////////////////////////
 	#define DWL_LISTAEX_MOUSEPRESIONADO						WM_USER + 300
-	#define DWL_LISTAEX_MOUSESOLTADO						WM_USER + 301				// Click y MouseSoltado son lo mismo
+	#define DWL_LISTAEX_MOUSESOLTADO						WM_USER + 301			
 	#define DWL_LISTAEX_MOUSEMOVIMIENTO						WM_USER + 302
-	#define	DWL_LISTAEX_CLICK                               DWL_LISTAEX_MOUSESOLTADO	// Click y MouseSoltado son lo mismo
-	#define DWL_LISTAEX_DOBLECLICK							WM_USER + 303
+	#define	DWL_LISTAEX_CLICK                               WM_USER + 303			
+	#define DWL_LISTAEX_DOBLECLICK							WM_USER + 304
+	#define DWL_LISTAEX_DRAGTERMINADO						WM_USER + 305
 
 //	#define DWL_USAR_GESTOR_POR_DEFECTO						WM_USER + 120 //! Macro para definir el valor que debera devolver el GestorMensajes si queremos llamar a la función por defecto del windowprocedure.
 	
@@ -99,6 +100,13 @@
 
 	// DDlgDirectorios //////////////////////////////////////////////////////
 	#define DWL_DLGDIRECTORIOS_POSTAM_CAMBIADO				WM_USER + 360
+
+
+
+
+
+
+
 
 
 	// DInternet ////////////////////////////////////////////////////////////
