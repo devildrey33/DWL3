@@ -18,7 +18,7 @@ namespace DWL {
 		_hWnd = CreateWindowEx(nEstilosExtendidos, nNombre, nTexto, nEstilos, cX, cY, cAncho, cAlto, hWndPadre, reinterpret_cast<HMENU>(cID), GetModuleHandle(NULL), this);
 
 		// Evento control creado del padre
-		if (nPadre != nullptr) nPadre->Evento_ControlCreado(this);
+		if (nPadre != nullptr) nPadre->Evento_ControlCreado(this, cX, cY, cAncho, cAlto);
 
 		return hWnd();
 		//	return CreateWindowEx(nEstiloExtendido, nNombre, nTexto, Estilo, cX, cY, cAncho, cAlto, nPadre(), reinterpret_cast<HMENU>(IntToPtr(nID)), GetModuleHandle(NULL), this);

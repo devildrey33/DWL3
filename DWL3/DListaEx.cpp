@@ -1051,7 +1051,10 @@ namespace DWL {
 		// Envio el evento mouseup a la ventana padre
 		SendMessage(GetParent(hWnd()), DWL_LISTAEX_MOUSESOLTADO, reinterpret_cast<WPARAM>(&DatosMouse), 0);
 		// Envio el evento DragTerminado si ha habido una operación de Drag & Drop
-		if (_EnDrag == TRUE) 	SendMessage(GetParent(hWnd()), DWL_LISTAEX_DRAGTERMINADO, 0, 0);
+		if (_EnDrag == TRUE) {
+			SendMessage(GetParent(hWnd()), DWL_LISTAEX_DRAGTERMINADO, 0, 0);
+			Evento_DragTerminado();
+		}
 		_EnDrag = FALSE;
 		
 		// Compruebo si el mouse está dentro del control

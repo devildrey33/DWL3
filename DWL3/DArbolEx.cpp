@@ -1187,8 +1187,7 @@ namespace DWL {
 			// Envio el evento del click a la ventana padre (solo si el mouse está dentro de la lista)
 			SendMessage(GetParent(hWnd()), DWL_ARBOLEX_CLICK, reinterpret_cast<WPARAM>(&DatosMouse), 0);
 		}
-
-
+		
 		// reasigno el estado presionado y Repinto
 		_NodoPresionadoParte = DArbolEx_ParteNodo_Nada;
 		_NodoPresionado = NULL;

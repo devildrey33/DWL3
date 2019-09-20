@@ -148,6 +148,7 @@ namespace DWL {
 		virtual void									Evento_MouseSoltado(DEventoMouse &DatosMouse)													{ };
 		virtual void                                    Evento_MouseRueda(DEventoMouseRueda &DatosMouse)												{ };
 		virtual void									Evento_MouseDobleClick(DEventoMouse &DatosMouse)												{ };
+		virtual void									Evento_DragTerminado(void)                                                                      { };
 
 		virtual void                                    Evento_TeclaPresionada(DEventoTeclado &DatosTeclado)											{ };
 		virtual void                                    Evento_TeclaSoltada(DEventoTeclado &DatosTeclado)												{ };

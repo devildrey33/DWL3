@@ -38,7 +38,7 @@ namespace DWL {
 		#endif
 
 		// Evento control creado del padre
-		if (nPadre != nullptr) nPadre->Evento_ControlCreado(this);
+		if (nPadre != nullptr) nPadre->Evento_ControlCreado(this, cX, cY, cAncho, cAlto);
 
 		return _hWnd;
 	};

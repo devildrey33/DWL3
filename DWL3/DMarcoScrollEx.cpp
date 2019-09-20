@@ -7,10 +7,6 @@ namespace DWL {
 
 	// Función para crear el marco
 	HWND DMarcoScrollEx::CrearMarcoScrollEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
-		// Establezco el color del fondo, si es null se utilizará el del skin
-//		HBRUSH ColFondo = (nColorFondo == nullptr) ? _Aplicacion->_ColorFondoVentana : nColorFondo;
-
-
 		// Creo el control principal con el marco y las barras de scroll
 		_hWnd = CrearControlEx(nPadre, L"DMarcoScrollEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL, NULL, _Aplicacion->_ColorFondoVentana);
 		// Creo un control para que sea el marco sin las barras de scroll
@@ -31,10 +27,10 @@ namespace DWL {
 
 
 	// Evento que se recibe al crear un control dentro del marco
-	void DMarcoScrollEx::Evento_ControlCreado(DhWnd *nControl) {
+	void DMarcoScrollEx::Evento_ControlCreado(DhWnd *nControl, const int cX, const int cY, const int cAncho, const int cAlto) {
 		// Si no es la página
 		if (nControl->TipoWnd() != DhWnd_Tipo_MarcoScrollEx_Pagina) {
-			CalcularPagina();
+			//CalcularPagina();
 		}
 	}
 
@@ -43,8 +39,8 @@ namespace DWL {
 		RECT RC;
 		GetClientRect(_hWnd, &RC);
 		// Establezco el ancho y alturas mínimos
-		_AnchoPagina = RC.right;
-		_AltoPagina  = RC.bottom;
+		_AnchoPagina = 0;
+		_AltoPagina  = 0;
 		// Enumero los controles
 		EnumChildWindows(_Pagina.hWnd(), _EnumChildProc, reinterpret_cast<LPARAM>(this));
 
@@ -84,7 +80,18 @@ namespace DWL {
 		}
 		ScrollV_Visible(SV);
 
-		// Redimensiono la página
+
+		RECT RCS, RCB;
+		ObtenerRectaCliente(&RC, &RCS, &RCB);
+
+		#if DMARCOSCROLLEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir_Varg(L"DMarcoScrollEx::CalcularPagina Ancho:%d Alto:%d ScrollV:%d ScrollH:%d\n", RCS.right - RCS.left, RCS.bottom - RCS.top, SV, SH);
+		#endif
+
+
+		// Redimensiono el marco
+		MoveWindow(_Marco.hWnd(), RCS.left, RCS.top, RCS.right - RCS.left, RCS.bottom - RCS.top, TRUE);
+		// Redimensiono la pagina
 		MoveWindow(_Pagina.hWnd(), 0, 0, _AnchoPagina, _AltoPagina, TRUE);
 	}
 
@@ -104,16 +111,166 @@ namespace DWL {
 		// Compruebo si el ancho es mas grande que el que hay guardado
 		if (This->_AnchoPagina < RVC.right) This->_AnchoPagina = RVC.right;
 		// Compruebo si el alto es mas grande que el que hay guardado
-		if (This->_AltoPagina < RVC.right)  This->_AltoPagina = RVC.bottom;
+		if (This->_AltoPagina < RVC.bottom)  This->_AltoPagina = RVC.bottom;
 		
 		// Continuo la enumeración
 		return TRUE;
 	}
 
 
+	void DMarcoScrollEx::Pintar(HDC hDC) {
+		RECT RC, RCS, RCB;
+		ObtenerRectaCliente(&RC, &RCS, &RCB);
+
+		HDC		Buffer		= CreateCompatibleDC(hDC);
+		HBITMAP Bmp			= CreateCompatibleBitmap(hDC, RCB.right - RCB.left, RCB.bottom - RCB.top);
+		HBITMAP BmpViejo	= static_cast<HBITMAP>(SelectObject(Buffer, Bmp));
+
+		// Pinto el fondo
+/*		HBRUSH BFondo = CreateSolidBrush(_ColorFondo);
+		FillRect(Buffer, &RCB, BFondo);
+		DeleteObject(BFondo);*/
+
+		// Pinto el borde del control
+		PintarBorde(&RCB, Buffer);
+
+		// Pinto las barras de scroll en el buffer
+		Scrolls_Pintar(Buffer, RC);
+		int TamH = 1, TamV = 1;
+
+		if (_ScrollH_Estado != DBarraScrollEx_Estado_Invisible) TamH = _ScrollH_Alto + 1;
+		if (_ScrollV_Estado != DBarraScrollEx_Estado_Invisible) TamV = _ScrollV_Ancho + 1;
+
+		// Pinto el buffer en el DC
+//		BitBlt(hDC, RCB.left, RCB.top, RCB.right, RCB.bottom, Buffer, 0, 0, SRCCOPY);
+		// Pinto el borde superior del buffer en el DC
+		BitBlt(hDC, RCB.left, RCB.top, RCB.right, 1, Buffer, 0, 0, SRCCOPY);
+		// Pinto el borde inferior del buffer en el DC
+		BitBlt(hDC, RCB.left, RCB.bottom - TamH, RCB.right, TamH, Buffer, 0, RCB.bottom - TamH, SRCCOPY);
+		// Pinto el borde izquierdo del buffer en el DC
+		BitBlt(hDC, RCB.left, RCB.top, 1, RCB.bottom, Buffer, 0, 0, SRCCOPY);
+		// Pinto el borde derecho del buffer en el DC
+		BitBlt(hDC, RCB.right - TamV, RCB.top, TamV, RCB.bottom, Buffer, RCB.right - TamV, 0, SRCCOPY);
+
+		// Elimino objetos gdi de la memoria
+		SelectObject(Buffer, BmpViejo);
+		DeleteObject(Bmp);
+		DeleteDC(Buffer);
+	}
+
+
+	void DMarcoScrollEx::Repintar(void) {
+		HDC DC = GetDC(_hWnd);
+		Pintar(DC);
+		ReleaseDC(_hWnd, DC);
+	}
+
+
+
+	void DMarcoScrollEx::_Evento_Pintar(void) {
+		PAINTSTRUCT PS;
+		HDC DC = BeginPaint(hWnd(), &PS);
+		Pintar(DC);
+		EndPaint(hWnd(), &PS);
+	}
+
+	// Función interna para porcesar el movimiento del mouse
+	void DMarcoScrollEx::_Evento_MouseMovimiento(WPARAM wParam, LPARAM lParam) {
+		DEventoMouse DatosMouse(wParam, lParam, this);
+		// Utilizo la función _MouseEntrando() para poder recibir los mensajes WM_MOUSELEAVE
+		if (_MouseEntrando() == TRUE) {
+			Evento_MouseEntrando();
+			Scrolls_MouseEntrando();
+		}
+
+		if (Scrolls_MouseMovimiento(DatosMouse) == TRUE) { return; } // las coordenadas pertenecen al scroll (salgo del evento)
+		Evento_MouseMovimiento(DatosMouse);
+	}
+
+	// Función interna para cuando sale el mouse del control
+	void DMarcoScrollEx::_Evento_MouseSaliendo(void) {
+		BOOL nRepintar = Scrolls_MouseSaliendo();
+		_MouseDentro = FALSE;
+		Evento_MouseSaliendo();
+		if (nRepintar == TRUE) Repintar();
+	}
+
+	void DMarcoScrollEx::_Evento_MousePresionado(const int Boton, WPARAM wParam, LPARAM lParam) {
+		DEventoMouse DatosMouse(wParam, lParam, this, Boton);
+		SetCapture(_hWnd);
+		SetFocus(_hWnd);
+		if (Scrolls_MousePresionado(DatosMouse) == TRUE) { return; }
+
+		// Evento virtual
+		Evento_MousePresionado(DatosMouse);
+
+	}
+
+
+	void DMarcoScrollEx::_Evento_MouseSoltado(const int Boton, WPARAM wParam, LPARAM lParam) {
+		DEventoMouse DatosMouse(wParam, lParam, this, Boton);
+		// Libero la captura del mouse
+		ReleaseCapture();
+
+		// Si el evento del moouse pertenece al scroll, salgo.
+		if (Scrolls_MouseSoltado(DatosMouse) == TRUE) { return; }
+
+		// Evento virtual
+		Evento_MouseSoltado(DatosMouse);
+
+	}
+
+	void DMarcoScrollEx::_Evento_MouseRueda(WPARAM wParam, LPARAM lParam) {
+		DEventoMouseRueda DatosMouse(wParam, lParam, this);
+
+		//		RECT RW;
+		//		GetWindowRect(hWnd(), &RW);
+
+
+
+		if (DatosMouse.Delta() > 0) { // hacia arriba
+			_ScrollV_Posicion -= _ScrollV_Pagina / 10.0f;
+			if (_ScrollV_Posicion < 0.0f) _ScrollV_Posicion = 0.0f;
+		}
+		else { // hacia abajo
+			_ScrollV_Posicion += _ScrollV_Pagina / 10.0f;
+			if (_ScrollV_Posicion > 1.0f) _ScrollV_Posicion = 1.0f;
+		}
+
+//		_CalcularScrolls();
+		// Las coordenadas X e Y son relativas a la pantalla...
+//		LONG ncX = RW.left - DatosMouse.X();
+//		LONG ncY = RW.top - DatosMouse.Y();
+/*		_ItemResaltado = HitTest(DatosMouse.X(), DatosMouse.Y());
+
+		if (_ItemUResaltado != -1) _Items[_ItemUResaltado]->_TransicionNormal();
+		if (_ItemResaltado != -1)  _Items[_ItemResaltado]->_TransicionResaltado();
+
+		_ItemUResaltado = _ItemResaltado;*/
+
+		Evento_MouseRueda(DatosMouse);
+		Repintar();
+	}
+
 	// Gestor de mensages para el marco
 	LRESULT CALLBACK DMarcoScrollEx::GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg) {
+			// Pintado
+			case WM_PAINT:			_Evento_Pintar();																															return 0;
+			// Mouse movimiento
+			case WM_MOUSEMOVE:		_Evento_MouseMovimiento(wParam, lParam);																									return 0;
+			case WM_MOUSELEAVE:		_Evento_MouseSaliendo();																													return 0;
+			// Mouse presionado
+			case WM_LBUTTONDOWN:	_Evento_MousePresionado(0, wParam, lParam);																									return 0;
+			case WM_RBUTTONDOWN:	_Evento_MousePresionado(1, wParam, lParam);																									return 0;
+			case WM_MBUTTONDOWN:	_Evento_MousePresionado(2, wParam, lParam);																									return 0;
+			// Mouse soltado
+			case WM_LBUTTONUP:		_Evento_MouseSoltado(0, wParam, lParam);																									return 0;
+			case WM_RBUTTONUP:		_Evento_MouseSoltado(1, wParam, lParam);																									return 0;
+			case WM_MBUTTONUP:		_Evento_MouseSoltado(2, wParam, lParam);																									return 0;
+
+			// Mouse rueda
+			case WM_MOUSEWHEEL:		_Evento_MouseRueda(wParam, lParam);																											return 0;
 
 		}
 		return DBarraScrollEx::GestorMensajes(uMsg, wParam, lParam);
