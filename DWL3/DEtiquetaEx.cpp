@@ -65,11 +65,11 @@ namespace DWL {
 		if (Skin.FuenteSombraTexto == TRUE) {
 			// Pinto la sombra del texto
 			SetTextColor(TmphDC, Skin.TextoSombra);
-			DrawText(TmphDC, _Texto.c_str(), static_cast<int>(_Texto.size()), &RC2, static_cast<UINT>(Alineacion));
+			DrawText(TmphDC, _Texto.c_str(), static_cast<int>(_Texto.size()), &RC2, static_cast<UINT>(Alineacion) | DT_WORDBREAK);
 		}
 		// Pinto el texto
 		SetTextColor(TmphDC, Skin.Texto);
-		DrawText(TmphDC, _Texto.c_str(), static_cast<int>(_Texto.size()), &RC, static_cast<UINT>(Alineacion));
+		DrawText(TmphDC, _Texto.c_str(), static_cast<int>(_Texto.size()), &RC, static_cast<UINT>(Alineacion) | DT_WORDBREAK);
 
 		RC.right++;	// (vuelvo a poner el right como estaba para el bitblt)
 

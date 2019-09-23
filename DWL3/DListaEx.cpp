@@ -496,8 +496,10 @@ namespace DWL {
 
 	// Calcula los items que se ven actualmente en la pantalla
 	void DListaEx::_CalcularItemsPagina(const size_t TamPagina) {
-		_ItemPaginaInicio = -1;
-		_ItemPaginaFin = -1;
+		_ItemPaginaInicio	= -1;
+		_ItemPaginaFin		= -1;
+
+		// Si no hay items o no hay columnas, salgo
 		if (_Items.size() == 0 || _Columnas.size() == 0) {
 			#if DLISTAEX_MOSTRARDEBUG == TRUE
 				Debug_Escribir_Varg(L"DListaEx::_CalcularItemsPagina I:%d F:%d\n", static_cast<__int64>(_ItemPaginaInicio), static_cast<__int64>(_ItemPaginaFin));
@@ -513,11 +515,12 @@ namespace DWL {
 
 		
 		LONG   TotalPixelesContados = -static_cast<LONG>(static_cast<float>(alto) * _ScrollV_Posicion);
-
+		// Diferencia de pixeles H (para items parcialmente visibles)
 		_ItemPaginaHDif = -static_cast<LONG>(static_cast<float>(ancho) * _ScrollH_Posicion);
 
 		LONG   nAltoItem = Fuente.Alto() + (DLISTAEX_PADDING * 2);
 
+		// Recorro todos los items para buscar el item inicial y el item final de la página
 		for (size_t i = 0; i < _Items.size(); i++) {
 			if (_ItemPaginaInicio == -1) { // Item inicial
 				if (TotalPixelesContados <= PixelInicio && TotalPixelesContados + nAltoItem >= PixelInicio) {
@@ -536,6 +539,7 @@ namespace DWL {
 					return;
 				}
 			}
+			// Sumo la altura del item, al total de pixeles contados verticales
 			TotalPixelesContados += nAltoItem;
 		}
 

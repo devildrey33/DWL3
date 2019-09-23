@@ -1,12 +1,15 @@
 #ifndef DANIMACION_H
 #define DANIMACION_H
 
-#define DANIMACION_MOSTRARDEBUG	FALSE
 
 #include <functional>
 #include <vector>
-#define DANIMACION_PI 3.14159265359f
 
+// Depuración
+#define DANIMACION_MOSTRARDEBUG				FALSE
+// Constante PI
+#define DANIMACION_PI						3.14159265359f
+// Función de tiempo por defecto
 #define DANIMACION_FUNCION_POR_DEFECTO		DWL::DAnimacion::FuncionesTiempo::CircularInOut
 
 

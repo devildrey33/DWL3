@@ -7,13 +7,28 @@ namespace DWL {
 
 	// Función para crear el marco
 	HWND DMarcoScrollEx::CrearMarcoScrollEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
+		
+		SkinScroll.FondoScrollNormal				= COLOR_SCROLL_OSCURO_FONDO;
+		SkinScroll.FondoScrollResaltado				= COLOR_SCROLL_OSCURO_FONDO_RESALTADO;
+		SkinScroll.FondoScrollPresionado			= COLOR_SCROLL_OSCURO_FONDO_PRESIONADO;
+		SkinScroll.BarraScrollNormal				= COLOR_SCROLL_OSCURO_BARRA;
+		SkinScroll.BarraScrollResaltado				= COLOR_SCROLL_OSCURO_BARRA_RESALTADO;
+		SkinScroll.BarraScrollPresionado			= COLOR_SCROLL_OSCURO_BARRA_PRESIONADO;
+		// Colores del orde del control (donde no hay nodos ni items)
+//		SkinScroll.BordeNormal						= COLOR_SCROLL_OSCURO_BORDE;
+//		SkinScroll.BordeResaltado					= COLOR_SCROLL_OSCURO_BORDE_RESALTADO;
+		// Colores del fondo del control (donde no hay nodos ni items)
+		SkinScroll.FondoNormal						= COLOR_SCROLL_OSCURO_CONTROL_FONDO;
+		SkinScroll.FondoResaltado					= COLOR_SCROLL_OSCURO_CONTROL_FONDO_RESALTADO;
+		ActualizarSkin();
+
 		// Creo el control principal con el marco y las barras de scroll
-		_hWnd = CrearControlEx(nPadre, L"DMarcoScrollEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL, NULL, _Aplicacion->_ColorFondoVentana);
+		_hWnd = CrearControlEx(nPadre, L"DMarcoScrollEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL, CS_HREDRAW | CS_VREDRAW, _Aplicacion->_ColorFondoVentana);
 		// Creo un control para que sea el marco sin las barras de scroll
-		_Marco.CrearControlEx(this, L"DMarcoScrollEx_Marco", L"", ID_PAGINA, 0, 0, cAncho, cAlto, WS_CHILD | WS_VISIBLE, NULL, NULL, _Aplicacion->_ColorFondoVentana);
+		_Marco.CrearControlEx(this, L"DMarcoScrollEx_Marco", L"", ID_PAGINA, 0, 0, cAncho, cAlto, WS_CHILD | WS_VISIBLE, NULL, CS_HREDRAW | CS_VREDRAW, _Aplicacion->_ColorFondoVentana);
 		// Creo un control dentro que se usara para mover todo el contenido
 		// Todos los controles creados dentro del MarcoScroll realmente se crean dentro del control _Pagina (Se redirige automáticamente desde DControlEx::CrearControlEx)
-		_Pagina.CrearControlEx(&_Marco, L"DMarcoScrollEx_Pagina", L"", ID_PAGINA, 0, 0, cAncho, cAlto, WS_CHILD | WS_VISIBLE, NULL, NULL, _Aplicacion->_ColorFondoVentana);
+		_Pagina.CrearControlEx(&_Marco, L"DMarcoScrollEx_Pagina", L"", ID_PAGINA, 0, 0, cAncho, cAlto, WS_CHILD | WS_VISIBLE, NULL, CS_HREDRAW | CS_VREDRAW, _Aplicacion->_ColorFondoVentana);
 		// Devuelvo el hWnd de este control
 		return _hWnd;
 	}
@@ -58,7 +73,9 @@ namespace DWL {
 			_ScrollH_Pagina = 1.0f;
 		}
 		else {
-			// 1.0 es el total
+			// Añado 10 pixeles de margen a la derecha
+			_AnchoPagina += 10;
+			// Calculo la proporcón horizontal de la página, de 0 a 1
 			_ScrollH_Pagina = (1.0f / _AnchoPagina) * static_cast<float>(RC.right);
 			// Si la suma de la posición del scroll y la pagina son más grandes que 100% 
 			if (_ScrollH_Posicion > 1.0f) {
@@ -72,6 +89,9 @@ namespace DWL {
 			_ScrollV_Pagina = 1.0f;
 		}
 		else {
+			// Añado 10 pixeles de margen abajo
+			_AltoPagina += 10;
+			// Calculo la proporcón vertical de la página, de 0 a 1
 			_ScrollV_Pagina = (1.0f / _AltoPagina) * static_cast<float>(RC.bottom);
 			// Si la suma de la posición del scroll y la pagina son más grandes que 100% 
 			if (_ScrollV_Posicion > 1.0f) {
@@ -109,9 +129,9 @@ namespace DWL {
 		RVC.right  -= RVM.left;
 		RVC.bottom -= RVM.top;
 		// Compruebo si el ancho es mas grande que el que hay guardado
-		if (This->_AnchoPagina < RVC.right) This->_AnchoPagina = RVC.right;
+		if (This->_AnchoPagina < RVC.right)		This->_AnchoPagina = RVC.right;
 		// Compruebo si el alto es mas grande que el que hay guardado
-		if (This->_AltoPagina < RVC.bottom)  This->_AltoPagina = RVC.bottom;
+		if (This->_AltoPagina < RVC.bottom)		This->_AltoPagina = RVC.bottom;
 		
 		// Continuo la enumeración
 		return TRUE;
@@ -189,10 +209,15 @@ namespace DWL {
 
 	// Función interna para cuando sale el mouse del control
 	void DMarcoScrollEx::_Evento_MouseSaliendo(void) {
-		BOOL nRepintar = Scrolls_MouseSaliendo();
-		_MouseDentro = FALSE;
-		Evento_MouseSaliendo();
-		if (nRepintar == TRUE) Repintar();
+		POINT Pt;
+		GetCursorPos(&Pt);
+		// Si la nueva ventana es una hija de esta, no ejecutamos el mouse leave
+//		if (IsChild(WindowFromPoint(Pt), _hWnd) != 0) {
+			BOOL nRepintar = Scrolls_MouseSaliendo();
+			_MouseDentro = FALSE;
+			Evento_MouseSaliendo();
+			if (nRepintar == TRUE) Repintar();
+//		}
 	}
 
 	void DMarcoScrollEx::_Evento_MousePresionado(const int Boton, WPARAM wParam, LPARAM lParam) {
@@ -223,10 +248,8 @@ namespace DWL {
 	void DMarcoScrollEx::_Evento_MouseRueda(WPARAM wParam, LPARAM lParam) {
 		DEventoMouseRueda DatosMouse(wParam, lParam, this);
 
-		//		RECT RW;
-		//		GetWindowRect(hWnd(), &RW);
-
-
+		RECT RC, RCS, RCB;
+		ObtenerRectaCliente(&RC, &RCS, &RCB);
 
 		if (DatosMouse.Delta() > 0) { // hacia arriba
 			_ScrollV_Posicion -= _ScrollV_Pagina / 10.0f;
@@ -237,20 +260,26 @@ namespace DWL {
 			if (_ScrollV_Posicion > 1.0f) _ScrollV_Posicion = 1.0f;
 		}
 
-//		_CalcularScrolls();
-		// Las coordenadas X e Y son relativas a la pantalla...
-//		LONG ncX = RW.left - DatosMouse.X();
-//		LONG ncY = RW.top - DatosMouse.Y();
-/*		_ItemResaltado = HitTest(DatosMouse.X(), DatosMouse.Y());
+		int PosX = static_cast<int>(static_cast<float>(_AnchoPagina - (RCS.right - RCS.left)) * _ScrollH_Posicion);
+		int PosY = static_cast<int>(static_cast<float>(_AltoPagina - (RCS.bottom - RCS.top)) * _ScrollV_Posicion);
+		SetWindowPos(_Pagina.hWnd(), NULL, -PosX, -PosY, 0, 0, SWP_NOSIZE);
 
-		if (_ItemUResaltado != -1) _Items[_ItemUResaltado]->_TransicionNormal();
-		if (_ItemResaltado != -1)  _Items[_ItemResaltado]->_TransicionResaltado();
-
-		_ItemUResaltado = _ItemResaltado;*/
 
 		Evento_MouseRueda(DatosMouse);
 		Repintar();
 	}
+
+	void DMarcoScrollEx::Scrolls_EventoCambioPosicion(void) {
+		RECT RC, RCS, RCB;
+		ObtenerRectaCliente(&RC, &RCS, &RCB);
+
+		// Resto la página al área total, y lo multiplico por el valor de la posición
+		int PosX = static_cast<int>(static_cast<float>(_AnchoPagina - (RCS.right - RCS.left)) * _ScrollH_Posicion);
+		int PosY = static_cast<int>(static_cast<float>(_AltoPagina - (RCS.bottom - RCS.top)) * _ScrollV_Posicion);
+
+		SetWindowPos(_Pagina.hWnd(), NULL, -PosX, -PosY, 0, 0, SWP_NOSIZE);
+	}
+
 
 	// Gestor de mensages para el marco
 	LRESULT CALLBACK DMarcoScrollEx::GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -293,6 +322,7 @@ namespace DWL {
 	// Gestor de mensages para la página
 	LRESULT CALLBACK DMarcoScrollEx::DMarcoScrollEx_Pagina::GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg) {
+			// Lista de mensajes que se pasaran a DMarcoScrollEx
 			case DWL_BARRAEX_CAMBIANDO :
 			case DWL_BARRAEX_CAMBIADO :
 			case DWL_BOTONEX_MOUSEDOWN :
@@ -301,11 +331,13 @@ namespace DWL {
 			case DWL_ARBOLEX_MOUSEPRESIONADO :
 			case DWL_ARBOLEX_MOUSESOLTADO :
 			case DWL_ARBOLEX_MOUSEMOVIMIENTO :
-			case DWL_ARBOLEX_DOBLECLICK :
+			case DWL_ARBOLEX_DOBLECLICK:
+			case DWL_ARBOLEX_CLICK:
 			case DWL_LISTAEX_MOUSEPRESIONADO :
 			case DWL_LISTAEX_MOUSESOLTADO :
 			case DWL_LISTAEX_MOUSEMOVIMIENTO :
-			case DWL_LISTAEX_DOBLECLICK :
+			case DWL_LISTAEX_DOBLECLICK:
+			case DWL_LISTAEX_CLICK:
 			case DWL_MARCAEX_CLICK :
 			case DWL_EDICIONTEXTOEX_CLICK :
 			case DWL_EDICIONTEXTOEX_CAMBIO :

@@ -113,8 +113,6 @@ namespace DWL {
 	*/
 	void DBarraScrollEx::ObtenerRectasScroll(RECT &IN_RC, RECT &OUT_RectaH, RECT &OUT_RectaV) {
 		RECT RC = IN_RC;
-		// Quito el borde
-//		RC.left += 2; RC.top += 2; RC.right -= 2; RC.bottom -= 2;
 		// Calculo las rectas V y H
 		OUT_RectaH = RC; OUT_RectaH.top = OUT_RectaH.bottom - _ScrollH_Alto;
 		OUT_RectaV = RC; OUT_RectaV.left = OUT_RectaV.right - _ScrollV_Ancho;
@@ -130,8 +128,6 @@ namespace DWL {
 		// Obtengo la recta cliente
 		RECT Recta;
 		GetClientRect(hWnd(), &Recta);
-		// Quito el borde
-//		Recta.left += 2; Recta.top += 2; Recta.right -= 2; Recta.bottom -= 2;
 		// Calculo las rectas V y H
 		RectaH = Recta; RectaH.top = RectaH.bottom - _ScrollH_Alto;
 		RectaV = Recta; RectaV.left = RectaV.right - _ScrollV_Ancho;

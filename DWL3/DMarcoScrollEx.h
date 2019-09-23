@@ -61,6 +61,8 @@ namespace DWL {
 		virtual void				Evento_MouseSoltado(DEventoMouse &DatosMouse)													{ };
 		virtual void                Evento_MouseRueda(DEventoMouseRueda &DatosMouse)												{ };
 
+		void						Scrolls_EventoCambioPosicion(void);
+
 									// Gestor de mensages virtual para el marco
 		virtual LRESULT CALLBACK	GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	  protected: /////////////////////
