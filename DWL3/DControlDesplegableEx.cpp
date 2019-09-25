@@ -21,7 +21,10 @@ namespace DWL {
 */
 
 
-	DControlDesplegableEx::DControlDesplegableEx(void)  {
+	DControlDesplegableEx::DControlDesplegableEx(void) : 
+		// Eventos Lambda enlazados a los eventos virtuales por defecto
+		EventoDesplegar([=](void)	{ Evento_Desplegar();	}),
+		EventoCambiado([=](void)	{ Evento_Cambiado();	})  {
 	}
 
 
@@ -43,7 +46,7 @@ namespace DWL {
 		switch (uMsg) {
 			case DWL_BOTONEX_CLICK:
 			case DWL_EDICIONTEXTOEX_CLICK:
-				Evento_Desplegar();
+				EventoDesplegar();
 				return 0;
 		}
 		return DControlEx::GestorMensajes(uMsg, wParam, lParam);

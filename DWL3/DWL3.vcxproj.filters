@@ -55,12 +55,6 @@
     <Filter Include="Ventanas\Dialogos Comunes\DlgDirectorios">
       <UniqueIdentifier>{ae1808ea-a56a-4b9c-ba96-0edfbff07ccb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ventanas\ControlesEx\ArbolEx">
-      <UniqueIdentifier>{242195a2-a614-4212-97bf-eede584cfa8e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ventanas\ControlesEx\BarraDesplazamientoEx">
-      <UniqueIdentifier>{e8d9f4ed-d8a6-48b6-a5b4-d34410f63c98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Ventanas\ControlesEx\BarraProgresoEx">
       <UniqueIdentifier>{dac0bdf3-4c53-43d6-9113-e651b2078ace}</UniqueIdentifier>
     </Filter>
@@ -81,9 +75,6 @@
     </Filter>
     <Filter Include="Ventanas\ControlesEx\ExplorarDirectoriosEx">
       <UniqueIdentifier>{0199187c-430a-4dc7-b7f9-a6e28e3912bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ventanas\ControlesEx\ListaEx">
-      <UniqueIdentifier>{30b13198-d159-4896-af89-ff0bc33d98c7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Ventanas\ControlesEx\MarcaEx">
       <UniqueIdentifier>{6341557d-e0fe-4880-9ec9-4318853bab17}</UniqueIdentifier>
@@ -118,7 +109,16 @@
     <Filter Include="Sistema\ArchivoInternet">
       <UniqueIdentifier>{fd53a755-536d-4340-a5c3-6ea94ba375dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ventanas\ControlesEx\MarcoScrollEx">
+    <Filter Include="Ventanas\ControlesEx\BarraProgresoEx\BarraDesplazamientoEx">
+      <UniqueIdentifier>{e8d9f4ed-d8a6-48b6-a5b4-d34410f63c98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ventanas\ControlesEx\BarraScrollEx\ArbolEx">
+      <UniqueIdentifier>{242195a2-a614-4212-97bf-eede584cfa8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ventanas\ControlesEx\BarraScrollEx\ListaEx">
+      <UniqueIdentifier>{30b13198-d159-4896-af89-ff0bc33d98c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ventanas\ControlesEx\BarraScrollEx\MarcoScrollEx">
       <UniqueIdentifier>{d1a31b8b-91b3-4f4a-a3c8-132eeed346b2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -184,13 +184,13 @@
       <Filter>Ventanas\Dialogos Comunes\DlgDirectorios</Filter>
     </ClInclude>
     <ClInclude Include="DArbolEx.h">
-      <Filter>Ventanas\ControlesEx\ArbolEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ArbolEx</Filter>
     </ClInclude>
     <ClInclude Include="DArbolEx_Nodo.h">
-      <Filter>Ventanas\ControlesEx\ArbolEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ArbolEx</Filter>
     </ClInclude>
     <ClInclude Include="DBarraDesplazamientoEx.h">
-      <Filter>Ventanas\ControlesEx\BarraDesplazamientoEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraProgresoEx\BarraDesplazamientoEx</Filter>
     </ClInclude>
     <ClInclude Include="DBarraProgresoEx.h">
       <Filter>Ventanas\ControlesEx\BarraProgresoEx</Filter>
@@ -211,16 +211,16 @@
       <Filter>Ventanas\ControlesEx\BotonEx</Filter>
     </ClInclude>
     <ClInclude Include="DListaEx.h">
-      <Filter>Ventanas\ControlesEx\ListaEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ListaEx</Filter>
     </ClInclude>
     <ClInclude Include="DListaEx_Columna.h">
-      <Filter>Ventanas\ControlesEx\ListaEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ListaEx</Filter>
     </ClInclude>
     <ClInclude Include="DListaEx_Item.h">
-      <Filter>Ventanas\ControlesEx\ListaEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ListaEx</Filter>
     </ClInclude>
     <ClInclude Include="DListaEx_SubItem.h">
-      <Filter>Ventanas\ControlesEx\ListaEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ListaEx</Filter>
     </ClInclude>
     <ClInclude Include="DEtiquetaEx.h">
       <Filter>Ventanas\ControlesEx\EtiquetaEx</Filter>
@@ -280,7 +280,7 @@
       <Filter>Sistema\ArchivoInternet</Filter>
     </ClInclude>
     <ClInclude Include="DMarcoScrollEx.h">
-      <Filter>Ventanas\ControlesEx\MarcoScrollEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\MarcoScrollEx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -330,13 +330,13 @@
       <Filter>Ventanas\Dialogos Comunes\DlgDirectorios</Filter>
     </ClCompile>
     <ClCompile Include="DArbolEx.cpp">
-      <Filter>Ventanas\ControlesEx\ArbolEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ArbolEx</Filter>
     </ClCompile>
     <ClCompile Include="DArbolEx_Nodo.cpp">
-      <Filter>Ventanas\ControlesEx\ArbolEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ArbolEx</Filter>
     </ClCompile>
     <ClCompile Include="DBarraDesplazamientoEx.cpp">
-      <Filter>Ventanas\ControlesEx\BarraDesplazamientoEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraProgresoEx\BarraDesplazamientoEx</Filter>
     </ClCompile>
     <ClCompile Include="DBarraProgresoEx.cpp">
       <Filter>Ventanas\ControlesEx\BarraProgresoEx</Filter>
@@ -357,16 +357,16 @@
       <Filter>Ventanas\ControlesEx\BotonEx</Filter>
     </ClCompile>
     <ClCompile Include="DListaEx.cpp">
-      <Filter>Ventanas\ControlesEx\ListaEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ListaEx</Filter>
     </ClCompile>
     <ClCompile Include="DListaEx_Columna.cpp">
-      <Filter>Ventanas\ControlesEx\ListaEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ListaEx</Filter>
     </ClCompile>
     <ClCompile Include="DListaEx_Item.cpp">
-      <Filter>Ventanas\ControlesEx\ListaEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ListaEx</Filter>
     </ClCompile>
     <ClCompile Include="DListaEx_SubItem.cpp">
-      <Filter>Ventanas\ControlesEx\ListaEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\ListaEx</Filter>
     </ClCompile>
     <ClCompile Include="DEtiquetaEx.cpp">
       <Filter>Ventanas\ControlesEx\EtiquetaEx</Filter>
@@ -417,7 +417,7 @@
       <Filter>Sistema\ArchivoInternet</Filter>
     </ClCompile>
     <ClCompile Include="DMarcoScrollEx.cpp">
-      <Filter>Ventanas\ControlesEx\MarcoScrollEx</Filter>
+      <Filter>Ventanas\ControlesEx\BarraScrollEx\MarcoScrollEx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

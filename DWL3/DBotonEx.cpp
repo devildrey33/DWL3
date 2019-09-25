@@ -35,7 +35,20 @@ namespace DWL {
 
 
 
-	DBotonEx::DBotonEx(void) : DControlEx(), _Marcado(FALSE), _PosIconoX(-1), _PosIconoY(-1), _ColorFondo(Skin.FondoNormal), _ColorBorde(Skin.BordeNormal), _ColorTexto(Skin.TextoNormal), _Estado(DBotonEx_Estado_Normal) {
+	DBotonEx::DBotonEx(void) : 
+		DControlEx()																	, 
+		_Marcado(FALSE)																	, 
+		_PosIconoX(-1)																	,
+		_PosIconoY(-1)																	,
+		_ColorFondo(Skin.FondoNormal)													,
+		_ColorBorde(Skin.BordeNormal)													,
+		_ColorTexto(Skin.TextoNormal)													,
+		_Estado(DBotonEx_Estado_Normal)													,	
+		// Eventos Lambda enlazados a los eventos virtuales por defecto
+		EventoMouseMovimiento([=](DEventoMouse &e)		{ Evento_MouseMovimiento(e);	}),
+		EventoMousePresionado([=](DEventoMouse& e)		{ Evento_MousePresionado(e);	}),
+		EventoMouseSoltado([=](DEventoMouse& e)			{ Evento_MouseSoltado(e);		}),
+		EventoMouseClick([=](DEventoMouse& e)			{ Evento_MouseClick(e);			})	{
 	}
 
 
@@ -170,7 +183,7 @@ namespace DWL {
 			}
 		}
 
-		Evento_MouseMovimiento(DatosMouse);
+		EventoMouseMovimiento(DatosMouse);
 	}
 
 
@@ -243,7 +256,7 @@ namespace DWL {
 		Transicion(DBotonEx_Transicion_Presionado);
 		_Estado = DBotonEx_Estado_Presionado;
 		SendMessage(GetParent(hWnd()), DWL_BOTONEX_MOUSEDOWN, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
-		Evento_MousePresionado(DatosMouse);
+		EventoMousePresionado(DatosMouse);
 	}
 
 	void DBotonEx::_Evento_MouseSoltado(const WPARAM wParam, const LPARAM lParam, const int Boton) {		
@@ -259,14 +272,15 @@ namespace DWL {
 			RECT RC;
 			GetClientRect(hWnd(), &RC);
 
-			Evento_MouseSoltado(DatosMouse);
+			EventoMouseSoltado(DatosMouse);
 			SendMessage(GetParent(hWnd()), DWL_BOTONEX_MOUSEUP, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
 
 			POINT Pt = { DatosMouse.X(), DatosMouse.Y() };
+			// Si el mouse está dentro del control
 			if (PtInRect(&RC, Pt) != 0) {
 				_Estado = DBotonEx_Estado_Resaltado;
 				Transicion(DBotonEx_Transicion_Resaltado);
-				Evento_MouseClick(DatosMouse);
+				EventoMouseClick(DatosMouse);
 				SendMessage(GetParent(hWnd()), DWL_BOTONEX_CLICK, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
 			}
 			else {

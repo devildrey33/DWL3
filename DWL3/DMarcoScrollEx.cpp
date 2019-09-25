@@ -5,12 +5,26 @@ namespace DWL {
 
 	#define ID_PAGINA 33
 
+
+
+	DMarcoScrollEx::DMarcoScrollEx(void) : 
+		DBarraScrollEx()																, 
+		_AnchoPagina(0)																	, 
+		_AltoPagina(0)																	,
+		EventoMouseEntrando([=](void)					{ Evento_MouseEntrando();		}),
+		EventoMouseSaliendo([=](void)					{ Evento_MouseSaliendo();		}),
+		EventoMouseMovimiento([=](DEventoMouse &e)		{ Evento_MouseMovimiento(e);	}),
+		EventoMousePresionado([=](DEventoMouse& e)		{ Evento_MousePresionado(e);	}),
+		EventoMouseSoltado([=](DEventoMouse& e)			{ Evento_MouseSoltado(e);		}),
+		EventoMouseRueda([=](DEventoMouseRueda& e)		{ Evento_MouseRueda(e);			})	{
+	}
+
 	// Función para crear el marco
 	HWND DMarcoScrollEx::CrearMarcoScrollEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
 		
 		SkinScroll.FondoScrollNormal				= COLOR_SCROLL_OSCURO_FONDO;
 		SkinScroll.FondoScrollResaltado				= COLOR_SCROLL_OSCURO_FONDO_RESALTADO;
-		SkinScroll.FondoScrollPresionado			= COLOR_SCROLL_OSCURO_FONDO_PRESIONADO;
+		SkinScroll.FondoScrollPresionado			= COLOR_SCROLL_OSCURO_FONDO;
 		SkinScroll.BarraScrollNormal				= COLOR_SCROLL_OSCURO_BARRA;
 		SkinScroll.BarraScrollResaltado				= COLOR_SCROLL_OSCURO_BARRA_RESALTADO;
 		SkinScroll.BarraScrollPresionado			= COLOR_SCROLL_OSCURO_BARRA_PRESIONADO;
@@ -199,12 +213,12 @@ namespace DWL {
 		DEventoMouse DatosMouse(wParam, lParam, this);
 		// Utilizo la función _MouseEntrando() para poder recibir los mensajes WM_MOUSELEAVE
 		if (_MouseEntrando() == TRUE) {
-			Evento_MouseEntrando();
+			EventoMouseEntrando();
 			Scrolls_MouseEntrando();
 		}
 
 		if (Scrolls_MouseMovimiento(DatosMouse) == TRUE) { return; } // las coordenadas pertenecen al scroll (salgo del evento)
-		Evento_MouseMovimiento(DatosMouse);
+		EventoMouseMovimiento(DatosMouse);
 	}
 
 	// Función interna para cuando sale el mouse del control
@@ -215,7 +229,7 @@ namespace DWL {
 //		if (IsChild(WindowFromPoint(Pt), _hWnd) != 0) {
 			BOOL nRepintar = Scrolls_MouseSaliendo();
 			_MouseDentro = FALSE;
-			Evento_MouseSaliendo();
+			EventoMouseSaliendo();
 			if (nRepintar == TRUE) Repintar();
 //		}
 	}
@@ -227,7 +241,7 @@ namespace DWL {
 		if (Scrolls_MousePresionado(DatosMouse) == TRUE) { return; }
 
 		// Evento virtual
-		Evento_MousePresionado(DatosMouse);
+		EventoMousePresionado(DatosMouse);
 
 	}
 
@@ -241,7 +255,7 @@ namespace DWL {
 		if (Scrolls_MouseSoltado(DatosMouse) == TRUE) { return; }
 
 		// Evento virtual
-		Evento_MouseSoltado(DatosMouse);
+		EventoMouseSoltado(DatosMouse);
 
 	}
 
@@ -265,7 +279,7 @@ namespace DWL {
 		SetWindowPos(_Pagina.hWnd(), NULL, -PosX, -PosY, 0, 0, SWP_NOSIZE);
 
 
-		Evento_MouseRueda(DatosMouse);
+		EventoMouseRueda(DatosMouse);
 		Repintar();
 	}
 

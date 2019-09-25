@@ -72,7 +72,7 @@ namespace DWL {
 		void							ObtenerRectaBarraScrollV(RECT &RectaScroll, RECT &RectaBarra);
 										// Obtiene el área de la barra dentro del scroll horizontal
 		void							ObtenerRectaBarraScrollH(RECT &RectaScroll, RECT &RectaBarra);
-
+										// Evento virtual que salta al cambiar de posición el scroll (NO TIENE LAMBDA)
 		virtual void					Scrolls_EventoCambioPosicion(void) { };
 		////////////////////////////////// ScrollH
 		void							ScrollH_Pagina(const float nValor);

@@ -56,17 +56,33 @@ namespace DWL {
 }
 
 
+
+
 	DArbolEx::DArbolEx(void) : DBarraScrollEx(),
-  	  _NodoMarcado(NULL)		, _NodoShift(NULL)								, _PosShift(0)				, _TiempoTecladoTmp(0),			// Info nodo Marcado y Shift
-	  _NodoPresionado(NULL)		, _NodoPresionadoParte(DArbolEx_ParteNodo_Nada)	, _Repintar(FALSE)			, _NodoUltimaBusqueda(NULL),	// Info nodo presionado
-	  _NodoResaltado(NULL)		, _NodoResaltadoParte(DArbolEx_ParteNodo_Nada)	, MultiSeleccion(TRUE)		, _MaxAltoNodo(0),				// Info nodo resaltado
-	  _NodoUResaltado(NULL)		, _NodoUResaltadoParte(DArbolEx_ParteNodo_Nada)	, SubSeleccion(FALSE)		,								// Info ultimo nodo resaltado (para evitar repintados innecesarios en el mousemove)
-	  _TotalAnchoVisible(0)		, _TotalAltoVisible(0)							, _ExpansorPorDefecto(DArbolEx_Expansor_TrianguloLinea),	// tamaño y el expansor por defecto
-	  _NodoPaginaInicio(NULL)	, _NodoPaginaFin(NULL)							, _NodoPaginaVDif(0)		, _NodoPaginaHDif(0),			// Nodo inicial y final de la página visible
-	  _BufferNodo(NULL)			, _BufferNodoBmp(NULL)							, _BufferNodoBmpViejo(NULL)								  {	// Buffer para pintar un solo nodo
+  	    _NodoMarcado(NULL)			, _NodoShift(NULL)								, _PosShift(0)				, _TiempoTecladoTmp(0),			// Info nodo Marcado y Shift
+	    _NodoPresionado(NULL)		, _NodoPresionadoParte(DArbolEx_ParteNodo_Nada)	, _Repintar(FALSE)			, _NodoUltimaBusqueda(NULL),	// Info nodo presionado
+	    _NodoResaltado(NULL)		, _NodoResaltadoParte(DArbolEx_ParteNodo_Nada)	, MultiSeleccion(TRUE)		, _MaxAltoNodo(0),				// Info nodo resaltado
+	    _NodoUResaltado(NULL)		, _NodoUResaltadoParte(DArbolEx_ParteNodo_Nada)	, SubSeleccion(FALSE)		,								// Info ultimo nodo resaltado (para evitar repintados innecesarios en el mousemove)
+	    _TotalAnchoVisible(0)		, _TotalAltoVisible(0)							, _ExpansorPorDefecto(DArbolEx_Expansor_TrianguloLinea),	// tamaño y el expansor por defecto
+	    _NodoPaginaInicio(NULL)		, _NodoPaginaFin(NULL)							, _NodoPaginaVDif(0)		, _NodoPaginaHDif(0),			// Nodo inicial y final de la página visible
+	    _BufferNodo(NULL)			, _BufferNodoBmp(NULL)							, _BufferNodoBmpViejo(NULL) ,								// Buffer para pintar un solo nodo
+		// Eventos Lambda enlazados a los eventos virtuales por defecto
+		EventoMouseEntrando([=](void)					{ Evento_MouseEntrando();		}),
+		EventoMouseSaliendo([=](void)					{ Evento_MouseSaliendo();		}),
+		EventoMouseMovimiento([=](DEventoMouse &e)		{ Evento_MouseMovimiento(e);	}),
+		EventoMousePresionado([=](DEventoMouse& e)		{ Evento_MousePresionado(e);	}),
+		EventoMouseSoltado([=](DEventoMouse& e)			{ Evento_MouseSoltado(e);		}),
+		EventoMouseClick([=](DEventoMouse& e)			{ Evento_MouseClick(e);			}),
+		EventoMouseRueda([=](DEventoMouseRueda& e)		{ Evento_MouseRueda(e);			}),
+		EventoMouseDobleClick([=](DEventoMouse& e)		{ Evento_MouseDobleClick(e);	}),
+		EventoTeclaPresionada([=](DEventoTeclado& e)	{ Evento_TeclaPresionada(e);	}),
+		EventoTeclaSoltada([=](DEventoTeclado& e)		{ Evento_TeclaSoltada(e);		}),
+		EventoTecla([=](DEventoTeclado& e)				{ Evento_Tecla(e);				}),
+		EventoFocoObtenido([=](HWND h)					{ Evento_FocoObtenido(h);		}),
+		EventoFocoPerdido([=](HWND h)					{ Evento_FocoPerdido(h);		})		{
 
 		_Raiz.Expandido = TRUE;
-		_Raiz._Arbol = this;
+		_Raiz._Arbol	= this;
 //		ColorFondoScroll = COLOR_ARBOL_FONDO_SCROLL;
 	};
 
@@ -1033,7 +1049,7 @@ namespace DWL {
 		_NodoResaltado = HitTest(cX, cY, _NodoResaltadoParte);
 
 		// Eventos virtuales
-		Evento_MouseMovimiento(DatosMouse);
+		EventoMouseMovimiento(DatosMouse);
 		SendMessage(GetParent(hWnd()), DWL_ARBOLEX_MOUSEMOVIMIENTO, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
 
 		if (_NodoPresionado == NULL) {
@@ -1120,7 +1136,7 @@ namespace DWL {
 			}
 		}
 
-		Evento_MousePresionado(DatosMouse);
+		EventoMousePresionado(DatosMouse);
 
 		Repintar();
 
@@ -1176,7 +1192,7 @@ namespace DWL {
 
 
 		// Llamo al evento virtual
-		Evento_MouseSoltado(DatosMouse);
+		EventoMouseSoltado(DatosMouse);
 		// Envio el evento mouseup a la ventana padre
 		SendMessage(GetParent(hWnd()), DWL_ARBOLEX_MOUSESOLTADO, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
 		// Compruebo si el mouse está dentro del control
@@ -1184,6 +1200,8 @@ namespace DWL {
 		POINT Pt = { DatosMouse.X(), DatosMouse.Y() };
 		GetClientRect(_hWnd, &RC);
 		if (PtInRect(&RC, Pt) == TRUE) {
+			// Evento lambda para el click
+			EventoMouseClick(DatosMouse);
 			// Envio el evento del click a la ventana padre (solo si el mouse está dentro de la lista)
 			SendMessage(GetParent(hWnd()), DWL_ARBOLEX_CLICK, reinterpret_cast<WPARAM>(&DatosMouse), 0);
 		}
@@ -1224,7 +1242,7 @@ namespace DWL {
 		if (_NodoResaltado != NULL)  _NodoResaltado->_TransicionResaltado();
 		
 
-		Evento_MouseRueda(DatosMouse);
+		EventoMouseRueda(DatosMouse);
 		Repintar();
 
 		// Envio el evento click a la ventana padre
@@ -1446,7 +1464,7 @@ namespace DWL {
 
 		// Si no hay nodos, salgo de la función
 		if (_Raiz._Hijos.size() == 0) {
-			Evento_TeclaPresionada(DatosTeclado);
+			EventoTeclaPresionada(DatosTeclado);
 			return;
 		}
 		
@@ -1462,10 +1480,10 @@ namespace DWL {
 			case VK_SUBTRACT	: Expandir(_NodoMarcado, FALSE);																		break; // -
 			case VK_PRIOR		: _Tecla_RePag(DatosTeclado.Shift());																	break; // RePag
 			case VK_NEXT		: _Tecla_AvPag(DatosTeclado.Shift());																	break; // AvPag
-			default				: Evento_Tecla(DatosTeclado);																			break; // if (Caracter >= 0x30 && Caracter <= 0x5A) // Cualquier tecla valida
+			default				: EventoTecla(DatosTeclado);																			break; // if (Caracter >= 0x30 && Caracter <= 0x5A) // Cualquier tecla valida
 		}
 
-		DWORD Tiempo = GetTickCount();
+		ULONGLONG Tiempo = GetTickCount64();
 
 		// Se ha pasado del tiempo, borro el string
 		if (_TiempoTecladoTmp + TIEMPO_TECLADO < Tiempo) {
@@ -1494,7 +1512,7 @@ namespace DWL {
 						#if DARBOLEX_MOSTRARDEBUG == TRUE
 							Debug_Escribir_Varg(L"DArbolEx::_Evento_TeclaPresionada (Txt : '%s', Nodo : '%s')\n", _TecladoTmp.c_str(), _NodoUltimaBusqueda->Texto.c_str());
 						#endif
-						Evento_Tecla(DatosTeclado);
+						EventoTecla(DatosTeclado);
 						return;
 					}
 				}
@@ -1514,7 +1532,7 @@ namespace DWL {
 			MessageBeep(0xFFFFFFFF);
 		}
 
-		Evento_TeclaPresionada(DatosTeclado);
+		EventoTeclaPresionada(DatosTeclado);
 	}
 
 	void DArbolEx::_Evento_TeclaSoltada(WPARAM wParam, LPARAM lParam) {
@@ -1523,7 +1541,7 @@ namespace DWL {
 
 		// Si no hay nodos, salgo de la función
 		if (_Raiz._Hijos.size() == 0) {
-			Evento_TeclaSoltada(DatosTeclado);
+			EventoTeclaSoltada(DatosTeclado);
 			return;
 		}
 
@@ -1532,7 +1550,7 @@ namespace DWL {
 			_PosShift = 0;
 		}
 
-		Evento_TeclaSoltada(DatosTeclado);
+		EventoTeclaSoltada(DatosTeclado);
 	}
 
 	/* TODO */
@@ -1543,7 +1561,7 @@ namespace DWL {
 			UINT Tecla = DatosTeclado.TeclaVirtual();
 		}
 
-		Evento_Tecla(DatosTeclado);
+		EventoTecla(DatosTeclado);
 	}
 
 	const BOOL DArbolEx::_StringEmpiezaPor(std::wstring &String1, std::wstring &String2) {
@@ -1581,7 +1599,7 @@ namespace DWL {
 		if (_NodoResaltado != NULL) _NodoResaltado->_TransicionNormal();
 
 		_NodoResaltado = NULL;
-		Evento_MouseSaliendo();
+		EventoMouseSaliendo();
 		if (nRepintar == TRUE) Repintar();
 	}
 
@@ -1600,18 +1618,18 @@ namespace DWL {
 			SeleccionarNodo(_NodoMarcado, TRUE);
 		}
 
-		Evento_MouseDobleClick(DatosMouse);
+		EventoMouseDobleClick(DatosMouse);
 	}
 
 
 	void DArbolEx::_Evento_FocoObtenido(HWND hWndUltimoFoco) {
 //		BorrarBufferTeclado();
-		Evento_FocoObtenido(hWndUltimoFoco);
+		EventoFocoObtenido(hWndUltimoFoco);
 	}
 
 	void DArbolEx::_Evento_FocoPerdido(HWND hWndNuevoFoco) {
 //		BorrarBufferTeclado();
-		Evento_FocoPerdido(hWndNuevoFoco);
+		EventoFocoPerdido(hWndNuevoFoco);
 	}
 
 	LRESULT CALLBACK DArbolEx::GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {

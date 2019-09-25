@@ -158,21 +158,36 @@ namespace DWL {
 		void                                            PintarExpansorTrianguloLinea(HDC hDC, RECT *Espacio, DArbolEx_Nodo *nNodo, const int AnchoOcupado);
 
 		void											Scrolls_EventoCambioPosicion(void);
-														// Eventos virtuales
+														// Eventos virtuales y funciones lambda asociadas a estos
 		virtual void          							Evento_MouseEntrando(void)																	{ };
+		std::function<void(void)>						EventoMouseEntrando;
 		virtual void									Evento_MouseSaliendo(void)																	{ };
+		std::function<void(void)>						EventoMouseSaliendo;
 		virtual void									Evento_MouseMovimiento(DEventoMouse &DatosMouse)											{ };
+		std::function<void(DEventoMouse &)>				EventoMouseMovimiento;
 		virtual void									Evento_MousePresionado(DEventoMouse &DatosMouse)											{ };
+		std::function<void(DEventoMouse &)>				EventoMousePresionado;
 		virtual void									Evento_MouseSoltado(DEventoMouse &DatosMouse)												{ };
+		std::function<void(DEventoMouse&)>				EventoMouseSoltado;
+		virtual void									Evento_MouseClick(DEventoMouse &DatosMouse)													{ };
+		std::function<void(DEventoMouse&)>				EventoMouseClick;
 		virtual void                                    Evento_MouseRueda(DEventoMouseRueda &DatosMouse)											{ };
+		std::function<void(DEventoMouseRueda&)>			EventoMouseRueda;
 		virtual void									Evento_MouseDobleClick(DEventoMouse &DatosMouse)											{ };
+		std::function<void(DEventoMouse&)>				EventoMouseDobleClick;
 
 		virtual void                                    Evento_TeclaPresionada(DEventoTeclado &DatosTeclado)										{ };
+		std::function<void(DEventoTeclado&)>			EventoTeclaPresionada;
 		virtual void                                    Evento_TeclaSoltada(DEventoTeclado &DatosTeclado)											{ };
+		std::function<void(DEventoTeclado&)>			EventoTeclaSoltada;
 		virtual void									Evento_Tecla(DEventoTeclado &DatosTeclado)													{ };
+		std::function<void(DEventoTeclado&)>			EventoTecla;
 
 		virtual void                                    Evento_FocoObtenido(HWND hWndUltimoFoco)													{ };
+		std::function<void(HWND)>						EventoFocoObtenido;
 		virtual void                                    Evento_FocoPerdido(HWND hWndNuevoFoco)														{ };
+		std::function<void(HWND)>						EventoFocoPerdido;
+
 														// Al expandir / contraer un nodo
 		virtual void									Evento_Nodo_Expandido(DWL::DArbolEx_Nodo *nNodo, const BOOL nExpandido)						{ };
 
@@ -290,7 +305,7 @@ namespace DWL {
 		LONG										   _NodoPaginaHDif;
 
 		std::wstring                                   _TecladoTmp;
-		DWORD                                          _TiempoTecladoTmp;
+		ULONGLONG                                      _TiempoTecladoTmp;
 		const BOOL                                     _StringEmpiezaPor(std::wstring &String1, std::wstring &String2);
 		DArbolEx_Nodo                                 *_NodoUltimaBusqueda;
 

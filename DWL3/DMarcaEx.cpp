@@ -35,7 +35,20 @@ namespace DWL {
 
 	#define DMARCAEX_TAMICONO 16
 
-	DMarcaEx::DMarcaEx(void): _Estado(DMarcaEx_Estado_Normal), _Marcado(FALSE), _ColorFondoMarca(Skin.FondoMarcaNormal), _ColorFondo(Skin.FondoNormal), _ColorTexto(Skin.TextoNormal), _ColorBorde(Skin.BordeNormal) {	}
+	DMarcaEx::DMarcaEx(void): 
+		_Estado(DMarcaEx_Estado_Normal)												,
+		_Marcado(FALSE)																, 
+		_ColorFondoMarca(Skin.FondoMarcaNormal)										,								
+		_ColorFondo(Skin.FondoNormal)												,
+		_ColorTexto(Skin.TextoNormal)												,
+		_ColorBorde(Skin.BordeNormal)												,
+		// Eventos Lambda enlazados a los eventos virtuales por defecto
+		EventoMouseSaliendo([=](void)				{ Evento_MouseSaliendo();		}),
+		EventoMouseMovimiento([=](DEventoMouse& e)	{ Evento_MouseMovimiento(e);	}),
+		EventoMousePresionado([=](DEventoMouse& e)	{ Evento_MousePresionado(e);	}),
+		EventoMouseSoltado([=](DEventoMouse& e)		{ Evento_MouseSoltado(e);		}),
+		EventoMouseClick([=](DEventoMouse& e)		{ Evento_MouseClick(e);			})  {
+	}
 
 
 	DMarcaEx::~DMarcaEx(void) {
@@ -197,7 +210,7 @@ namespace DWL {
 //				Resaltar(TRUE);
 			}
 		}
-		Evento_MouseMovimiento(DatosMouse);
+		EventoMouseMovimiento(DatosMouse);
 
 //		if (nRepintar == TRUE)	Repintar();
 	}
@@ -206,7 +219,7 @@ namespace DWL {
 		DEventoMouse DatosMouse(wParam, lParam, this, Boton);
 		SetCapture(hWnd());
 		_Estado = DMarcaEx_Estado_Presionado;
-		Evento_MousePresionado(DatosMouse);
+		EventoMousePresionado(DatosMouse);
 		//Repintar();
 		Transicion(DMarcaEx_Transicion_Presionado);
 	}
@@ -226,6 +239,7 @@ namespace DWL {
 				Transicion(DMarcaEx_Transicion_Resaltado);
 				_Marcado = !_Marcado;
 				SendMessage(GetParent(hWnd()), DWL_MARCAEX_CLICK, reinterpret_cast<WPARAM>(&DatosMouse), 0);
+				EventoMouseClick(DatosMouse);
 			}
 			else {
 //				Transicion(DMarcaEx_Transicion_Normal);		No hace falta (salta el mouseleave)
@@ -233,7 +247,7 @@ namespace DWL {
 			}
 //			nRepintar = TRUE;
 		}
-		Evento_MouseSoltado(DatosMouse);
+		EventoMouseSoltado(DatosMouse);
 //		if (nRepintar == TRUE)	Repintar();
 	}
 
@@ -246,7 +260,7 @@ namespace DWL {
 //			Resaltar(FALSE);
 			Transicion(DMarcaEx_Transicion_Normal);
 		}
-		Evento_MouseSaliendo();
+		EventoMouseSaliendo();
 //		if (nRepintar == TRUE)	Repintar();
 	}
 

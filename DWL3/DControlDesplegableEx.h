@@ -21,7 +21,12 @@ namespace DWL {
 	  public:
 									DControlDesplegableEx(void);
 		                           ~DControlDesplegableEx(void);
-		virtual void				Evento_Desplegar(void) { };
+		virtual void				Evento_Desplegar(void)			{ };
+		std::function<void(void)>	EventoDesplegar;
+		virtual void				Evento_Cambiado(void)			{ };
+		std::function<void(void)>	EventoCambiado;
+
+
 		virtual LRESULT CALLBACK	GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 //		void						Pintar(HDC DC);
 		void						CrearControlDesplegable(DhWnd *nPadre, const wchar_t *nTexto, const INT_PTR nID, const INT_PTR nIDIcono, const int cX, const int cY, const int cAncho, const int cAlto, const DEdicionTextoEx_Entrada Entrada);

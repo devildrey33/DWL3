@@ -35,7 +35,22 @@ namespace DWL {
 	}
 
 
-	DBarraProgresoEx::DBarraProgresoEx(void) : _Minimo(0), _Maximo(0), _Valor(0), _Estado(DBarraEx_Estado_Normal), _ColorBarra(Skin.BarraNormal), _ColorFondo(Skin.FondoNormal), _ColorBorde(Skin.BordeNormal), _MostrarValor(DBarraEx_MostrarValor_Nada), _Activado(TRUE), _Alineacion(IzquierdaDerecha) {
+	// Constructor
+	DBarraProgresoEx::DBarraProgresoEx(void) :
+		_Minimo(0)																				, 
+		_Maximo(0)																				,
+		_Valor(0)																				,
+		_Estado(DBarraEx_Estado_Normal)															, 
+		_ColorBarra(Skin.BarraNormal)															, 
+		_ColorFondo(Skin.FondoNormal)															, 
+		_ColorBorde(Skin.BordeNormal)															,
+		_MostrarValor(DBarraEx_MostrarValor_Nada)												,
+		_Activado(TRUE)																			,
+		_Alineacion(IzquierdaDerecha)															, 
+		_RBarra({ 0, 0, 0, 0 })																	, 
+		_RFondo({ 0, 0, 0, 0 })																	,
+		// Eventos Lambda enlazados a los eventos virtuales por defecto
+		EventoFormatearValor([=](std::wstring& v)		{ Evento_FormatearValor(v); })			 {
 	}
 
 
@@ -192,7 +207,8 @@ namespace DWL {
 				case DBarraEx_MostrarValor_ValorMaximo2Decimales:		TxtValor = DWL::Strings::ToStrF(_Valor, 2) + L" / " + DWL::Strings::ToStrF(_Maximo, 2);		break;
 				case DBarraEx_MostrarValor_ValorMaximoInt:				TxtValor = DWL::Strings::ToStrF(_Valor, 0) + L" / " + DWL::Strings::ToStrF(_Maximo, 0);		break;
 			}
-			Evento_FormatearValor(TxtValor);
+			EventoFormatearValor(TxtValor);
+//			Evento_FormatearValor(TxtValor);
 			SetBkMode(DC, TRANSPARENT);
 			if (Skin.FuenteSombraTexto == TRUE) {
 				SetTextColor(DC, Skin.TextoSombra);
@@ -262,6 +278,7 @@ namespace DWL {
 			}
 		}
 	}
+
 	void DBarraProgresoEx::_Evento_MouseSaliendo(void) {
 		_MouseDentro = FALSE;
 		if (_Estado != DBarraEx_Estado_Presionado) {

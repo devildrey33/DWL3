@@ -57,65 +57,70 @@ namespace DWL {
 
 	class DBotonEx : public DControlEx {
 	  public:
-									DBotonEx(void);
-				                   ~DBotonEx(void);
-									// Función que crea un BotonEx con texto
-		HWND						CrearBotonEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
-									// Función que crea un BotonEx con icono
-		HWND						CrearBotonEx(DhWnd *nPadre, const int IDIcono, const int TamIcono, const int PosIconoX, const int PosIconoY, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
-									// Función que crea un BotonEx con icono y texto
-		HWND						CrearBotonEx(DhWnd *nPadre, const int IDIcono, const int TamIcono, const int PosIconoX, const int PosIconoY, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
+											DBotonEx(void);
+									       ~DBotonEx(void);
+											// Función que crea un BotonEx con texto
+		HWND								CrearBotonEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
+											// Función que crea un BotonEx con icono
+		HWND								CrearBotonEx(DhWnd *nPadre, const int IDIcono, const int TamIcono, const int PosIconoX, const int PosIconoY, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
+											// Función que crea un BotonEx con icono y texto
+		HWND								CrearBotonEx(DhWnd *nPadre, const int IDIcono, const int TamIcono, const int PosIconoX, const int PosIconoY, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
 
-		virtual void				Activado(const BOOL nActivar);
-		inline const BOOL			Activado(void) { return DhWnd::Activado(); }
+		virtual void						Activado(const BOOL nActivar);
+		inline const BOOL					Activado(void)										{ return DhWnd::Activado(); }
 		
-		void						Pintar(HDC DC, const int nX = 0, const int nY = 0);
+		void								Pintar(HDC DC, const int nX = 0, const int nY = 0);
 	
-		virtual void				Evento_MouseMovimiento(DEventoMouse &DatosMouse)	{ };
-		virtual void				Evento_MousePresionado(DEventoMouse &DatosMouse)	{ };
-		virtual void				Evento_MouseSoltado(DEventoMouse &DatosMouse)		{ };
-		virtual void				Evento_MouseClick(DEventoMouse &DatosMouse)			{ };
-		virtual void				Evento_Pintar(HDC DC)								{ };
+		virtual void						Evento_MouseMovimiento(DEventoMouse& DatosMouse)	{ };
+		std::function<void(DEventoMouse&)>	EventoMouseMovimiento;
+		virtual void						Evento_MousePresionado(DEventoMouse& DatosMouse)	{ };
+		std::function<void(DEventoMouse&)>	EventoMousePresionado;
+		virtual void						Evento_MouseSoltado(DEventoMouse& DatosMouse)		{ };
+		std::function<void(DEventoMouse&)>	EventoMouseSoltado;
+		virtual void						Evento_MouseClick(DEventoMouse& DatosMouse)			{ };
+		std::function<void(DEventoMouse&)>	EventoMouseClick;
 
-		virtual const DhWnd_Tipo	TipoWnd(void) { return DhWnd_Tipo_BarraProgresoEx; };
+		virtual void						Evento_Pintar(HDC DC)								{ };
 
-		LRESULT CALLBACK			GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
+		virtual const DhWnd_Tipo			TipoWnd(void)										{ return DhWnd_Tipo_BarraProgresoEx; };
 
-		DWL::DFuente				Fuente;
+		LRESULT CALLBACK					GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-		inline const BOOL			Marcado(void) { return _Marcado; }
-		void						Marcado(const BOOL nMarcar);
+		DWL::DFuente						Fuente;
 
-									// Función para asignar un icono para el boton
-		void						Icono(const int IDIcono, const int TamIcono, const int PosX = DBOTONEX_CENTRADO, const int PosY = DBOTONEX_CENTRADO);
-		inline const INT_PTR		IDIcono(void) { return (_Icono() != NULL) ? _Icono.ID() : 0; };
+		inline const BOOL					Marcado(void) { return _Marcado; }
+		void								Marcado(const BOOL nMarcar);
 
-									// Funciones para asignar texto a un boton
-		inline void					Texto(std::wstring &nTexto)  { _Texto = nTexto; Repintar(); };
-		inline void					Texto(const wchar_t *nTexto) { _Texto = nTexto; Repintar(); };
-									// Función que realiza una transición del estado actual al estado especificado
-		void						Transicion(const DBotonEx_Transicion nTransicion);
+											// Función para asignar un icono para el boton
+		void								Icono(const int IDIcono, const int TamIcono, const int PosX = DBOTONEX_CENTRADO, const int PosY = DBOTONEX_CENTRADO);
+		inline const INT_PTR				IDIcono(void)										{ return (_Icono() != NULL) ? _Icono.ID() : 0; };
 
-		DBotonEx_Skin				Skin;
-	  protected:
-		void				       _Evento_MouseMovimiento(const WPARAM wParam, const LPARAM lParam);
-		void		    		   _Evento_MousePresionado(const WPARAM wParam, const LPARAM lParam, const int Boton);
-		void				       _Evento_MouseSoltado(const WPARAM wParam, const LPARAM lParam, const int Boton);
-		void                       _Evento_MouseSaliendo(void);
+											// Funciones para asignar texto a un boton
+		inline void							Texto(std::wstring &nTexto)							{ _Texto = nTexto; Repintar(); };
+		inline void							Texto(const wchar_t *nTexto)						{ _Texto = nTexto; Repintar(); };
+											// Función que realiza una transición del estado actual al estado especificado
+		void								Transicion(const DBotonEx_Transicion nTransicion);
 
-		void                       _Evento_Pintar(void);
-		HWND				       _CrearBotonEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos);
-		std::wstring               _Texto;
-		DBotonEx_Estado	  	       _Estado;
-		BOOL                       _Marcado;
-		DIcono                     _Icono;
-		int                        _PosIconoX;
-		int                        _PosIconoY;
-		DAnimacion                 _AniTransicion;
-		COLORREF                   _ColorBorde;
-		COLORREF                   _ColorFondo;
-		COLORREF                   _ColorTexto;
-	};
+		DBotonEx_Skin						Skin;
+	  protected:	
+		void						       _Evento_MouseMovimiento(const WPARAM wParam, const LPARAM lParam);
+		void							   _Evento_MousePresionado(const WPARAM wParam, const LPARAM lParam, const int Boton);
+		void						       _Evento_MouseSoltado(const WPARAM wParam, const LPARAM lParam, const int Boton);
+		void					           _Evento_MouseSaliendo(void);
+
+		void					           _Evento_Pintar(void);
+		HWND						       _CrearBotonEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos);
+		std::wstring					   _Texto;
+		DBotonEx_Estado	  			       _Estado;
+		BOOL						       _Marcado;
+		DIcono						       _Icono;
+		int							       _PosIconoX;
+		int							       _PosIconoY;
+		DAnimacion					       _AniTransicion;
+		COLORREF					       _ColorBorde;
+		COLORREF					       _ColorFondo;
+		COLORREF					       _ColorTexto;
+	};		
 
 }
 

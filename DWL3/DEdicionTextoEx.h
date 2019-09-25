@@ -5,6 +5,7 @@
 #include "DAnimacion.h"
 #include "DFuente.h"
 #include "DIcono.h"
+#include "DEventoMouse.h"
 
 namespace DWL {
 
@@ -71,140 +72,148 @@ namespace DWL {
 	};
 
 	class DEdicionTextoEx : public DControlEx {
-	  public: //////////////////////// 
-									// Constructor
-									DEdicionTextoEx(void);
-									// Destructor
-		                           ~DEdicionTextoEx(void);
-									// Función que crea el control DEdicionTextoEx sin icono
-		HWND						CrearEdicionTextoEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
-									// Función que crea el control DEdicionTextoEx utilizando un icono de los recursos
-		HWND						CrearEdicionTextoEx(DhWnd *nPadre, const UINT IDI_Icono, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
-									// Función que crea el control DEdicionTextoEx utilizando un icono del sistema
-		HWND						CrearEdicionTextoEx(DhWnd* nPadre, const GUID nIconoKnownFolder, const TCHAR* nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
-									// Función que crea el control DEdicionTextoEx utilizando un icono de los recursos
-		HWND						CrearEdicionTextoEx(DhWnd *nPadre, const wchar_t* nPathIcono, const int nPosIcono, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
-									// Función que crea el control DEdicionTextoEx partiendo de una clase DIcono que puede ser nullptr
-		HWND						CrearEdicionTextoEx(DhWnd *nPadre, DIcono* nIcono, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
-									// Función que activa / desactiva el control
-		virtual void				Activado(const BOOL nActivar);
-									// Función que devuelve si el control está activado
-		inline const BOOL			Activado(void) { return DhWnd::Activado(); }
-									// Función que pinta este control en las coordenadas y el DC especificados
-		void						Pintar(HDC hDC, const int cX = 0, const int cY = 0);
-									// Función para obtener el DIcono de este control
-		inline DIcono              &Icono(void) { return _Icono; }
-									// Función para asignar un nuevo DIcono a este control
-		void                        Icono(DIcono *nIcono, const BOOL nRepintar = TRUE);
-									// Función que devuelve el texto de este control
-		std::wstring			   &Texto(void) { return _Texto; }
-									// Función que asigna un valor entero al texto
-		virtual void                Texto(const LONG_PTR ValorEntero, const BOOL nRepintar = TRUE);
-									// Función que asigna un valor decimal al texto
-		virtual void                Texto(const double ValorDecimal, const int Decimales = 2, const BOOL nRepintar = TRUE);
-									// Función que asigna el texto partiendo de un std::wstring
-		virtual void				Texto(std::wstring &nTexto, const BOOL nRepintar = TRUE);
-									// Función que asigna el texto partiendo de un wchar_t
-		virtual void				Texto(const wchar_t *nTexto, const BOOL nRepintar = TRUE);
-									// Función que inicia la animación del estado especificado
-		void						Transicion(const DEdicionTextoEx_Transicion nTransicion);
-									// Fuente que se mostrará en el control
-		DFuente						Fuente;
-									// Tipo de entrada permitida para el usuario
-		DEdicionTextoEx_Entrada		Entrada;		
-									// Alineación del texto dentro del control
-		DEdicionTextoEx_Alineacion	Alineacion;
-									// Skin con la configuración de colores
-		DEdicionTextoEx_Skin        Skin;
-									// Función que obtiene la posición del cursor de las coordenadas especificadas
-		const size_t                HitTest(const int cX, const int cY);
-									// Texto que se mostrará en el control antes de tener el foco o un texto al estilo HTML
-		std::wstring                Placeholder;
-									// Devuelve el tipo de HWND
-		virtual const DhWnd_Tipo	TipoWnd(void) { return DhWnd_Tipo_EdicionTextoEx; };
-									// Gestor de mensajes para este control
-		LRESULT CALLBACK			GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	  protected: /////////////////////
-									// Determina si el caracter introducido es válido para el tipo de entrada actual
-		const BOOL                 _EntradaPermitida(const wchar_t Caracter); 
-									// Evento WM_PAINT
-		void					   _Evento_Pintar(void);
-									// Evento WM_MOUSEMOVE
-		void					   _Evento_MouseMovimiento(const WPARAM wParam, const LPARAM lParam);
-									// Evento WM_MOUSEDOWN*
-		void					   _Evento_MousePresionado(const WPARAM wParam, const LPARAM lParam, const int Boton);
-									// Evento WM_MOUSEUP*
-		void					   _Evento_MouseSoltado(const WPARAM wParam, const LPARAM lParam, const int Boton);
-									// Evento WM_MOUSELEAVE
-		void					   _Evento_MouseSaliendo(void);
-									// Evento WM_DOBLECLICK*
-		void					   _Evento_MouseDobleClick(const WPARAM wParam, const LPARAM lParam, const int Boton);
-									// Evento WM_KEYDOWN
-		void                       _Evento_TeclaPresionada(WPARAM wParam, LPARAM lParam);
-									// Evento WM_KEYUP
-		void					   _Evento_TeclaSoltada(WPARAM wParam, LPARAM lParam);
-									// Evento WM_CHAR
-		void					   _Evento_Tecla(WPARAM wParam, LPARAM lParam);
-									// Evento WM_SETFOCUS
-		void                       _Evento_FocoAsignado(void);
-									// Evento WM_KILLFOCUS
-		void                       _Evento_FocoPerdido(void);
-									// Evento WM_TIMER
-		void					   _Evento_Temporizador(const INT_PTR tID);
-									// Copiar
-		void                       _ControlC(void);
-									// Cortar
-		void                       _ControlX(void);
-									// Pegar
-		void                       _ControlV(void);
-									// Des-hacer
-		void                       _ControlZ(void);
-									// Re-hacer
-		void                       _ControlY(void);
-									// Función que borra el caracter antes del cursor, o la selección
-		void                       _Borrar(void);
-									// Función que borra el caracter por despues del cursor, o la selección
-		void                       _Suprimir(void);
-									// Función que borra el texto seleccionado
-		void                       _BorrarTextoSeleccionado(void);
-									// Función que agrega un nuevo texto a la lista de des-hacer / re-hacer
-		void                       _AgregarTextoUndo(void);
-									// Icono para mostrar a la izquierda
-		DIcono                     _Icono;
-									// Texto actual del control
-		std::wstring               _Texto;
-									// Textos guardados para el control Z y el control Y
-		std::vector<std::wstring>  _Textos;
-									// Posición de los cursores guardados para el control Z y el control Y
-		std::vector<size_t>        _PosCursores;
-									// Posición del des-hacer / re-hacer dentro del vector _Textos
-		size_t                     _PosRedoUndo;
-									// Función que devuelve un RECT con el tamaño y posición del texto dentro del control
-		const RECT                 _PosicionTexto(std::wstring& nTexto, RECT &RC);
-									// Color del texto para transiciones
-		COLORREF                   _ColorTexto;
-									// Color de la sombra texto para transiciones
-		COLORREF                   _ColorTextoSombra;
-									// Color del placeholder para transiciones
-		COLORREF                   _ColorTextoPH;
-									// Color de la sombra del placeholder para transiciones
-		COLORREF                   _ColorTextoSombraPH;
-									// Color del fondo para transiciones
-		COLORREF                   _ColorFondo;
-									// Color del borde para transiciones
-		COLORREF                   _ColorBorde;
-									// Color del cursor para transiciones
-		COLORREF                   _ColorCursor;
-									// Posición del cursor
-		size_t                     _PosCursor;
-									// Posición de la selección (si es la misma que _PosCursor no hay selección)
-		size_t                     _PosSeleccion;
-									// Objeto para la animación del cursor
-		DAnimacion                 _AniCursor;
-									// Objeto para las transiciones de estado
-		DAnimacion                 _AniTransicion;		
-									// Variable que determina si el control está presionado
-		BOOL                       _Presionado;
+	  public: ////////////////////////////////
+											// Constructor
+											DEdicionTextoEx(void);
+											// Destructor
+										   ~DEdicionTextoEx(void);
+											// Función que crea el control DEdicionTextoEx sin icono
+		HWND								CrearEdicionTextoEx(DhWnd *nPadre, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
+											// Función que crea el control DEdicionTextoEx utilizando un icono de los recursos
+		HWND								CrearEdicionTextoEx(DhWnd *nPadre, const UINT IDI_Icono, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
+											// Función que crea el control DEdicionTextoEx utilizando un icono del sistema
+		HWND								CrearEdicionTextoEx(DhWnd* nPadre, const GUID nIconoKnownFolder, const TCHAR* nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
+											// Función que crea el control DEdicionTextoEx utilizando un icono de los recursos
+		HWND								CrearEdicionTextoEx(DhWnd *nPadre, const wchar_t* nPathIcono, const int nPosIcono, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
+											// Función que crea el control DEdicionTextoEx partiendo de una clase DIcono que puede ser nullptr
+		HWND								CrearEdicionTextoEx(DhWnd *nPadre, DIcono* nIcono, const TCHAR *nTxt, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos = WS_CHILD | WS_VISIBLE);
+											// Función que activa / desactiva el control
+		virtual void						Activado(const BOOL nActivar);
+											// Función que devuelve si el control está activado
+		inline const BOOL					Activado(void) { return DhWnd::Activado(); }
+											// Función que pinta este control en las coordenadas y el DC especificados
+		void								Pintar(HDC hDC, const int cX = 0, const int cY = 0);
+											// Función para obtener el DIcono de este control
+		inline DIcono			           &Icono(void) { return _Icono; }
+											// Función para asignar un nuevo DIcono a este control
+		void						        Icono(DIcono *nIcono, const BOOL nRepintar = TRUE);
+											// Función que devuelve el texto de este control
+		std::wstring					   &Texto(void) { return _Texto; }
+											// Función que asigna un valor entero al texto
+		virtual void				       Texto(const LONG_PTR ValorEntero, const BOOL nRepintar = TRUE);
+											// Función que asigna un valor decimal al texto
+		virtual void				       Texto(const double ValorDecimal, const int Decimales = 2, const BOOL nRepintar = TRUE);
+											// Función que asigna el texto partiendo de un std::wstring
+		virtual void						Texto(std::wstring &nTexto, const BOOL nRepintar = TRUE);
+											// Función que asigna el texto partiendo de un wchar_t
+		virtual void						Texto(const wchar_t *nTexto, const BOOL nRepintar = TRUE);
+											// Función que inicia la animación del estado especificado
+		void								Transicion(const DEdicionTextoEx_Transicion nTransicion);
+											// Evento virtual que informa de un cambio en el texto
+		virtual void						Evento_Cambio(void) { };
+											// Variable con la función lambda enlazada a Evento_Cambio
+		std::function<void(void)>			EventoCambio;
+											// Evento virtual que informa de que se ha hecho click en el control
+		virtual void						Evento_MouseClick(DEventoMouse& DatosMouse) { };
+											// Variable con la función lambda enlazada a Evento_Click
+		std::function<void(DEventoMouse&)>	EventoMouseClick;
+											// Fuente que se mostrará en el control
+		DFuente								Fuente;
+											// Tipo de entrada permitida para el usuario
+		DEdicionTextoEx_Entrada				Entrada;		
+											// Alineación del texto dentro del control
+		DEdicionTextoEx_Alineacion			Alineacion;
+											// Skin con la configuración de colores
+		DEdicionTextoEx_Skin				Skin;
+											// Función que obtiene la posición del cursor de las coordenadas especificadas
+		const size_t						HitTest(const int cX, const int cY);
+											// Texto que se mostrará en el control antes de tener el foco o un texto al estilo HTML
+		std::wstring					    Placeholder;
+											// Devuelve el tipo de HWND
+		virtual const DhWnd_Tipo			TipoWnd(void) { return DhWnd_Tipo_EdicionTextoEx; };
+											// Gestor de mensajes para este control
+		LRESULT CALLBACK					GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	  protected: /////////////////////////////
+											// Determina si el caracter introducido es válido para el tipo de entrada actual
+		const BOOL                         _EntradaPermitida(const wchar_t Caracter); 
+											// Evento WM_PAINT
+		void				         	   _Evento_Pintar(void);
+											// Evento WM_MOUSEMOVE
+		void				         	   _Evento_MouseMovimiento(const WPARAM wParam, const LPARAM lParam);
+											// Evento WM_MOUSEDOWN*
+		void							   _Evento_MousePresionado(const WPARAM wParam, const LPARAM lParam, const int Boton);
+											// Evento WM_MOUSEUP*
+		void							   _Evento_MouseSoltado(const WPARAM wParam, const LPARAM lParam, const int Boton);
+											// Evento WM_MOUSELEAVE
+		void							   _Evento_MouseSaliendo(void);
+											// Evento WM_DOBLECLICK*
+		void							   _Evento_MouseDobleClick(const WPARAM wParam, const LPARAM lParam, const int Boton);
+											// Evento WM_KEYDOWN
+		void				               _Evento_TeclaPresionada(WPARAM wParam, LPARAM lParam);
+											// Evento WM_KEYUP
+		void							   _Evento_TeclaSoltada(WPARAM wParam, LPARAM lParam);
+											// Evento WM_CHAR
+		void							   _Evento_Tecla(WPARAM wParam, LPARAM lParam);
+											// Evento WM_SETFOCUS
+		void				               _Evento_FocoAsignado(void);
+											// Evento WM_KILLFOCUS
+		void					           _Evento_FocoPerdido(void);
+											// Evento WM_TIMER
+		void							   _Evento_Temporizador(const INT_PTR tID);
+											// Copiar
+		void					           _ControlC(void);
+											// Cortar
+		void				               _ControlX(void);
+											// Pegar
+		void				               _ControlV(void);
+											// Des-hacer
+		void				               _ControlZ(void);
+											// Re-hacer
+		void				               _ControlY(void);
+											// Función que borra el caracter antes del cursor, o la selección
+		void					           _Borrar(void);
+											// Función que borra el caracter por despues del cursor, o la selección
+		void						       _Suprimir(void);
+											// Función que borra el texto seleccionado
+		void						       _BorrarTextoSeleccionado(void);
+											// Función que agrega un nuevo texto a la lista de des-hacer / re-hacer
+		void						       _AgregarTextoUndo(void);
+											// Icono para mostrar a la izquierda
+		DIcono					           _Icono;
+											// Texto actual del control
+		std::wstring				       _Texto;
+											// Textos guardados para el control Z y el control Y
+		std::vector<std::wstring>          _Textos;
+											// Posición de los cursores guardados para el control Z y el control Y
+		std::vector<size_t>                _PosCursores;
+											// Posición del des-hacer / re-hacer dentro del vector _Textos
+		size_t                             _PosRedoUndo;
+											// Función que devuelve un RECT con el tamaño y posición del texto dentro del control
+		const RECT                         _PosicionTexto(std::wstring& nTexto, RECT &RC);
+											// Color del texto para transiciones
+		COLORREF						   _ColorTexto;
+											// Color de la sombra texto para transiciones
+		COLORREF                           _ColorTextoSombra;
+											// Color del placeholder para transiciones
+		COLORREF                           _ColorTextoPH;
+								 			// Color de la sombra del placeholder para transiciones
+		COLORREF                           _ColorTextoSombraPH;
+											// Color del fondo para transiciones
+		COLORREF                           _ColorFondo;
+											// Color del borde para transiciones
+		COLORREF                           _ColorBorde;
+											// Color del cursor para transiciones
+		COLORREF					       _ColorCursor;
+											// Posición del cursor
+		size_t							   _PosCursor;
+											// Posición de la selección (si es la misma que _PosCursor no hay selección)
+		size_t                             _PosSeleccion;
+											// Objeto para la animación del cursor
+		DAnimacion                         _AniCursor;
+											// Objeto para las transiciones de estado
+		DAnimacion                         _AniTransicion;		
+											// Variable que determina si el control está presionado
+		BOOL                               _Presionado;
 	};
 
 

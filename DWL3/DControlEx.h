@@ -4,6 +4,13 @@
 #include "DhWnd.h"
 
 namespace DWL {
+	/* 
+		- Eventos virtuales y Eventos lambda
+			- Los controles Ex deben tener eventos virtuales que empiezen por Evento_, y funciones lambda enlazadas a dichos eventos virtuales que empezaran por Evento 
+			- Internamente los controles solo deben utilizar las funciones Lambda, de está forma las funciones lambda tendrán preferencia sobre los eventos virtuales.
+			- La única excepción son las funciones de pintado, ya que si queremos re-emplazar una, va a necesitar mucho código, por no hablar de la sobrecarga durante el pintado.
+	*/
+
 
 	/* Controles de usuario fabricados desde 0 */
 	class DControlEx : public DhWnd {

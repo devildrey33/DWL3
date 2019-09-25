@@ -5,7 +5,14 @@
 
 namespace DWL {
 
-	DBarraDesplazamientoEx::DBarraDesplazamientoEx(void) :	DBarraProgresoEx(), _MostrarToolTip(DBarraEx_ToolTip_SinToolTip) {
+	DBarraDesplazamientoEx::DBarraDesplazamientoEx(void) :	
+		DBarraProgresoEx(),
+		_MostrarToolTip(DBarraEx_ToolTip_SinToolTip),
+		// Eventos Lambda enlazados a los eventos virtuales por defecto
+		EventoMouseMovimiento([=](DEventoMouse& d)			{ Evento_MouseMovimiento(d);	}),
+		EventoMousePresionado([=](DEventoMouse& d)			{ Evento_MousePresionado(d);	}), 
+		EventoMouseSoltado([=](DEventoMouse& d)				{ Evento_MouseSoltado(d);		}),
+		EventoMostrarToolTip([=](float v, std::wstring& s)	{ Evento_MostrarToolTip(v, s);	})  {
 	}
 
 	DBarraDesplazamientoEx::~DBarraDesplazamientoEx(void) {
@@ -86,7 +93,7 @@ namespace DWL {
 		float valor = _ValorMouse(RC, cX, cY);		
 
 		std::wstring TextoToolTip;
-		Evento_MostrarToolTip(valor, TextoToolTip);
+		EventoMostrarToolTip(valor, TextoToolTip);
 
 		switch (_MostrarToolTip) {
 			case DBarraEx_ToolTip_Arriba	:	_ToolTip.Mostrar(RW.left + cX, RW.top - 35, TextoToolTip);		break;
@@ -102,7 +109,7 @@ namespace DWL {
 			_Valor = valor;
 			Repintar();
 			SendMessage(GetParent(hWnd()), DWL_BARRAEX_CAMBIANDO, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
-			Evento_MouseMovimiento(DatosMouse);
+			EventoMouseMovimiento(DatosMouse);
 		}
 	}
 
@@ -121,7 +128,7 @@ namespace DWL {
 			_Valor = _ValorMouse(RC, Pt.x, Pt.y);
 			//Repintar();
 			SendMessage(GetParent(hWnd()), DWL_BARRAEX_CAMBIANDO, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
-			Evento_MousePresionado(DatosMouse);
+			EventoMousePresionado(DatosMouse);
 			Transicion(DBarraEx_Transicion_Presionado);
 		}
 	}

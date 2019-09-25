@@ -16,7 +16,7 @@ namespace DWL {
 	class DBarraEx_Skin {
 	   public :
 							DBarraEx_Skin(void);
-						   ~DBarraEx_Skin(void) { }
+						   ~DBarraEx_Skin(void)		{ }
 							// Colores para la barra de scroll (para la transición normal / hover / presionado)
 		COLORREF			BarraNormal;
 		COLORREF			BarraResaltado;
@@ -41,7 +41,6 @@ namespace DWL {
 		BOOL				FuenteCursiva;
 //		BOOL				FuenteSubrayado;
 		BOOL				FuenteSombraTexto;
-
 	};
 
 	enum DBarraEx_Estado {
@@ -74,75 +73,76 @@ namespace DWL {
 
 	class DBarraProgresoEx : public DControlEx {
 	  public:
-											DBarraProgresoEx(void);
-							               ~DBarraProgresoEx(void);
-		HWND								CrearBarraProgresoEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const INT_PTR cID, const float nMinimo = 0.0f, const float nMaximo = 1.0f, const float nValor = 0.0, const DBarraEx_Alineacion nAlineacion = IzquierdaDerecha);
+												DBarraProgresoEx(void);
+								               ~DBarraProgresoEx(void);
+		HWND									CrearBarraProgresoEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const INT_PTR cID, const float nMinimo = 0.0f, const float nMaximo = 1.0f, const float nValor = 0.0, const DBarraEx_Alineacion nAlineacion = IzquierdaDerecha);
 
-		virtual void						Activado(const BOOL nActivar);
-		inline const BOOL					Activado(void) { return DhWnd::Activado(); }
+		virtual void							Activado(const BOOL nActivar);
+		inline const BOOL						Activado(void) { return DhWnd::Activado(); }
 
 
-											// Mínimo, Máximo, Valor
-		void								Minimo(const float nMinimo);
-		virtual void						Valor(const float nValor);
-		void								Maximo(const float nMaximo);
-		inline const float					Minimo(void)											{ return _Minimo;					}
-		inline const float					Maximo(void)											{ return _Maximo;					}
-		virtual inline const float			Valor(void)												{ return _Valor;					}
+												// Mínimo, Máximo, Valor
+		void									Minimo(const float nMinimo);
+		virtual void							Valor(const float nValor);
+		void									Maximo(const float nMaximo);
+		inline const float						Minimo(void)											{ return _Minimo;					}
+		inline const float						Maximo(void)											{ return _Maximo;					}
+		virtual inline const float				Valor(void)												{ return _Valor;					}
 
-		void								PintarBarraEx(HDC DC, const int nX = 0, const int nY = 0);
-											// Calcula la recta de la barra con los valores especificados según la alineación actual)
-		void								CalcularBarra(float nMinimo, float nMaximo, float nValor, RECT &IN_RectaCliente, RECT &OUT_Barra);
+		void									PintarBarraEx(HDC DC, const int nX = 0, const int nY = 0);
+												// Calcula la recta de la barra con los valores especificados según la alineación actual)
+		void									CalcularBarra(float nMinimo, float nMaximo, float nValor, RECT &IN_RectaCliente, RECT &OUT_Barra);
 
-		////////////////////////////////////// Los eventos de pintado se ejecutan en el mismo orden que están declarados											
-											// Evento virtual para pintar la parte de la barra ocupada
-		virtual void						Evento_PintarBarra(HDC DC, RECT &RBarra);
-											// Evento virtual para pintar el fondo
-		virtual void						Evento_PintarFondo(HDC DC, RECT &RFondo);
-											// Evento virtual en el que puedes pintar lo que quieras encima de la barra ya pintada
-		virtual void						Evento_PintarPersonalizado(HDC DC, RECT &RFondo)		{ }
-											// Permite modificar el valor formateado antes de pintarlo en el Evento_PintarValor
-		virtual void						Evento_FormatearValor(std::wstring &ValorFormateado)	{ };
-											// Evento virtual para pintar el valor
-		virtual void						Evento_PintarValor(HDC DC, RECT &RFondo);
-											// Evento virtual para pintar el borde de la barra
-		virtual void						Evento_PintarBorde(HDC DC, RECT &RBorde);
-		//////////////////////////////////////
+		////////////////////////////////////////// Los eventos de pintado se ejecutan en el mismo orden que están declarados											
+												// Evento virtual para pintar la parte de la barra ocupada
+		virtual void							Evento_PintarBarra(HDC DC, RECT &RBarra);
+												// Evento virtual para pintar el fondo
+		virtual void							Evento_PintarFondo(HDC DC, RECT &RFondo);
+												// Evento virtual en el que puedes pintar lo que quieras encima de la barra ya pintada
+		virtual void							Evento_PintarPersonalizado(HDC DC, RECT &RFondo)		{ }
+												// Permite modificar el valor formateado antes de pintarlo en el Evento_PintarValor
+		virtual void							Evento_FormatearValor(std::wstring &ValorFormateado)	{ };
+		std::function<void(std::wstring&)>		EventoFormatearValor;		
+												// Evento virtual para pintar el valor
+		virtual void							Evento_PintarValor(HDC DC, RECT &RFondo);
+												// Evento virtual para pintar el borde de la barra
+		virtual void							Evento_PintarBorde(HDC DC, RECT &RBorde);
 
-		virtual void						Transicion(const DBarraEx_Transicion nTransicion);
+		virtual void							Transicion(const DBarraEx_Transicion nTransicion);
 
-		virtual const DhWnd_Tipo			TipoWnd(void) { return DhWnd_Tipo_BarraProgresoEx; };
+		virtual const DhWnd_Tipo				TipoWnd(void) { return DhWnd_Tipo_BarraProgresoEx; };
 
-		LRESULT CALLBACK					GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
+		LRESULT CALLBACK						GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-		inline void							MostrarValor(const DBarraEx_MostrarValor nMostrarValor)	{ _MostrarValor = nMostrarValor;	}
-		inline const DBarraEx_MostrarValor  MostrarValor(void)										{ return _MostrarValor;				}
+		inline void								MostrarValor(const DBarraEx_MostrarValor nMostrarValor)	{ _MostrarValor = nMostrarValor;	}
+		inline const DBarraEx_MostrarValor		MostrarValor(void)										{ return _MostrarValor;				}
 
-		void                                Alineacion(const DBarraEx_Alineacion nAlineacion);
+		void									Alineacion(const DBarraEx_Alineacion nAlineacion);
 
-		DBarraEx_Skin						Skin;
+		DBarraEx_Skin							Skin;
 	  protected:
-		const float                        _ValorMouse(RECT &RC, int cX, int cY);
-		void				               _Evento_MouseMovimiento(WPARAM wParam, LPARAM lParam);
-		void		                       _Evento_MouseSaliendo(void);
 
-		COLORREF				           _ColorBarra;
-		COLORREF		                   _ColorBorde;
-		COLORREF		                   _ColorFondo;
-		float			         		   _Minimo;
-		float					           _Maximo;
-		float		         			   _Valor;
-		DBarraEx_Estado		         	   _Estado;
-		DAnimacion                         _AniTransicion;
-		DBarraEx_MostrarValor              _MostrarValor;
-		BOOL                               _Activado;
-		DBarraEx_Alineacion                _Alineacion;
+		const float                            _ValorMouse(RECT &RC, int cX, int cY);
+		void				                   _Evento_MouseMovimiento(WPARAM wParam, LPARAM lParam);
+		void		                           _Evento_MouseSaliendo(void);
 
-		DFuente                            _Fuente;
-											// Recta del area roja de la barra
-		RECT                               _RBarra;
-											// Recta solo con el fondo blanco restante
-		RECT							   _RFondo;
+		COLORREF				               _ColorBarra;
+		COLORREF		                       _ColorBorde;
+		COLORREF    		                   _ColorFondo;
+		float		    	         		   _Minimo;
+		float			    		           _Maximo;
+		float		             			   _Valor;
+		DBarraEx_Estado		             	   _Estado;
+		DAnimacion                             _AniTransicion;
+		DBarraEx_MostrarValor                  _MostrarValor;
+		BOOL                                   _Activado;
+		DBarraEx_Alineacion                    _Alineacion;
+
+		DFuente                                _Fuente;
+												// Recta del area roja de la barra
+		RECT                                   _RBarra;
+												// Recta solo con el fondo blanco restante
+		RECT							       _RFondo;
 
 		friend class DMenuEx;
 	};	

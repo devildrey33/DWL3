@@ -123,22 +123,22 @@ namespace DWL {
 		const POINT					CalcularEspacio(void);
 
 		const BOOL					Visible(void);
-
-		inline void					BarraValor(const float nValor) { _Barra.Valor(nValor); };
-		inline const float			BarraValor(void) { return _Barra.Valor(); };
-
+									// Funciones para asignar / obtener el valor de la barra de este menú
+		inline void					BarraValor(const float nValor)		{ _Barra.Valor(nValor); };
+		inline const float			BarraValor(void)					{ return _Barra.Valor(); };
+									// Función para realizar una transición de estado animada
 		void						Transicion(const DMenuEx_Transicion nTransicion);
-
+									// Fuente del menu
 		DFuente						Fuente;
-
 									// Variable para almacenar un parámetro personalizado para este menú
 		INT64						Parametro;
-
+									// Skin con los colores y fuentes 
 		DMenuEx_Skin				Skin;
-
+									// Maximo de opacidad
 		double						MaxOpacidad;
-
+									// Tipo de ventana
 		virtual const DhWnd_Tipo	TipoWnd(void) { return DhWnd_Tipo_MenuEx; };
+									// Gestor de mensajes
 		LRESULT CALLBACK			GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	  protected:
 									// Constructor menú tipo texto (interno AgregarBarra)

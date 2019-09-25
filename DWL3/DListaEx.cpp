@@ -40,12 +40,29 @@ namespace DWL {
 
 
 
+
 	DListaEx::DListaEx(void) :  DBarraScrollEx()		, _ItemPaginaInicio(0)		, _ItemPaginaFin(0)			, _ItemPaginaVDif(0)		, _ItemPaginaHDif(0),
 								_SubItemResaltado(-1)	, _SubItemUResaltado(-1)	, _SubItemPresionado(-1)	, MostrarSeleccion(TRUE)	, MultiSeleccion(FALSE) , MoverItemsDrag(FALSE),
 								_ItemResaltado(-1)		, _ItemUResaltado(-1)		, _ItemMarcado(-1)			, _PintarIconos(TRUE),	    
 								_ItemPresionado(-1)		, _ItemShift(-1)			, _Repintar(FALSE)			, _TimerDragArriba(0)       , _TimerDragAbajo(0),
 								_TotalAnchoVisible(0)	, _TotalAltoVisible(0)		, _TiempoItemPresionado(0)  , _PItemPresionado(NULL)    , _EnDrag(FALSE),
-								_BufferItem(NULL)		, _BufferItemBmp(NULL)		, _BufferItemBmpViejo(NULL)	, _BufferItemFuenteViejo(NULL) {
+								_BufferItem(NULL)		, _BufferItemBmp(NULL)		, _BufferItemBmpViejo(NULL)	, _BufferItemFuenteViejo(NULL),
+								// Eventos Lambda enlazados a los eventos virtuales por defecto
+								EventoMouseEntrando([=](void)																		{ Evento_MouseEntrando();									}),
+								EventoMouseSaliendo([=](void)																		{ Evento_MouseSaliendo();									}),
+								EventoMouseMovimiento([=](DEventoMouse& e)															{ Evento_MouseMovimiento(e);								}),
+								EventoMousePresionado([=](DEventoMouse& e)															{ Evento_MousePresionado(e);								}),
+								EventoMouseSoltado([=](DEventoMouse& e)																{ Evento_MouseSoltado(e);									}),
+								EventoMouseClick([=](DEventoMouse& e)																{ Evento_MouseClick(e);										}),
+								EventoMouseRueda([=](DEventoMouseRueda& e)															{ Evento_MouseRueda(e);										}),
+								EventoMouseDobleClick([=](DEventoMouse& e)															{ Evento_MouseDobleClick(e);								}),
+								EventoDragTerminado([=](void)																		{ Evento_DragTerminado();									}),
+								EventoTeclaPresionada([=](DEventoTeclado& e)														{ Evento_TeclaPresionada(e);								}),
+								EventoTeclaSoltada([=](DEventoTeclado& e)															{ Evento_TeclaSoltada(e);									}),
+								EventoTecla([=](DEventoTeclado& e)																	{ Evento_Tecla(e);											}),
+								EventoFocoObtenido([=](HWND h)																		{ Evento_FocoObtenido(h);									}),
+								EventoFocoPerdido([=](HWND h)																		{ Evento_FocoPerdido(h);									})  {
+						//		EventoPintarSubItem([=](HDC hDC, const LONG_PTR NumItem, const LONG_PTR NumSubItem, RECT* Espacio)	{ Evento_PintarSubItem(hDC, NumItem, NumSubItem, Espacio);	})	{
 
 	}
 
@@ -710,7 +727,7 @@ namespace DWL {
 //		_mX = cX; _mY = cY;
 		// Utilizo la función _MouseEntrando() para poder recibir los mensajes WM_MOUSELEAVE
 		if (_MouseEntrando() == TRUE) {
-			Evento_MouseEntrando();
+			EventoMouseEntrando();
 			Scrolls_MouseEntrando();
 		}
 		
@@ -718,7 +735,7 @@ namespace DWL {
 		
 		_ItemResaltado = HitTest(DatosMouse.X(), DatosMouse.Y(), &_SubItemResaltado);
 		
-		Evento_MouseMovimiento(DatosMouse);
+		EventoMouseMovimiento(DatosMouse);
 
 		// Envio el evento mouseup a la ventana padre
 		SendMessage(GetParent(hWnd()), DWL_LISTAEX_MOUSEMOVIMIENTO, reinterpret_cast<WPARAM>(&DatosMouse), 0);
@@ -983,7 +1000,7 @@ namespace DWL {
 			DesSeleccionarTodo();
 		}*/
 
-		Evento_MousePresionado(DatosMouse);
+		EventoMousePresionado(DatosMouse);
 		Repintar(TRUE);
 		// Envio el evento mouseup a la ventana padre
 		SendMessage(GetParent(hWnd()), DWL_LISTAEX_MOUSEPRESIONADO, reinterpret_cast<WPARAM>(&DatosMouse), 0);
@@ -1051,13 +1068,13 @@ namespace DWL {
 		}
 
 		// Evento virtual
-		Evento_MouseSoltado(DatosMouse);
+		EventoMouseSoltado(DatosMouse);
 		// Envio el evento mouseup a la ventana padre
 		SendMessage(GetParent(hWnd()), DWL_LISTAEX_MOUSESOLTADO, reinterpret_cast<WPARAM>(&DatosMouse), 0);
 		// Envio el evento DragTerminado si ha habido una operación de Drag & Drop
 		if (_EnDrag == TRUE) {
 			SendMessage(GetParent(hWnd()), DWL_LISTAEX_DRAGTERMINADO, 0, 0);
-			Evento_DragTerminado();
+			EventoDragTerminado();
 		}
 		_EnDrag = FALSE;
 		
@@ -1068,13 +1085,14 @@ namespace DWL {
 		if (PtInRect(&RC, Pt) == TRUE) {
 			// Envio el evento del click a la ventana padre (solo si el mouse está dentro de la lista)
 			SendMessage(GetParent(hWnd()), DWL_LISTAEX_CLICK, reinterpret_cast<WPARAM>(&DatosMouse), 0);
+			EventoMouseClick(DatosMouse);
 		}
 
 		// Establezco que no hay ningún item presionado, y repinto
 		// TODO : El -1 está malament lo millor seria fer servir el objecte DListaEx_Item * directament com a l'arbre
-		_ItemPresionado = -1;
-		_SubItemPresionado = -1;
-		_PItemPresionado = NULL;
+		_ItemPresionado		= -1;
+		_SubItemPresionado	= -1;
+		_PItemPresionado	= NULL;
 		Repintar();
 
 	}
@@ -1110,7 +1128,7 @@ namespace DWL {
 
 		_ItemUResaltado = _ItemResaltado;
 
-		Evento_MouseRueda(DatosMouse);
+		EventoMouseRueda(DatosMouse);
 		Repintar();
 	}
 
@@ -1136,10 +1154,10 @@ namespace DWL {
 				case VK_DOWN	: _Tecla_CursorAbajo(DatosTeclado);			break;
 				case VK_PRIOR	: _Tecla_RePag(DatosTeclado);				break; // RePag
 				case VK_NEXT	: _Tecla_AvPag(DatosTeclado);				break; // AvPag
-				default			: Evento_Tecla(DatosTeclado);				break; // if (Caracter >= 0x30 && Caracter <= 0x5A) // Cualquier tecla valida
+				default			: EventoTecla(DatosTeclado);				break; // if (Caracter >= 0x30 && Caracter <= 0x5A) // Cualquier tecla valida
 			}
 		}
-		Evento_TeclaPresionada(DatosTeclado);
+		EventoTeclaPresionada(DatosTeclado);
 
 	}
 
@@ -1148,12 +1166,12 @@ namespace DWL {
 		if (DatosTeclado.TeclaVirtual() == VK_SHIFT) {
 			_ItemShift = -1;
 		}		
-		Evento_TeclaSoltada(DatosTeclado);
+		EventoTeclaSoltada(DatosTeclado);
 	}
 
 	void DListaEx::_Evento_Tecla(WPARAM wParam, LPARAM lParam) {
 		DEventoTeclado DatosTeclado(wParam, lParam, this);
-		Evento_Tecla(DatosTeclado);
+		EventoTecla(DatosTeclado);
 	}
 
 
@@ -1348,25 +1366,21 @@ namespace DWL {
 		_MouseDentro = FALSE;
 		_ItemResaltado  = -1;
 		_ItemUResaltado = -1;
-		Evento_MouseSaliendo();
+		EventoMouseSaliendo();
 		if (nRepintar == TRUE) Repintar();
 	}
 
 	void DListaEx::_Evento_MouseDobleClick(const int Boton, WPARAM wParam, LPARAM lParam) {
 		DEventoMouse DatosMouse(wParam, lParam, this, Boton);
-		Evento_MouseDobleClick(DatosMouse);
-
-//		Evento_MouseDobleClick(Boton, cX, cY, Param);
+		EventoMouseDobleClick(DatosMouse);
 	}
 
 	void DListaEx::_Evento_FocoObtenido(HWND hWndUltimoFoco) {
-//		BorrarBufferTeclado();
-		Evento_FocoObtenido(hWndUltimoFoco);
+		EventoFocoObtenido(hWndUltimoFoco);
 	}
 
 	void DListaEx::_Evento_FocoPerdido(HWND hWndNuevoFoco) {
-//		BorrarBufferTeclado();
-		Evento_FocoPerdido(hWndNuevoFoco);
+		EventoFocoPerdido(hWndNuevoFoco);
 	}
 
 	// Función que mira si algun item de la lista tiene que pintar un icono.

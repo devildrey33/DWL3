@@ -66,9 +66,23 @@ namespace DWL {
 	*/
 
 	// Constructor
-	DEdicionTextoEx::DEdicionTextoEx(void) : DControlEx(), Entrada(DEdicionTextoEx_Entrada_Texto), Alineacion(DEdicionTextoEx_Alineacion_Izquierda), _Presionado(FALSE), 
-											_PosCursor(0), _ColorTexto(Skin.Texto), _ColorTextoSombra(Skin.TextoSombra),  _ColorFondo(Skin.FondoNormal), _ColorBorde(Skin.BordeNormal), 
-											_ColorCursor(Skin.FondoNormal), _PosSeleccion(0), _PosRedoUndo(0), _ColorTextoPH(Skin.TextoPlaceholder), _ColorTextoSombraPH(Skin.TextoPlaceholderSombra) {
+	DEdicionTextoEx::DEdicionTextoEx(void) : 
+		DControlEx(), 
+		Entrada(DEdicionTextoEx_Entrada_Texto)									, 
+		Alineacion(DEdicionTextoEx_Alineacion_Izquierda)						, 
+		_Presionado(FALSE)														, 		
+		_PosCursor(0)															, 
+		_ColorTexto(Skin.Texto)													, 
+		_ColorTextoSombra(Skin.TextoSombra)										, 
+		_ColorFondo(Skin.FondoNormal)											, 
+		_ColorBorde(Skin.BordeNormal)											, 
+		_ColorCursor(Skin.FondoNormal)											,
+		_PosSeleccion(0), _PosRedoUndo(0)										, 
+		_ColorTextoPH(Skin.TextoPlaceholder)									,
+		_ColorTextoSombraPH(Skin.TextoPlaceholderSombra)						,
+		// Eventos Lambda enlazados a los eventos virtuales por defecto
+		EventoCambio([=]						{ Evento_Cambio();				}),
+		EventoMouseClick([=](DEventoMouse& e)	{ Evento_MouseClick(e);			})  {
 	}
 
 	// Destructor
@@ -541,6 +555,7 @@ namespace DWL {
 		
 		// Notifico que el texto ha cambiado a la ventana padre
 		SendMessage(GetParent(hWnd()), DWL_EDICIONTEXTOEX_CAMBIO, static_cast<WPARAM>(ID()), 0);
+		EventoCambio();
 
 		#if DEDICIONTEXTOEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DEdicionTextoEx::_AgregarTextoUndo %d.\n", _PosRedoUndo);
@@ -683,6 +698,7 @@ namespace DWL {
 			Transicion(DEdicionTextoEx_Transicion_Resaltado);
 		}
 		SendMessage(GetParent(hWnd()), DWL_EDICIONTEXTOEX_CLICK, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
+		EventoMouseClick(DatosMouse);
 		_Presionado = FALSE;
 		_PosCursor = HitTest(DatosMouse.X(), DatosMouse.Y());
 		Repintar();

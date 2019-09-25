@@ -48,6 +48,7 @@ namespace DWL {
 					_Edicion.Texto(_Lista.ItemPresionado()->Texto(0), TRUE);
 				}
 				SendMessage(GetParent(_hWnd), DWL_DESPLEGABLEEX_CAMBIO, static_cast<WPARAM>(ID()), 0);
+				EventoCambiado();
 				return 0;
 		}
 		return DControlDesplegableEx::GestorMensajes(uMsg, wParam, lParam);

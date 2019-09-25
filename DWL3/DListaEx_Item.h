@@ -7,9 +7,9 @@
 
 namespace DWL {
 
-	#define DLISTAEX_PADDING				(int)2 // Espacio entre el marco de la selección y el texto (tambien se utiliza para espaciar el expansor, el icono y el texto horizontalmente)
-	#define DLISTAEX_MARGEN_Y_SELECCION		(int)1 // Espacio entre la Y inicial / final del texto y el marco de seleccion
-	#define DLISTAEX_TAMICONO				(int)16 // Tamaño del icono
+	#define DLISTAEX_PADDING				 2 // Espacio entre el marco de la selección y el texto (tambien se utiliza para espaciar el expansor, el icono y el texto horizontalmente)
+	#define DLISTAEX_MARGEN_Y_SELECCION		 1 // Espacio entre la Y inicial / final del texto y el marco de seleccion
+	#define DLISTAEX_TAMICONO				16 // Tamaño del icono
 
 	class DListaEx;
 
