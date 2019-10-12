@@ -17,8 +17,8 @@ namespace DWL {
 		if (!GetConsoleWindow()) {
 			AllocConsole();
 			SetConsoleTitle(Titulo);
-			_Consola = GetStdHandle(STD_OUTPUT_HANDLE);
-			_UltimoTick = GetTickCount();
+			_Consola	= GetStdHandle(STD_OUTPUT_HANDLE);
+			_UltimoTick = GetTickCount64();
 		}
 	}
 
@@ -52,7 +52,7 @@ namespace DWL {
 	const BOOL DConsola::Leer(std::wstring &Texto) {
 		WaitForSingleObject(_Mutex, INFINITE);
 		DWORD CaracteresLeidos = 0;
-		static wchar_t Caracteres[4096];
+		static wchar_t Caracteres[4096] = L"\0";
 		SecureZeroMemory(Caracteres, 4096 * sizeof(wchar_t));
 		BOOL R = ReadConsole(_Consola, Caracteres, 4096, &CaracteresLeidos, NULL);
 		Texto = Caracteres;
@@ -83,8 +83,8 @@ namespace DWL {
 		int TotalCaracteres = vswprintf_s(T, 4096, Texto, Marker);
 		DWORD CaracteresEscribidos = 0;
 		static wchar_t Txt[4096];
-		DWORD TmpTick = GetTickCount();
-		TotalCaracteres = swprintf_s(Txt, 4096, L"[%.8d] %s", TmpTick - _UltimoTick, T);
+		ULONGLONG TmpTick = GetTickCount64();
+		TotalCaracteres = swprintf_s(Txt, 4096, L"[%.8d] %s", static_cast<DWORD>(TmpTick - _UltimoTick), T);
 		_UltimoTick = TmpTick;
 		BOOL Ret = WriteConsole(_Consola, Txt, TotalCaracteres, &CaracteresEscribidos, NULL);
 		va_end(Marker);
@@ -96,8 +96,8 @@ namespace DWL {
 		WaitForSingleObject(_Mutex, INFINITE);
 		DWORD CaracteresEscribidos = 0;
 		static wchar_t Txt[4096];
-		DWORD TmpTick = GetTickCount();
-		int TotalCaracteres = swprintf_s(Txt, 4096, L"[%.8d] %s", TmpTick - _UltimoTick, Texto.c_str());
+		ULONGLONG TmpTick = GetTickCount64();
+		int TotalCaracteres = swprintf_s(Txt, 4096, L"[%.8d] %s", static_cast<DWORD>(TmpTick - _UltimoTick), Texto.c_str());
 		_UltimoTick = TmpTick;
 		BOOL Ret = WriteConsole(_Consola, Txt, TotalCaracteres, &CaracteresEscribidos, NULL);
 		ReleaseMutex(_Mutex);

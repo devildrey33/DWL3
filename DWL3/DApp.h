@@ -82,10 +82,20 @@ namespace DWL {
 		void						   _Internet_Porcentaje(const float nValor, const UINT nID);
 										// Función que indica que la descarga ha finalizado correctamente
 		void						   _Internet_Terminado(const UINT nID);
+										// Función que inicia el set_se_translator para poder hacer catch en todas las excepciones (0xC0000005 : Access Violation) en especial
+		void						   _Catch_Exceptions(void);
 										// Color para le fondo de las ventanas
 		HBRUSH                         _ColorFondoVentana;
 										// Vector que contiene la linea de comandos separada
 		std::vector<std::wstring>	   _LineaComandos;
+
+		typedef unsigned int exception_code_t;
+										// Funcion que devuelve el texto de la despreición de una excepción
+		static const char             *_seDescripcion(const exception_code_t& code);
+										// Función que devuelve el texto de la la operación ejecutada durante una excepción
+		static const char             *_opDescripcion(const ULONG opcode);
+										// Función que convierte una excepción a string ANSI / UTF-8
+		static std::string			   _ErrorStr(struct _EXCEPTION_POINTERS* ep, bool has_exception_code = false, exception_code_t code = 0);
 
 		friend class DVentana;
 		friend class DMarcoScrollEx;

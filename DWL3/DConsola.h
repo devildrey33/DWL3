@@ -21,7 +21,7 @@
 
 			const BOOL              MostrarUltimoError();
 		protected:
-			DWORD				   _UltimoTick;
+			ULONGLONG			   _UltimoTick;
 			HANDLE                 _Consola;
 			HANDLE                 _Mutex;
 		};

@@ -3,6 +3,10 @@
 #include <versionhelpers.h>
 #include <Shellapi.h>
 #include "DArchivoInternet.h"
+#include <eh.h>
+#include <Psapi.h>
+#include <sstream>
+#include "DStringUtils.h"
 
 DWL::DApp *_Aplicacion = nullptr;
 
@@ -12,6 +16,8 @@ namespace DWL {
 	DApp::DApp(void) : _ColorFondoVentana(nullptr) {
 		// Asigno esta clase al puntero global de la aplicación
 		_Aplicacion = this;
+		// Activo el _set_se_translator para poder hacer un catch a todas las excepciones
+		_Catch_Exceptions();
 		// Obtengo la línea de comandos
 		_ObtenerLineaComandos();
 		// Creo la ventana para los mensajes multithread
@@ -20,6 +26,108 @@ namespace DWL {
 		HRESULT CIE = CoInitializeEx(0, COINIT_MULTITHREADED | COINIT_SPEED_OVER_MEMORY);
 		// Creo el color que se usara para el fondo de las ventanas (NO BORRAR lo hace el windows)
 		_ColorFondoVentana = CreateSolidBrush(COLOR_FONDO);
+	}
+
+
+	/* Función que inicia el set_se_translator para poder hacer catch en todas las excepciones (0xC0000005 : Access Violation) en especial
+	    Usar :
+			try								{   ...	  }
+			catch(const std::exception &ex)	{   ...   };
+	*/
+	void DApp::_Catch_Exceptions(void) {
+		// Be sure to enable "Yes with SEH Exceptions (/EHa)" in C++ / Code Generation;
+		_set_se_translator([](unsigned int Codigo, EXCEPTION_POINTERS* pExp) {
+			std::string ErrStr = DApp::_ErrorStr(pExp, true, Codigo);
+			// En modo DEBUG imprimo el error por la cnsola
+			#ifdef _DEBUG
+				std::wstring ErrWStr;
+				DWL::Strings::AnsiToWide(ErrStr.c_str(), ErrWStr);
+				ErrWStr += L"\n";
+				Debug_Escribir(ErrWStr);
+			#endif
+			throw std::exception(ErrStr.c_str());
+		});
+
+		/*_set_se_translator([](unsigned int u, EXCEPTION_POINTERS* pExp) {
+			std::string error = "SE Exception: ";
+			switch (u) {
+				case 0xC0000005:
+					error += "Access Violation";
+					break;
+				default:
+					char result[11];
+					sprintf_s(result, 11, "0x%08X", u);
+					error += result;
+					break;
+			};
+			throw std::exception(error.c_str());
+		})*/;
+	}
+
+	// Función que convierte una excepción a string
+	// https://stackoverflow.com/questions/457577/catching-access-violation-exceptions
+	std::string DApp::_ErrorStr(struct _EXCEPTION_POINTERS *ep, bool has_exception_code, exception_code_t code) {		
+		HMODULE hm;
+		::GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, static_cast<LPCTSTR>(ep->ExceptionRecord->ExceptionAddress), &hm);
+		MODULEINFO mi;
+		::GetModuleInformation(::GetCurrentProcess(), hm, &mi, sizeof(mi));
+		char fn[MAX_PATH];
+		::GetModuleFileNameExA(::GetCurrentProcess(), hm, fn, MAX_PATH);
+
+		std::ostringstream oss;
+		oss << "SE " << (has_exception_code ? _seDescripcion(code) : "") << " at address 0x" << std::hex << ep->ExceptionRecord->ExceptionAddress << std::dec
+			<< " inside " << fn << " loaded at base address 0x" << std::hex << mi.lpBaseOfDll << "\n";
+
+		if (has_exception_code && (
+			code == EXCEPTION_ACCESS_VIOLATION ||
+			code == EXCEPTION_IN_PAGE_ERROR)) {
+			oss << "Invalid operation: " << _opDescripcion(ep->ExceptionRecord->ExceptionInformation[0]) << L" at address 0x" << std::hex << ep->ExceptionRecord->ExceptionInformation[1] << std::dec << "\n";
+		}
+
+		if (has_exception_code && code == EXCEPTION_IN_PAGE_ERROR) {
+			oss << "Underlying NTSTATUS code that resulted in the exception " << ep->ExceptionRecord->ExceptionInformation[2] << "\n";
+		}
+
+		return oss.str();
+	}
+
+	
+	// https://stackoverflow.com/questions/3523716/is-there-a-function-to-convert-exception-pointers-struct-to-a-string
+	// Funcion que devuelve el texto de la despreición de una excepción
+	const char *DApp::_seDescripcion(const exception_code_t &code)	{
+		switch (code) {
+			case EXCEPTION_ACCESS_VIOLATION:			return "EXCEPTION_ACCESS_VIOLATION";
+			case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:		return "EXCEPTION_ARRAY_BOUNDS_EXCEEDED";
+			case EXCEPTION_BREAKPOINT:					return "EXCEPTION_BREAKPOINT";
+			case EXCEPTION_DATATYPE_MISALIGNMENT:		return "EXCEPTION_DATATYPE_MISALIGNMENT";
+			case EXCEPTION_FLT_DENORMAL_OPERAND:		return "EXCEPTION_FLT_DENORMAL_OPERAND";
+			case EXCEPTION_FLT_DIVIDE_BY_ZERO:			return "EXCEPTION_FLT_DIVIDE_BY_ZERO";
+			case EXCEPTION_FLT_INEXACT_RESULT:			return "EXCEPTION_FLT_INEXACT_RESULT";
+			case EXCEPTION_FLT_INVALID_OPERATION:		return "EXCEPTION_FLT_INVALID_OPERATION";
+			case EXCEPTION_FLT_OVERFLOW:				return "EXCEPTION_FLT_OVERFLOW";
+			case EXCEPTION_FLT_STACK_CHECK:				return "EXCEPTION_FLT_STACK_CHECK";
+			case EXCEPTION_FLT_UNDERFLOW:				return "EXCEPTION_FLT_UNDERFLOW";
+			case EXCEPTION_ILLEGAL_INSTRUCTION:			return "EXCEPTION_ILLEGAL_INSTRUCTION";
+			case EXCEPTION_IN_PAGE_ERROR:				return "EXCEPTION_IN_PAGE_ERROR";
+			case EXCEPTION_INT_DIVIDE_BY_ZERO:			return "EXCEPTION_INT_DIVIDE_BY_ZERO";
+			case EXCEPTION_INT_OVERFLOW:				return "EXCEPTION_INT_OVERFLOW";
+			case EXCEPTION_INVALID_DISPOSITION:			return "EXCEPTION_INVALID_DISPOSITION";
+			case EXCEPTION_NONCONTINUABLE_EXCEPTION:	return "EXCEPTION_NONCONTINUABLE_EXCEPTION";
+			case EXCEPTION_PRIV_INSTRUCTION:			return "EXCEPTION_PRIV_INSTRUCTION";
+			case EXCEPTION_SINGLE_STEP:					return "EXCEPTION_SINGLE_STEP";
+			case EXCEPTION_STACK_OVERFLOW:				return "EXCEPTION_STACK_OVERFLOW";
+			default:									return "UNKNOWN EXCEPTION";
+		}
+	}
+
+	// Función que devuelve el texto de la la operación ejecutada durante una excepción
+	const char *DApp::_opDescripcion(const ULONG opcode) {
+		switch (opcode) {
+			case 0:		return "read";
+			case 1:		return "write";
+			case 8:		return "user-mode data execution prevention (DEP) violation";
+			default:	return "unknown";
+		}
 	}
 
 	// Devuelve el path de la aplicación sin el ejecutable
