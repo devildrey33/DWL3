@@ -11,12 +11,20 @@ namespace DWL {
 
 		
 
-	Strings::Split::Split(std::wstring& Texto, const wchar_t Separador) {
-		_SepararWide(Texto.c_str(), Separador);
+	Strings::Split::Split(std::wstring& Texto, const wchar_t Delimitador) {
+		_SepararWide(Texto.c_str(), Delimitador);
 	}
 
-	Strings::Split::Split(const wchar_t* Texto, const wchar_t Separador) {
-		_SepararWide(Texto, Separador);
+	Strings::Split::Split(const wchar_t* Texto, const wchar_t Delimitador) {
+		_SepararWide(Texto, Delimitador);
+	}
+
+	Strings::Split::Split(std::wstring& Texto, const wchar_t *Delimitadores) {
+		_SepararWide(Texto.c_str(), Delimitadores);
+	}
+
+	Strings::Split::Split(const wchar_t* Texto, const wchar_t *Delimitadores) {
+		_SepararWide(Texto, Delimitadores);
 	}
 
 
@@ -35,25 +43,50 @@ namespace DWL {
 	}
 
 
-	void Strings::Split::_SepararWide(const wchar_t* Texto, const wchar_t Separador) {
+	void Strings::Split::_SepararWide(const wchar_t* Texto, const wchar_t Delimitador) {
 		std::wstringstream Stream(Texto);
 		std::wstring Tmp;
-		while (std::getline(Stream, Tmp, Separador)) {
+		while (std::getline(Stream, Tmp, Delimitador)) {
 			if (!Tmp.empty())
 				_TextoSeparado.push_back(Tmp);
 		}
 	}
 
 
+	void Strings::Split::_SepararWide(const wchar_t* Texto, const wchar_t *Delimitadores) {
+		// https://stackoverflow.com/questions/7621727/split-a-string-into-words-by-multiple-delimiters
 
+		std::wstringstream stringStream(Texto);
+		std::wstring line;
+		while (std::getline(stringStream, line)) {
+			std::size_t prev = 0, pos;
+			while ((pos = line.find_first_of(Delimitadores, prev)) != std::string::npos) {
+				if (pos > prev)
+					_TextoSeparado.push_back(line.substr(prev, pos - prev));
+				prev = pos + 1;
+			}
+			if (prev < line.length())
+				_TextoSeparado.push_back(line.substr(prev, std::string::npos));
+		}
 
-
-	Strings::SplitA::SplitA(std::string &Texto, const char Separador) {
-		_SepararAnsi(Texto.c_str(), Separador);
 	}
 
-	Strings::SplitA::SplitA(const char *Texto, const char Separador) {
-		_SepararAnsi(Texto, Separador);
+
+
+	Strings::SplitA::SplitA(std::string& Texto, const char Delimitador) {
+		_SepararAnsi(Texto.c_str(), Delimitador);
+	}
+
+	Strings::SplitA::SplitA(const char* Texto, const char Delimitador) {
+		_SepararAnsi(Texto, Delimitador);
+	}
+
+	Strings::SplitA::SplitA(std::string& Texto, const char *Delimitadores) {
+		_SepararAnsi(Texto.c_str(), Delimitadores);
+	}
+
+	Strings::SplitA::SplitA(const char* Texto, const char *Delimitadores) {
+		_SepararAnsi(Texto, Delimitadores);
 	}
 
 
@@ -72,17 +105,30 @@ namespace DWL {
 	}
 
 
-	void Strings::SplitA::_SepararAnsi(const char *Texto, const char Separador) {
+	void Strings::SplitA::_SepararAnsi(const char *Texto, const char Delimitador) {
 		std::stringstream Stream(Texto);
 		std::string Tmp;
-		while (std::getline(Stream, Tmp, Separador)) {
+		while (std::getline(Stream, Tmp, Delimitador)) {
 			if (!Tmp.empty())
 				_TextoSeparado.push_back(Tmp);
 		}
 	}
 
 
-
+	void Strings::SplitA::_SepararAnsi(const char* Texto, const char *Delimitadores) {
+		std::stringstream stringStream(Texto);
+		std::string line;
+		while (std::getline(stringStream, line)) {
+			std::size_t prev = 0, pos;
+			while ((pos = line.find_first_of(" ';", prev)) != std::string::npos) {
+				if (pos > prev)
+					_TextoSeparado.push_back(line.substr(prev, pos - prev));
+				prev = pos + 1;
+			}
+			if (prev < line.length())
+				_TextoSeparado.push_back(line.substr(prev, std::string::npos));
+		}
+	}
 
 
 

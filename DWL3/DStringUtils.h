@@ -7,35 +7,47 @@
 	#include <iomanip>
 	// DString_ToStr, DString_StrTo
 	#include <sstream>
+	#include <functional>
 
 	namespace DWL {
 		class Strings {
 		  public:
-			/* Split para separar una cadena por un carácter delimitador 
+			/* Split para separar una cadena por uno o varios carácteres delimitadores
 				NOTA : si no encuentra el delimitador, devuelve la cadena completa en el operador [0] */
 			class Split {
 			  public:
-											Split(std::wstring &Texto, const wchar_t Separador);
-											Split(const wchar_t*Texto, const wchar_t Separador);
+											Split(std::wstring &Texto, const wchar_t Delimitador);
+											Split(const wchar_t*Texto, const wchar_t Delimitador);
+											Split(std::wstring& Texto, const wchar_t *Delimitadores);
+											Split(const wchar_t* Texto, const wchar_t *Delimitadores);
+
+											
 				                           ~Split(void);
 				inline const size_t			Total(void) { return _TextoSeparado.size(); };
 				std::wstring               &operator[] (const size_t Pos);
 				const bool					operator() (void);
 			  protected:
-				void					   _SepararWide(const wchar_t *Texto, const wchar_t Separador);
+				void					   _SepararWide(const wchar_t *Texto, const wchar_t Delimitador);
+				void					   _SepararWide(const wchar_t* Texto, const wchar_t *Delimitadores);
 				std::vector<std::wstring>  _TextoSeparado;
 			};
 
+			/* Split ANSI para separar una cadena por uno o varios carácteres delimitadores
+				NOTA : si no encuentra el delimitador, devuelve la cadena completa en el operador [0] */
 			class SplitA {
 			  public:
-											SplitA(std::string &Texto, const char Separador);
-											SplitA(const char *Texto, const char Separador);
+											SplitA(std::string &Texto, const char Delimitador);
+											SplitA(const char *Texto, const char Delimitador);
+											SplitA(std::string &Texto, const char *Delimitadores);
+											SplitA(const char *Texto, const char *Delimitadores);
+
 				                           ~SplitA(void);
 				inline const size_t			Total(void) { return _TextoSeparado.size(); };
 				std::string                &operator[] (const size_t Pos);
 				const bool					operator() (void);
 			  protected:
-				void					   _SepararAnsi(const char *Texto, const char Separador);
+				void					   _SepararAnsi(const char *Texto, const char Delimitador);
+				void					   _SepararAnsi(const char* Texto, const char *Delimitadores);
 				std::vector<std::string>   _TextoSeparado;
 			};
 
