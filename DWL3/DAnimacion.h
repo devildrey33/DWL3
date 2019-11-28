@@ -165,6 +165,7 @@ namespace DWL {
 		DWORD                                      _TickInicio;
 		Datos                                      _Datos;
 		Valores                                    _Valores;
+		BOOL                                       _Eliminado;
 
 	};
 };

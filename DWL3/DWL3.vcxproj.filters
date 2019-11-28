@@ -121,6 +121,9 @@
     <Filter Include="Ventanas\ControlesEx\BarraScrollEx\MarcoScrollEx">
       <UniqueIdentifier>{d1a31b8b-91b3-4f4a-a3c8-132eeed346b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sistema\EnviarCorreo">
+      <UniqueIdentifier>{d6b0d9dd-b9c2-435b-bf23-a6a26f44cc10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DAnimacion.h">
@@ -282,6 +285,10 @@
     <ClInclude Include="DMarcoScrollEx.h">
       <Filter>Ventanas\ControlesEx\BarraScrollEx\MarcoScrollEx</Filter>
     </ClInclude>
+    <ClInclude Include="DWL_TODO.h" />
+    <ClInclude Include="DEnviarCorreo.h">
+      <Filter>Sistema\EnviarCorreo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DAnimacion.cpp">
@@ -418,6 +425,9 @@
     </ClCompile>
     <ClCompile Include="DMarcoScrollEx.cpp">
       <Filter>Ventanas\ControlesEx\BarraScrollEx\MarcoScrollEx</Filter>
+    </ClCompile>
+    <ClCompile Include="DEnviarCorreo.cpp">
+      <Filter>Sistema\EnviarCorreo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

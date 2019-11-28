@@ -4,6 +4,7 @@
 #include "DBarraProgresoEx.h"
 #include "DToolTipEx.h"
 #include "DEventoMouse.h"
+#include "DEventoMouseRueda.h"
 
 namespace DWL {
 
@@ -39,22 +40,26 @@ namespace DWL {
 	   std::function<void(DEventoMouse&)>			EventoMousePresionado;
 	   virtual void									Evento_MouseSoltado(DEventoMouse &DatosMouse) { };
 	   std::function<void(DEventoMouse&)>			EventoMouseSoltado;
+	   virtual void                                 Evento_MouseRueda(DEventoMouseRueda &DatosMouse) { };
+	   std::function<void(DEventoMouseRueda &)>		EventoMouseRueda;
+
 	   virtual void									Evento_MostrarToolTip(float nValor, std::wstring &Texto);
 	   std::function<void(float, std::wstring &)>	EventoMostrarToolTip;
 
-//	   virtual void                             Resaltar(const BOOL Resaltado);
+//	   virtual void									Resaltar(const BOOL Resaltado);
 
-	   virtual const DhWnd_Tipo					TipoWnd(void) { return DhWnd_Tipo_BarraDesplazamientoEx; };
+	   virtual const DhWnd_Tipo						TipoWnd(void) { return DhWnd_Tipo_BarraDesplazamientoEx; };
 
-	   LRESULT CALLBACK							GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	   LRESULT CALLBACK								GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	  protected:
-		void								   _Evento_MouseMovimiento(WPARAM wParam, LPARAM lParam);
-		void								   _Evento_MousePresionado(const int Boton, WPARAM wParam, LPARAM lParam);
-		void								   _Evento_MouseSoltado(const int Boton, WPARAM wParam, LPARAM lParam);
-		void                                   _Evento_MouseSaliendo(void);
+		void									   _Evento_MouseMovimiento(WPARAM wParam, LPARAM lParam);
+		void									   _Evento_MousePresionado(const int Boton, WPARAM wParam, LPARAM lParam);
+		void									   _Evento_MouseSoltado(const int Boton, WPARAM wParam, LPARAM lParam);
+		void									   _Evento_MouseRueda(WPARAM wParam, LPARAM lParam);
+		void						               _Evento_MouseSaliendo(void);
 
-	    DBarraEx_ToolTip		               _MostrarToolTip;
-	    DToolTipEx							   _ToolTip;
+	    DBarraEx_ToolTip				           _MostrarToolTip;
+	    DToolTipEx								   _ToolTip;
 	};
 }
 

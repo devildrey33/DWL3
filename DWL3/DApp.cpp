@@ -38,7 +38,7 @@ namespace DWL {
 		// Be sure to enable "Yes with SEH Exceptions (/EHa)" in C++ / Code Generation;
 		_set_se_translator([](unsigned int Codigo, EXCEPTION_POINTERS* pExp) {
 			std::string ErrStr = DApp::_ErrorStr(pExp, true, Codigo);
-			// En modo DEBUG imprimo el error por la cnsola
+			// En modo DEBUG imprimo el error por la consola
 			#ifdef _DEBUG
 				std::wstring ErrWStr;
 				DWL::Strings::AnsiToWide(ErrStr.c_str(), ErrWStr);

@@ -3,11 +3,12 @@
 	// BarraEx
 	#define DWL_BARRAEX_CAMBIANDO							WM_USER + 1	// MouseDown y MouseMove
 	#define DWL_BARRAEX_CAMBIADO							WM_USER + 2	// MouseUp
+	#define DWL_BARRAEX_MOUSERUEDA							WM_USER + 3	// Rueda del mouse
 
 	// BotonEx
-	#define DWL_BOTONEX_MOUSEDOWN							WM_USER + 3
-	#define DWL_BOTONEX_MOUSEUP								WM_USER + 4	// Se lanza incluso fuera del control
-	#define DWL_BOTONEX_CLICK								WM_USER + 5	// Solo se lanza si el mouse está dentro del control al soltar el boton
+	#define DWL_BOTONEX_MOUSEDOWN							WM_USER + 4
+	#define DWL_BOTONEX_MOUSEUP								WM_USER + 5	// Se lanza incluso fuera del control
+	#define DWL_BOTONEX_CLICK								WM_USER + 6	// Solo se lanza si el mouse está dentro del control al soltar el boton
 
 	// EditBox /////////////////////////////////////////////////////////////
 	#define DWL_EDITBOX_CLICK_IZQUIERDO						WM_USER + 12

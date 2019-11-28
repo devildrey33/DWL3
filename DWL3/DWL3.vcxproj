@@ -183,6 +183,7 @@
     <ClInclude Include="DDlgAbrir.h" />
     <ClInclude Include="DDlgDirectorios.h" />
     <ClInclude Include="DEdicionTextoEx.h" />
+    <ClInclude Include="DEnviarCorreo.h" />
     <ClInclude Include="DEtiquetaEx.h" />
     <ClInclude Include="DEventoMouse.h" />
     <ClInclude Include="DEventoMouseRueda.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="DUnidadesDisco.h" />
     <ClInclude Include="DVentana.h" />
     <ClInclude Include="DWL_Configuracion.h" />
+    <ClInclude Include="DWL_TODO.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="DWL_Skin.h" />
@@ -237,6 +239,7 @@
     <ClCompile Include="DDlgAbrir.cpp" />
     <ClCompile Include="DDlgDirectorios.cpp" />
     <ClCompile Include="DEdicionTextoEx.cpp" />
+    <ClCompile Include="DEnviarCorreo.cpp" />
     <ClCompile Include="DEtiquetaEx.cpp" />
     <ClCompile Include="DExplorarDirectoriosEx.cpp" />
     <ClCompile Include="DFuente.cpp" />

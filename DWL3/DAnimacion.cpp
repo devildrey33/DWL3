@@ -10,7 +10,7 @@ namespace DWL {
 	|_____/_/    \_\_| |_|_|_| |_| |_|\__,_|\___|_|\___/|_| |_|
 */
 
-	DAnimacion::DAnimacion(void) : _Timer(NULL), _TickInicio(NULL), _Duracion(0), _TiempoActual(0) {
+	DAnimacion::DAnimacion(void) : _Timer(NULL), _TickInicio(NULL), _Duracion(0), _TiempoActual(0), _Eliminado(FALSE) {
 	}
 	
 
@@ -80,6 +80,9 @@ namespace DWL {
 
 	// Función que inicia la animación a partir de un objeto DAnimacion::Datos
 	void DAnimacion::Iniciar(Datos &nDatos, const DWORD Milisegundos, std::function<void(Valores &, const BOOL)> LambdaCallback, const DWORD Intervalo) {
+		// Re-habilito que se pueda eliminar este timer UNA VEZ
+		_Eliminado = FALSE;
+
 		// Compruebo que los valores Desde sean distintos a los valores Hasta
 		BOOL Iguales = TRUE;
 		for (size_t i = 0; i < nDatos.Total(); i++) {
@@ -108,8 +111,9 @@ namespace DWL {
 		_Callback		= LambdaCallback;
 		_Duracion		= Milisegundos;
 		_TickInicio     = GetTickCount();
-		_TiempoActual	= 0;
+		_TiempoActual	= 0;																										// WT_EXECUTEINPERSISTENTTHREAD
 		BOOL Ret = CreateTimerQueueTimer(&_Timer, NULL, reinterpret_cast<WAITORTIMERCALLBACK>(_TimerProc), this, Intervalo, Intervalo, WT_EXECUTEINTIMERTHREAD);
+//		BOOL Ret = CreateTimerQueueTimer(&_Timer, NULL, reinterpret_cast<WAITORTIMERCALLBACK>(_TimerProc), this, Intervalo, Intervalo, WT_EXECUTEDEFAULT);
 		#if DANIMACION_MOSTRARDEBUG == TRUE
 			Debug_Escribir_Varg(L"DAnimacion::Iniciar %d milisegundos.\n", Milisegundos);
 		#endif
@@ -134,8 +138,17 @@ namespace DWL {
 		#if DANIMACION_MOSTRARDEBUG == TRUE
 			Debug_Escribir(L"DAnimacion::Terminar\n");
 		#endif
-		if (_Timer != NULL) {
+		if (_Timer != NULL && _Eliminado == FALSE) {
+			// Aseguro que no se intenta eliminar 2 veces el mismo timer
+			_Eliminado = TRUE;
 			BOOL D = DeleteTimerQueueTimer(NULL, _Timer, NULL);
+			// Amb INVALID_HANDLE_VALUE la funció no retorna fins que no acaba el timer, amb NULL pot ser que s'extigui executan mentres l'intento apagar...
+//			BOOL D = DeleteTimerQueueTimer(NULL, _Timer, INVALID_HANDLE_VALUE); // INVALID HANDLE no funciona be amb CreateTimerQueueTimer WT_EXECUTEINTIMERTHREAD
+			if (D != TRUE) {				
+				Debug_Escribir_Varg(L"DAnimacion::Terminar DeleteTimerQueueTimer Error : %s\n", _Aplicacion->UltimoError().c_str());				
+//				_Eliminado = FALSE;
+//				return;
+			}
 		}
 		_Timer = NULL;
 	}

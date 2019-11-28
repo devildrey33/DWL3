@@ -9,10 +9,11 @@ namespace DWL {
 		DBarraProgresoEx(),
 		_MostrarToolTip(DBarraEx_ToolTip_SinToolTip),
 		// Eventos Lambda enlazados a los eventos virtuales por defecto
-		EventoMouseMovimiento([=](DEventoMouse& d)			{ Evento_MouseMovimiento(d);	}),
-		EventoMousePresionado([=](DEventoMouse& d)			{ Evento_MousePresionado(d);	}), 
-		EventoMouseSoltado([=](DEventoMouse& d)				{ Evento_MouseSoltado(d);		}),
-		EventoMostrarToolTip([=](float v, std::wstring& s)	{ Evento_MostrarToolTip(v, s);	})  {
+		EventoMouseMovimiento([=](DEventoMouse &d)			{ Evento_MouseMovimiento(d);	}),
+		EventoMousePresionado([=](DEventoMouse &d)			{ Evento_MousePresionado(d);	}), 
+		EventoMouseSoltado([=](DEventoMouse &d)				{ Evento_MouseSoltado(d);		}),
+		EventoMouseRueda([=](DEventoMouseRueda &d)			{ Evento_MouseRueda(d);			}),
+		EventoMostrarToolTip([=](float v, std::wstring &s)	{ Evento_MostrarToolTip(v, s);	})  {
 	}
 
 	DBarraDesplazamientoEx::~DBarraDesplazamientoEx(void) {
@@ -162,6 +163,13 @@ namespace DWL {
 	}
 
 
+	void DBarraDesplazamientoEx::_Evento_MouseRueda(WPARAM wParam, LPARAM lParam) {
+		DEventoMouseRueda DatosMouse(wParam, lParam, this);
+		SendMessage(GetParent(hWnd()), DWL_BARRAEX_MOUSERUEDA, DEVENTOMOUSERUEDA_TO_WPARAM(DatosMouse), 0);
+		EventoMouseRueda(DatosMouse);
+	}
+
+
 	LRESULT CALLBACK DBarraDesplazamientoEx::GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg) {
 			case WM_ERASEBKGND:
@@ -197,6 +205,10 @@ namespace DWL {
 				return 0;
 			case WM_MBUTTONUP:
 				_Evento_MouseSoltado(2, wParam, lParam);
+				return 0;
+
+			case WM_MOUSEWHEEL:	
+				_Evento_MouseRueda(wParam, lParam);	
 				return 0;
 		}
 		return DControlEx::GestorMensajes(uMsg, wParam, lParam);
