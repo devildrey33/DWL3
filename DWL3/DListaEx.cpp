@@ -246,6 +246,8 @@ namespace DWL {
 		DeleteDC(Buffer);
 	}
 
+
+
 	void DListaEx::PintarItem(HDC hDC, const LONG_PTR nPosItem, RECT &Espacio) {
 		if (_Items.size() == 0) return;
 
@@ -272,6 +274,7 @@ namespace DWL {
 		RECT RCelda;
 //		LONG AnchoPintado = (DLISTAEX_PADDING * 2) + DLISTAEX_TAMICONO;
 		LONG AnchoPintado = 0;
+		DListaEx_Item *Item = nullptr;
 		//	Recorro todos los sub-items
 		for (size_t i = 0; i < _Columnas.size(); i++) {
 			RCelda = {
@@ -283,8 +286,10 @@ namespace DWL {
 			if (i == 0 && _PintarIconos == TRUE) { // La primera columna contiene el icono (que ya se ha pintado)
 				RCelda.left += (DLISTAEX_PADDING * 2) + DLISTAEX_TAMICONO;
 			}
+
+			Item = _Items[static_cast<unsigned int>(nPosItem)];
 			// Si hay texto lo pinto
-			if (_Items[static_cast<unsigned int>(nPosItem)]->Texto(i).size() > 0) {
+			if (Item->Texto(i).size() > 0) {
 				// Pinto la sombra
 				if (Skin.FuenteSombraTexto == TRUE) {
 					SetTextColor(_BufferItem, _Items[nPosItem]->_ColorTextoSombra);

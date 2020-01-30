@@ -97,7 +97,7 @@ namespace DWL {
 		for (size_t n = 0; n < _Unidades.size(); n++) {
 			if (_Unidades[n]->Numero_Serie() == Numero) return _Unidades[n];
 		}
-		return NULL;
+		return nullptr;
 	};
 
 	DUnidadDisco *DUnidadesDisco::Buscar_Letra(const wchar_t Letra) {
@@ -105,7 +105,7 @@ namespace DWL {
 		for (size_t n = 0; n < _Unidades.size(); n++) {
 			if (_Unidades[n]->Letra() == L2) return _Unidades[n];
 		}
-		return NULL;
+		return nullptr;
 	};
 
 	const size_t DUnidadesDisco::TotalUnidades(void) {

@@ -144,11 +144,13 @@ namespace DWL {
 			BOOL D = DeleteTimerQueueTimer(NULL, _Timer, NULL);
 			// Amb INVALID_HANDLE_VALUE la funció no retorna fins que no acaba el timer, amb NULL pot ser que s'extigui executan mentres l'intento apagar...
 //			BOOL D = DeleteTimerQueueTimer(NULL, _Timer, INVALID_HANDLE_VALUE); // INVALID HANDLE no funciona be amb CreateTimerQueueTimer WT_EXECUTEINTIMERTHREAD
-			if (D != TRUE) {				
-				Debug_Escribir_Varg(L"DAnimacion::Terminar DeleteTimerQueueTimer Error : %s\n", _Aplicacion->UltimoError().c_str());				
-//				_Eliminado = FALSE;
-//				return;
-			}
+			#if DANIMACION_MOSTRARDEBUG == TRUE
+				if (D != TRUE) {				
+					Debug_Escribir_Varg(L"DAnimacion::Terminar DeleteTimerQueueTimer Error : %s\n", _Aplicacion->UltimoError().c_str());				
+	//				_Eliminado = FALSE;
+	//				return;
+				}
+			#endif
 		}
 		_Timer = NULL;
 	}
