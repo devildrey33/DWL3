@@ -70,6 +70,8 @@ int APIENTRY _tWinMain(_In_     HINSTANCE hInstance,
 ```
  
 ### Propósito
+ Esta libreria la he creado para disponer de una serie de funciones básicas y controles que puedo necesitar a la hora de programar cualquier aplicación en C++. Desde objetos para facilitarme la vida con archivos binarios, a controles de usuario propios que simulan en gran parte el comportamiento de los controles estandar de windows pero que son mucho mas configurables.
+ 
  
  
 
