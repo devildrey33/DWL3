@@ -179,12 +179,22 @@ namespace DWL {
 		if (Terminado == TRUE) {
 			// Asigno el valor final (algunas veces con decimales se puede pasar..)
 			for (size_t i = 0; i < This->_Datos.Total(); i++) 
-				This->_Valores[i] = This->_Datos[i].Hasta;			
-			This->_Callback(This->_Valores, Terminado);
-			This->Terminar();
+				This->_Valores[i] = This->_Datos[i].Hasta;	
+			try {
+				This->_Callback(This->_Valores, Terminado);
+				This->Terminar();
+			}
+			catch (std::bad_function_call) {
+				// El callback ya no existe por que se ha eliminado el objeto DAnimacion
+			}
 		}
 		else {
-			This->_Callback(This->_Valores, Terminado);
+			try {
+				This->_Callback(This->_Valores, Terminado);
+			}
+			catch (std::bad_function_call) {
+				// El callback ya no existe por que se ha eliminado el objeto DAnimacion
+			}
 		}
 	}
 
