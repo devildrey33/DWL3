@@ -9,7 +9,7 @@
 
 namespace DWL {
 	// Constructor
-	DEnviarCorreo::DEnviarCorreo(void) : _Socket(NULL), _SFT(NULL), _Certificado(NULL), _Protocolo(0), _aiKeyExch(0), _CredencialesCreadas(FALSE), _Thread(NULL), _ContextoCreado(FALSE) {
+	DEnviarCorreo::DEnviarCorreo(void) : _Contexto({ 0, 0 }), _Credenciales({ 0, 0 }), _Puerto(0), _Socket(NULL), _SFT(NULL), _Certificado(NULL), _Protocolo(0), _aiKeyExch(0), _CredencialesCreadas(FALSE), _Thread(NULL), _ContextoCreado(FALSE) {
 
 	}
 
@@ -33,8 +33,8 @@ namespace DWL {
 		}
 
 		// Inicio el thread para enviar el correo
-		_Thread = CreateThread(NULL, 0, (unsigned long(__stdcall *)(void *))this->_ThreadEnviar, (void *)this, 0, NULL);
-
+		DEnviarCorreo *This = this;
+		_Thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)this->_ThreadEnviar, reinterpret_cast<void *>(this), 0, NULL);
 		// Si se ha creado el thread, asigno su prioridad
 		if (_Thread) SetThreadPriority(_Thread, 0);
 		// Si no se ha creado el thread devuelvo false
@@ -48,8 +48,8 @@ namespace DWL {
 
 	// Thread para enviar el correo
 	unsigned long  DEnviarCorreo::_ThreadEnviar(void *pThis) {
+//		DEnviarCorreo *This = static_cast<DEnviarCorreo *>(pThis);
 		DEnviarCorreo *This = reinterpret_cast<DEnviarCorreo *>(pThis);
-
 		// Cargo la librería para la criptografia
 		if (This->_IniciarCrypto() == FALSE) {
 			This->_Terminar();
@@ -86,8 +86,11 @@ namespace DWL {
 			return FALSE;
 		}
 
+
+
+
 		// Envio el EHLO y logueo al usuario
-		if (This->_AutentificarCredencialesServidor() == FALSE) {
+		if (This->_EnviarHelo() == FALSE) {
 			This->_Terminar();
 			return FALSE;
 		}
@@ -131,7 +134,7 @@ namespace DWL {
 		cbData = _Encriptar(pbIoBuffer, Sizes);
 		if (cbData == SOCKET_ERROR || cbData == 0) {
 			printf("**** Error %d sending data to server (3)\n", WSAGetLastError());
-			return SEC_E_INTERNAL_ERROR;
+			return FALSE; // SEC_E_INTERNAL_ERROR;
 		}
 
 
@@ -150,16 +153,17 @@ namespace DWL {
 		cbData = _Encriptar(pbIoBuffer, Sizes);
 		if (cbData == SOCKET_ERROR || cbData == 0) {
 			printf("**** Error %d sending data to server (3)\n", WSAGetLastError()); 
-			return SEC_E_INTERNAL_ERROR;
+			return FALSE; // SEC_E_INTERNAL_ERROR;
 		}
 
 
 		// Receive a Response
 		scRet = _Desencriptar(pbIoBuffer, cbIoBufferLength);
-		if (scRet != SEC_E_OK) return scRet;
+		
+//		if (scRet != SEC_E_OK) return scRet;
 
 
-		return SEC_E_OK;
+		return (scRet == SEC_E_OK) ? TRUE : FALSE; //  SEC_E_OK;
 	}
 
 
@@ -459,7 +463,7 @@ namespace DWL {
 
 	/*****************************************************************************/
 	void DEnviarCorreo::_ErrorWinsock(DWORD ErrCode)	{
-		const wchar_t *StrError = NULL; // http://www.sockets.com/err_lst1.htm#WSANO_DATA
+		const wchar_t *StrError = nullptr; // http://www.sockets.com/err_lst1.htm#WSANO_DATA
 
 		switch (ErrCode) {// http://msdn.microsoft.com/en-us/library/ms740668(VS.85).aspx
 		
@@ -570,7 +574,7 @@ namespace DWL {
 			_Certificado = CertOpenSystemStoreA(0, "MY");
 			if (!_Certificado) {
 				printf("**** Error 0x%x returned by CertOpenSystemStore\n", GetLastError());
-				return SEC_E_NO_CREDENTIALS;
+				return FALSE; // SEC_E_NO_CREDENTIALS;
 			}
 		}
 
@@ -592,7 +596,7 @@ namespace DWL {
 			if (pCertContext == NULL)	{
 				printf("**** Error 0x%x returned by CertFindCertificateInStore\n", GetLastError());
 				if (GetLastError() == CRYPT_E_NOT_FOUND) printf("CRYPT_E_NOT_FOUND - property doesn't exist\n");
-				return SEC_E_NO_CREDENTIALS;
+				return FALSE; //  SEC_E_NO_CREDENTIALS;
 			}
 		}
 
@@ -740,7 +744,7 @@ namespace DWL {
 		if (_Socket != NULL) return TRUE;
 
 		LPSERVENT	lpServEntry;
-		int			iProtocolPort	= 0;
+		int			iProtocolPort	= _Puerto;
 		addrinfo    *result			= NULL;
 		addrinfo    *p				= NULL;
 		addrinfo     hints;
@@ -794,13 +798,18 @@ namespace DWL {
 
 		// Conecto el socket
 		if (connect(_Socket, (PSOCKADDR)& _SockAddr, sizeof(_SockAddr))) {
-			// WSAGetLastError()
+			int err = WSAGetLastError();
 			return FALSE;
 		}
 
 		return TRUE;
 	}
 
+
+	void DEnviarCorreo::Servidor(const char *nServidor, const UINT nPuerto) {
+		_Servidor = nServidor;
+		_Puerto   = nPuerto;
+	}
 
 
 	void DEnviarCorreo::_Terminar(void) {
@@ -842,8 +851,8 @@ namespace DWL {
 		SECURITY_STATUS scRet;
 
 
-		dwSSPIFlags = ISC_REQ_SEQUENCE_DETECT | ISC_REQ_REPLAY_DETECT | ISC_REQ_CONFIDENTIALITY |
-			ISC_RET_EXTENDED_ERROR | ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_STREAM;
+		dwSSPIFlags =	ISC_REQ_SEQUENCE_DETECT | ISC_REQ_REPLAY_DETECT | ISC_REQ_CONFIDENTIALITY |
+						ISC_RET_EXTENDED_ERROR | ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_STREAM;
 
 
 		//  Initiate a ClientHello message and generate a token.
@@ -897,7 +906,7 @@ namespace DWL {
 		return TRUE;
 	}
 
-
+	// BUG
 	SECURITY_STATUS DEnviarCorreo::_BucleHandShake(const BOOL LecturaInicial) {
 		SecBufferDesc   OutBuffer, InBuffer;
 		SecBuffer       InBuffers[2], OutBuffers[1];
@@ -990,6 +999,40 @@ namespace DWL {
 				&OutBuffer,
 				&dwSSPIOutFlags,
 				&tsExpiry);
+
+			int a = 0;
+			switch (scRet) {
+				case SEC_E_INSUFFICIENT_MEMORY:
+					a = 1;
+					break;
+				case SEC_E_INTERNAL_ERROR:
+					a = 2;
+					break;
+				case SEC_E_INVALID_HANDLE:
+					a = 3;
+					break;
+				case SEC_E_INVALID_TOKEN:
+					a = 4;
+					break;
+				case SEC_E_LOGON_DENIED:
+					a = 5;
+					break;
+				case SEC_E_NO_AUTHENTICATING_AUTHORITY:
+					a = 6;
+					break;
+				case SEC_E_NO_CREDENTIALS:
+					a = 7;
+					break;
+				case SEC_E_TARGET_UNKNOWN:
+					a = 8;
+					break;
+				case SEC_E_UNSUPPORTED_FUNCTION:
+					a = 9;
+					break;
+				case SEC_E_WRONG_PRINCIPAL:
+					a = 10;
+					break;
+			}
 
 
 			// If InitializeSecurityContext was successful (or if the error was

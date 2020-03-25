@@ -81,7 +81,7 @@ namespace DWL {
 		if (has_exception_code && (
 			code == EXCEPTION_ACCESS_VIOLATION ||
 			code == EXCEPTION_IN_PAGE_ERROR)) {
-			oss << "Invalid operation: " << _opDescripcion(ep->ExceptionRecord->ExceptionInformation[0]) << L" at address 0x" << std::hex << ep->ExceptionRecord->ExceptionInformation[1] << std::dec << "\n";
+			oss << "Invalid operation: " << _opDescripcion(static_cast<ULONG>(ep->ExceptionRecord->ExceptionInformation[0])) << L" at address 0x" << std::hex << ep->ExceptionRecord->ExceptionInformation[1] << std::dec << "\n";
 		}
 
 		if (has_exception_code && code == EXCEPTION_IN_PAGE_ERROR) {

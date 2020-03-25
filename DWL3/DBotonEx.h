@@ -9,13 +9,13 @@
 
 
 namespace DWL {
-	enum DBotonEx_Estado {
+	enum class DBotonEx_Estado {
 		DBotonEx_Estado_Normal,
 		DBotonEx_Estado_Resaltado,
 		DBotonEx_Estado_Presionado
 	};
 
-	enum DBotonEx_Transicion {
+	enum class DBotonEx_Transicion {
 		DBotonEx_Transicion_Normal,
 		DBotonEx_Transicion_Resaltado,
 		DBotonEx_Transicion_Presionado,
@@ -32,7 +32,7 @@ namespace DWL {
 	  public :
 						DBotonEx_Skin(void);
 		               ~DBotonEx_Skin(void) { }
-								// Colores
+						// Colores
 		 COLORREF		FondoNormal;
 		 COLORREF		FondoResaltado;
 		 COLORREF		FondoPresionado;

@@ -35,6 +35,9 @@ namespace DWL {
 
 
 
+
+
+
 	DBotonEx::DBotonEx(void) : 
 		DControlEx()																	, 
 		_Marcado(FALSE)																	, 
@@ -43,7 +46,7 @@ namespace DWL {
 		_ColorFondo(Skin.FondoNormal)													,
 		_ColorBorde(Skin.BordeNormal)													,
 		_ColorTexto(Skin.TextoNormal)													,
-		_Estado(DBotonEx_Estado_Normal)													,	
+		_Estado(DBotonEx_Estado::DBotonEx_Estado_Normal)								,
 		// Eventos Lambda enlazados a los eventos virtuales por defecto
 		EventoMouseMovimiento([=](DEventoMouse &e)		{ Evento_MouseMovimiento(e);	}),
 		EventoMousePresionado([=](DEventoMouse& e)		{ Evento_MousePresionado(e);	}),
@@ -94,7 +97,7 @@ namespace DWL {
 //		if (hWnd()) { Debug_Escribir(L"DBotonEx::CrearBotonEx() Error : ya se ha creado el botón\n"); return hWnd(); }
 		_hWnd = CrearControlEx(nPadre, L"DBotonEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL);
 		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
-		_Estado = DBotonEx_Estado_Normal;
+		_Estado = DBotonEx_Estado::DBotonEx_Estado_Normal;
 		_MouseDentro = FALSE;
 		return hWnd();
 	}
@@ -116,7 +119,7 @@ namespace DWL {
 
 		int bPresionado = 0;
 		// Si el control está presionado retoco las posiciones del texto i los iconos
-		if (_Estado == DBotonEx_Estado_Presionado) {
+		if (_Estado == DBotonEx_Estado::DBotonEx_Estado_Presionado) {
 			RCT.top += 2;		// Recta texto
 			RCS.top += 2;		// Recta sombra
 			bPresionado = 1;	// x e y iniciales para el icono
@@ -167,7 +170,7 @@ namespace DWL {
 	void DBotonEx::Activado(const BOOL nActivar) {
 		BOOL Ret = FALSE;
 		Ret = EnableWindow(_hWnd, nActivar);
-		Transicion((nActivar == TRUE) ? DBotonEx_Transicion_Normal : DBotonEx_Transicion_Desactivado);
+		Transicion((nActivar == TRUE) ? DBotonEx_Transicion::DBotonEx_Transicion_Normal : DBotonEx_Transicion::DBotonEx_Transicion_Desactivado);
 		//Repintar();
 	}
 
@@ -177,9 +180,9 @@ namespace DWL {
 		DEventoMouse DatosMouse(wParam, lParam, this);
 		if (_MouseEntrando() == TRUE) {
 			// Mouse enter
-			if (_Estado != DBotonEx_Estado_Presionado) {
-				_Estado = DBotonEx_Estado_Resaltado;
-				Transicion(DBotonEx_Transicion_Resaltado);
+			if (_Estado != DBotonEx_Estado::DBotonEx_Estado_Presionado) {
+				_Estado = DBotonEx_Estado::DBotonEx_Estado_Resaltado;
+				Transicion(DBotonEx_Transicion::DBotonEx_Transicion_Resaltado);
 			}
 		}
 
@@ -200,27 +203,27 @@ namespace DWL {
 
 		COLORREF *FondoHasta = 0, *BordeHasta = 0, *TextoHasta = 0;
 		switch (nTransicion) {
-			case DBotonEx_Transicion_Normal:
+			case DBotonEx_Transicion::DBotonEx_Transicion_Normal:
 				FondoHasta = &Skin.FondoNormal;
 				BordeHasta = &Skin.BordeNormal;
 				TextoHasta = &Skin.TextoNormal;
 				break;
-			case DBotonEx_Transicion_Resaltado:
+			case DBotonEx_Transicion::DBotonEx_Transicion_Resaltado:
 				FondoHasta = &Skin.FondoResaltado;
 				BordeHasta = &Skin.BordeResaltado;
 				TextoHasta = &Skin.TextoResaltado;
 				break;
-			case DBotonEx_Transicion_Presionado:
+			case DBotonEx_Transicion::DBotonEx_Transicion_Presionado:
 				FondoHasta = &Skin.FondoPresionado;
 				BordeHasta = &Skin.BordePresionado;
 				TextoHasta = &Skin.TextoPresionado;
 				break;
-			case DBotonEx_Transicion_Marcado:
+			case DBotonEx_Transicion::DBotonEx_Transicion_Marcado:
 				FondoHasta = &Skin.FondoMarcado;
 				BordeHasta = &Skin.BordeNormal;
 				TextoHasta = &Skin.TextoNormal;
 				break;
-			case DBotonEx_Transicion_Desactivado:
+			case DBotonEx_Transicion::DBotonEx_Transicion_Desactivado:
 				FondoHasta = &Skin.FondoNormal;
 				BordeHasta = &Skin.BordeNormal;
 				TextoHasta = &Skin.TextoDesactivado;
@@ -253,8 +256,8 @@ namespace DWL {
 		#endif	
 		DEventoMouse DatosMouse(wParam, lParam, this, Boton);
 		SetCapture(hWnd());
-		Transicion(DBotonEx_Transicion_Presionado);
-		_Estado = DBotonEx_Estado_Presionado;
+		Transicion(DBotonEx_Transicion::DBotonEx_Transicion_Presionado);
+		_Estado = DBotonEx_Estado::DBotonEx_Estado_Presionado;
 		SendMessage(GetParent(hWnd()), DWL_BOTONEX_MOUSEDOWN, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
 		EventoMousePresionado(DatosMouse);
 	}
@@ -265,7 +268,7 @@ namespace DWL {
 		#endif	
 		ReleaseCapture();
 
-		if (_Estado == DBotonEx_Estado_Presionado) {
+		if (_Estado == DBotonEx_Estado::DBotonEx_Estado_Presionado) {
 			DEventoMouse DatosMouse(wParam, lParam, this, Boton);
 			
 
@@ -278,13 +281,13 @@ namespace DWL {
 			POINT Pt = { DatosMouse.X(), DatosMouse.Y() };
 			// Si el mouse está dentro del control
 			if (PtInRect(&RC, Pt) != 0) {
-				_Estado = DBotonEx_Estado_Resaltado;
-				Transicion(DBotonEx_Transicion_Resaltado);
+				_Estado = DBotonEx_Estado::DBotonEx_Estado_Resaltado;
+				Transicion(DBotonEx_Transicion::DBotonEx_Transicion_Resaltado);
 				EventoMouseClick(DatosMouse);
 				SendMessage(GetParent(hWnd()), DWL_BOTONEX_CLICK, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
 			}
 			else {
-				_Estado = DBotonEx_Estado_Normal;
+				_Estado = DBotonEx_Estado::DBotonEx_Estado_Normal;
 //				Transicion(DBotonEx_Transicion_Normal); (no hace falta salta el mouse leave)
 			}
 //			Repintar();
@@ -302,11 +305,11 @@ namespace DWL {
 		if (PtInRect(&RC, P) == TRUE) {
 			_ColorFondo = Skin.FondoResaltado;
 //			Transicion(DBotonEx_Transicion_Resaltado); // no se necesita una transición porque el mouse está encima y sigue siendo resaltado
-			_Estado = DBotonEx_Estado_Resaltado;
+			_Estado = DBotonEx_Estado::DBotonEx_Estado_Resaltado;
 		}
 		else { // Si no está encima del control asigno el color según si está marcado o no
-			_Estado = DBotonEx_Estado_Normal;
-			Transicion((nMarcar == TRUE) ? DBotonEx_Transicion_Marcado : DBotonEx_Transicion_Normal);
+			_Estado = DBotonEx_Estado::DBotonEx_Estado_Normal;
+			Transicion((nMarcar == TRUE) ? DBotonEx_Transicion::DBotonEx_Transicion_Marcado : DBotonEx_Transicion::DBotonEx_Transicion_Normal);
 			
 		}	
 	}
@@ -328,9 +331,9 @@ namespace DWL {
 			Debug_Escribir(L"DBotonEx::_Evento_MouseSaliendo\n");
 		#endif	
 		_MouseDentro = FALSE;
-		if (_Estado != DBotonEx_Estado_Presionado && Activado() == TRUE) {
-			Transicion((_Marcado == FALSE) ? DBotonEx_Transicion_Normal : DBotonEx_Transicion_Marcado);
-			_Estado = DBotonEx_Estado_Normal;
+		if (_Estado != DBotonEx_Estado::DBotonEx_Estado_Presionado && Activado() == TRUE) {
+			Transicion((_Marcado == FALSE) ? DBotonEx_Transicion::DBotonEx_Transicion_Normal : DBotonEx_Transicion::DBotonEx_Transicion_Marcado);
+			_Estado = DBotonEx_Estado::DBotonEx_Estado_Normal;
 		}
 	}
 

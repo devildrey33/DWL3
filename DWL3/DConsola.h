@@ -4,7 +4,7 @@
 	#include <string>
 
 	namespace DWL {
-
+		// Clase para mostrar valores por la consola (THREAD SAFE)
 		class DConsola {
 		  public:
 									DConsola(void);
@@ -20,7 +20,7 @@
 			const BOOL				EscribirMS(std::wstring &Texto);
 
 			const BOOL              MostrarUltimoError();
-		protected:
+		  protected:
 			ULONGLONG			   _UltimoTick;
 			HANDLE                 _Consola;
 			HANDLE                 _Mutex;

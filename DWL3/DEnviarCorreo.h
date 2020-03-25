@@ -11,6 +11,11 @@
 #include <wincrypt.h>
 #include <schannel.h>
 
+//#pragma comment(lib, "WSock32.Lib")
+#pragma comment(lib, "Crypt32.Lib")
+#pragma comment(lib, "Secur32.lib")
+//#pragma comment(lib, "user32.lib")
+//#pragma comment(lib, "MSVCRTD.lib")
 
 
 namespace DWL {
@@ -86,6 +91,7 @@ namespace DWL {
 		const BOOL                             _Desencriptar(PBYTE pbIoBuffer, DWORD cbIoBufferLength);
 
 		std::string                            _Servidor;
+		UINT                                   _Puerto;
 	    std::string                            _Texto;
 		std::string                            _Titulo;
 		std::string                            _CorreoOrigen;
