@@ -58,7 +58,7 @@ namespace DWL {
 											// ID del thread
 		UINT                               _ID;
 											// Función lambda para quando se termina la petición
-		std::function<void(DPeticion &)>  _LambdaTerminado;
+		std::function<void(DPeticion &)>   _LambdaTerminado;
 											// Función lambda para quando se hay un error en la petición
 		std::function<void(const UINT)>    _LambdaError;
 											// Función lambda para informar sobre el progreso (de 0.0 a 1.0)

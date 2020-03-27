@@ -70,9 +70,9 @@ namespace DWL {
 	// Clase base para el HWND con algunas funciones
 	// - Está costruida de forma que solo se puede asignar el miembro _hWmd internamente.
 	class DhWnd {
-	  public:
+	  public: //////////////////////// Constructor
 									DhWnd(void)		 : _hWnd(nullptr), _MouseDentro(FALSE), _Padre(nullptr) { };
-//									DhWnd(HWND hWnd) : _hWnd(hWnd)	, _MouseDentro(FALSE) { };
+									// Destructor
                                    ~DhWnd(void)							{ Destruir(); };
 		inline HWND					hWnd(void)							{ return _hWnd; };
 		inline virtual void			Activado(const BOOL nActivar)		{ EnableWindow(_hWnd, nActivar); };

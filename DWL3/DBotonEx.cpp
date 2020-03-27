@@ -37,7 +37,7 @@ namespace DWL {
 
 
 
-
+	// Constructor
 	DBotonEx::DBotonEx(void) : 
 		DControlEx()																	, 
 		_Marcado(FALSE)																	, 
@@ -47,14 +47,14 @@ namespace DWL {
 		_ColorBorde(Skin.BordeNormal)													,
 		_ColorTexto(Skin.TextoNormal)													,
 		_Estado(DBotonEx_Estado::DBotonEx_Estado_Normal)								,
-		// Eventos Lambda enlazados a los eventos virtuales por defecto
+		// Eventos Lambda enlazados a los eventos virtuales por defecto /////////////////
 		EventoMouseMovimiento([=](DEventoMouse &e)		{ Evento_MouseMovimiento(e);	}),
 		EventoMousePresionado([=](DEventoMouse& e)		{ Evento_MousePresionado(e);	}),
 		EventoMouseSoltado([=](DEventoMouse& e)			{ Evento_MouseSoltado(e);		}),
 		EventoMouseClick([=](DEventoMouse& e)			{ Evento_MouseClick(e);			})	{
 	}
 
-
+	// Destructor
 	DBotonEx::~DBotonEx(void) {
 	} 
 
@@ -89,22 +89,30 @@ namespace DWL {
 		Repintar();
 	}
 
+	// Función para crear el botón
 	HWND DBotonEx::_CrearBotonEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos) {
-		_ColorFondo = Skin.FondoNormal;
-		_ColorBorde = Skin.BordeNormal;
-		_ColorTexto = Skin.TextoNormal;
-		_Marcado = FALSE;
-//		if (hWnd()) { Debug_Escribir(L"DBotonEx::CrearBotonEx() Error : ya se ha creado el botón\n"); return hWnd(); }
+		// Recupero los colores normales desde el skin
+		_ColorFondo		= Skin.FondoNormal;
+		_ColorBorde		= Skin.BordeNormal;
+		_ColorTexto		= Skin.TextoNormal;
+		// Estado marcado a FALSE
+		_Marcado		= FALSE;
+		// Creo el control
 		_hWnd = CrearControlEx(nPadre, L"DBotonEx", L"", cID, cX, cY, cAncho, cAlto, Estilos, NULL);
+		// Creo la fuente
 		Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
-		_Estado = DBotonEx_Estado::DBotonEx_Estado_Normal;
-		_MouseDentro = FALSE;
+		// Estado del botón
+		_Estado			= DBotonEx_Estado::DBotonEx_Estado_Normal;
+		// El mouse no está dentro del botón
+		_MouseDentro	= FALSE;
+		// Devuelvo el HWND del botón
 		return hWnd();
 	}
 
 
 	void DBotonEx::Pintar(HDC DC, const int nX, const int nY) {
 		RECT    RC, RCF, RCT, RCS;
+		// Obtengo el tamaño del control
 		GetClientRect(hWnd(), &RC);
 		RCF = RC; RCF.left++; RCF.top++; RCF.right--; RCF.bottom--;
 		RCS = RC; RCS.left++; RCS.top++; RCS.right++; RCS.bottom++;
@@ -167,33 +175,38 @@ namespace DWL {
 		DeleteDC(Buffer);
 	}
 
+	// Función para activar / desactivar el botón
 	void DBotonEx::Activado(const BOOL nActivar) {
 		BOOL Ret = FALSE;
+		// Activo / desactivo el botón
 		Ret = EnableWindow(_hWnd, nActivar);
+		// Ejecuto la transición de colores
 		Transicion((nActivar == TRUE) ? DBotonEx_Transicion::DBotonEx_Transicion_Normal : DBotonEx_Transicion::DBotonEx_Transicion_Desactivado);
-		//Repintar();
 	}
 
 	
-
+	// Función que responde al mensaje WM_MOUSEMOVE
 	void DBotonEx::_Evento_MouseMovimiento(const WPARAM wParam, const LPARAM lParam) {
 		DEventoMouse DatosMouse(wParam, lParam, this);
+		// Si el mouse está dentro del control por primera vez, viene a ser como un mensaje WM_MOUSEENTER
 		if (_MouseEntrando() == TRUE) {
-			// Mouse enter
+			// Si no está presionado
 			if (_Estado != DBotonEx_Estado::DBotonEx_Estado_Presionado) {
 				_Estado = DBotonEx_Estado::DBotonEx_Estado_Resaltado;
 				Transicion(DBotonEx_Transicion::DBotonEx_Transicion_Resaltado);
 			}
 		}
-
+		// Ejecuto el evento lambda, que a su vez ejecutara el evento virtual por defecto...
 		EventoMouseMovimiento(DatosMouse);
 	}
 
-
+	// Función que hace la transición de colores del estado actual al nuevo estado
 	void DBotonEx::Transicion(const DBotonEx_Transicion nTransicion) {
 		DWORD Duracion = DhWnd::TiempoAnimaciones;
+		// Si se está animando
 		if (_AniTransicion.Animando() == TRUE) {
 			Duracion = _AniTransicion.TiempoActual();
+			// Termino la transición
 			_AniTransicion.Terminar();
 		}
 
@@ -202,6 +215,7 @@ namespace DWL {
 		#endif	
 
 		COLORREF *FondoHasta = 0, *BordeHasta = 0, *TextoHasta = 0;
+		// Asigno los colores de la transición según la transición especificada
 		switch (nTransicion) {
 			case DBotonEx_Transicion::DBotonEx_Transicion_Normal:
 				FondoHasta = &Skin.FondoNormal;
@@ -230,70 +244,84 @@ namespace DWL {
 				break;
 		}
 
+		// Inicio la transición
 		_AniTransicion.Iniciar(
-			{ _ColorFondo, _ColorBorde, _ColorTexto }, 
-			{ FondoHasta, BordeHasta, TextoHasta }, 
-			Duracion, 
-			[=](DAnimacion::Valores& Datos, const BOOL Terminado) {
+			{ _ColorFondo, _ColorBorde, _ColorTexto },				// Desde
+			{ FondoHasta, BordeHasta, TextoHasta },					// Hasta
+			Duracion,												// Duración en milisegundos
+			[=](DAnimacion::Valores& Datos, const BOOL Terminado) { // Callback para cada paso de la transición
+				// Asigno los colores
 				_ColorFondo = Datos[0].Color();
 				_ColorBorde = Datos[1].Color();
 				_ColorTexto = Datos[2].Color();
+				// Repinto el botón
 				Repintar();
 			}
 		);
 
-/*		_AniTransicion.Iniciar(_ColorFondo, FondoHasta, _ColorBorde, BordeHasta, _ColorTexto, TextoHasta, Duracion, [=](DAnimacion2::Valores &Datos, const BOOL Terminado) {
-			_ColorFondo = Datos[0].Color();
-			_ColorBorde = Datos[1].Color();
-			_ColorTexto = Datos[2].Color();
-			Repintar();
-		});*/
 	}
 
+	// Función que responde a los mensajes WM_?MOUSEDOWN
 	void DBotonEx::_Evento_MousePresionado(const WPARAM wParam, const LPARAM lParam, const int Boton) {
 		#if DBOTONEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir(L"DBotonEx::_Evento_MousePresionado\n");
 		#endif	
+		// Datos para mandar al evento lambda y virtual
 		DEventoMouse DatosMouse(wParam, lParam, this, Boton);
+		// Asigno la captura a este control
 		SetCapture(hWnd());
+		// Ejecuto la transición de colores
 		Transicion(DBotonEx_Transicion::DBotonEx_Transicion_Presionado);
+		// Asigno el estado a presionado
 		_Estado = DBotonEx_Estado::DBotonEx_Estado_Presionado;
+		// Envio el mensaje a la ventana padre
 		SendMessage(GetParent(hWnd()), DWL_BOTONEX_MOUSEDOWN, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
+		// Ejecuto el evento lambda, que por defecto ejecutara el evento virtual
 		EventoMousePresionado(DatosMouse);
 	}
 
+	// Función que responde a los mensajes WM_?MOUSEUP
 	void DBotonEx::_Evento_MouseSoltado(const WPARAM wParam, const LPARAM lParam, const int Boton) {		
 		#if DBOTONEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir(L"DBotonEx::_Evento_MouseSoltado\n");
 		#endif	
+		// Libero la captura 
 		ReleaseCapture();
 
+		// Si el estado es presionado  (puede ser que se presionara el boton del mouse en otra ventana / control, por lo tanto no cuenta como presionado en el botón)
 		if (_Estado == DBotonEx_Estado::DBotonEx_Estado_Presionado) {
-			DEventoMouse DatosMouse(wParam, lParam, this, Boton);
-			
-
+			// Datos para el evento del mouse
+			DEventoMouse DatosMouse(wParam, lParam, this, Boton);			
+			// Obtengo el tamaño del control
 			RECT RC;
 			GetClientRect(hWnd(), &RC);
-
-			EventoMouseSoltado(DatosMouse);
+			// Mando el mensaje mouse up a la ventana padre
 			SendMessage(GetParent(hWnd()), DWL_BOTONEX_MOUSEUP, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
-
+			// Mando el evento lambda mouse up, que por defecto ejecuta el evento virtual
+			EventoMouseSoltado(DatosMouse);
+			// Obtengo la posición del mouse
 			POINT Pt = { DatosMouse.X(), DatosMouse.Y() };
 			// Si el mouse está dentro del control
 			if (PtInRect(&RC, Pt) != 0) {
+				// Asigno el estado a resaltado
 				_Estado = DBotonEx_Estado::DBotonEx_Estado_Resaltado;
+				// Ejecuto la transición resaltado
 				Transicion(DBotonEx_Transicion::DBotonEx_Transicion_Resaltado);
-				EventoMouseClick(DatosMouse);
+				// Mando el mensaje click a la ventana padre
 				SendMessage(GetParent(hWnd()), DWL_BOTONEX_CLICK, DEVENTOMOUSE_TO_WPARAM(DatosMouse), 0);
+				// Mando el evento lambda click, que por defecto ejecuta el evento virtual
+				EventoMouseClick(DatosMouse);
+
 			}
+			// El mouse no está dentro del control
 			else {
+				// Asigno el estado normal
 				_Estado = DBotonEx_Estado::DBotonEx_Estado_Normal;
-//				Transicion(DBotonEx_Transicion_Normal); (no hace falta salta el mouse leave)
 			}
-//			Repintar();
 		}
 	}
 
+	// Función que asigna si el botón está marcado o no
 	void DBotonEx::Marcado(const BOOL nMarcar) {
 		_Marcado = nMarcar;
 		POINT P;
@@ -304,7 +332,6 @@ namespace DWL {
 		// Miro si el mouse está encima del control, y asigno el color rojo resaltado
 		if (PtInRect(&RC, P) == TRUE) {
 			_ColorFondo = Skin.FondoResaltado;
-//			Transicion(DBotonEx_Transicion_Resaltado); // no se necesita una transición porque el mouse está encima y sigue siendo resaltado
 			_Estado = DBotonEx_Estado::DBotonEx_Estado_Resaltado;
 		}
 		else { // Si no está encima del control asigno el color según si está marcado o no
@@ -314,6 +341,7 @@ namespace DWL {
 		}	
 	}
 
+	// Función que responde al mensaje WM_PAINT
 	void DBotonEx::_Evento_Pintar(void) {
 		HDC         DC;
 		PAINTSTRUCT PS;
@@ -326,6 +354,7 @@ namespace DWL {
 		EndPaint(hWnd(), &PS);
 	}
 
+	// Función que responde al mensaje WM_MOUSELEAVE
 	void DBotonEx::_Evento_MouseSaliendo(void) {
 		#if DBOTONEX_MOSTRARDEBUG == TRUE
 			Debug_Escribir(L"DBotonEx::_Evento_MouseSaliendo\n");
@@ -337,6 +366,7 @@ namespace DWL {
 		}
 	}
 
+	// Gestor de mensajes virtual para este control
 	LRESULT CALLBACK DBotonEx::GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg) {
 			case WM_PAINT		:		_Evento_Pintar();									return 0;
@@ -349,6 +379,7 @@ namespace DWL {
 			case WM_RBUTTONUP	:		_Evento_MouseSoltado(wParam, lParam, 1);			return 0;
 			case WM_MBUTTONUP	:		_Evento_MouseSoltado(wParam, lParam, 2);			return 0;
 		}
+		// Devuelvo el gestor de mensajes por defecto
 		return DControlEx::GestorMensajes(uMsg, wParam, lParam);
 	}
 }

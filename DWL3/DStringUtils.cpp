@@ -201,7 +201,7 @@ namespace DWL {
 
 
 	// Devuelve un string con el nombre de archivo sin el resto del path
-	std::wstring &Path_BaseName(const wchar_t* nPath, const BOOL Extension) {
+	std::wstring &Strings::Path_BaseName(const wchar_t *nPath, const BOOL Extension) {
 		static std::wstring Ret;
 		std::wstring		Tmp = nPath;
 		size_t				Punto = (Extension == TRUE) ? Tmp.size() : 0;
@@ -223,7 +223,7 @@ namespace DWL {
 
 	// Devuelve un string con el path sin el nombre de archivo
 	// Puedes hacer que devuelva uno o varios directorios inferiores si ajustas la variable BajarPaths
-	std::wstring &Path_DirName(const wchar_t* nPath, const UINT BajarPaths) {
+	std::wstring &Strings::Path_DirName(const wchar_t *nPath, const UINT BajarPaths) {
 		static std::wstring Ret;
 		std::wstring		Tmp		= nPath;
 		UINT				BP		= 0;

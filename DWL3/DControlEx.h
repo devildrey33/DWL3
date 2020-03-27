@@ -14,20 +14,23 @@ namespace DWL {
 
 	/* Controles de usuario fabricados desde 0 */
 	class DControlEx : public DhWnd {
-	  public:
+	  public: //////////////////////// Constructor
 									DControlEx(void) : DhWnd() { }
+									// Destructor
 		                           ~DControlEx(void) { }
-
+									// Función virtual para activar / desactivar el control extendido
 		inline virtual void			Activado(const BOOL nActivar)	{ EnableWindow(_hWnd, nActivar); };
+									// Función virtual que devuelve si el control extendido está activado
 		inline virtual const BOOL	Activado(void)					{ return IsWindowEnabled(_hWnd); };
-
+									// Tipo de control extendido
 		virtual const DhWnd_Tipo	TipoWnd(void)					{ return DhWnd_Tipo_ControlEx; };
-
+									// Gestor de mensajes para el control extendido
 		virtual LRESULT CALLBACK	GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
-//		inline void					Repintar(void) { RedrawWindow(hWnd(), NULL, NULL, RDW_INVALIDATE | RDW_INTERNALPAINT); };
-	  protected:
+	  protected: ///////////////////// Función protegida para crear el control extendido
 		HWND						CrearControlEx(DhWnd *nPadre, const TCHAR *nNombre, const TCHAR *nTexto, const INT_PTR cID, const int cX, const int cY, const int cAncho, const int cAlto, DWORD nEstilos, DWORD nEstilosExtendidos, UINT nEstilosClase = NULL, HBRUSH nColorFondo = NULL);
+									// Función para conectar este objeto con un control creado en un dialogo
 		void					   _ConectarControl(const UINT nID, DhWnd *nPadre);
+									// Gestor de mensajes estatico
 		static LRESULT CALLBACK    _GestorMensajes(HWND HandleVentana, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	};
 

@@ -399,9 +399,6 @@
     <ClCompile Include="DApp.cpp">
       <Filter>Sistema\App</Filter>
     </ClCompile>
-    <ClCompile Include="DWL3.cpp">
-      <Filter>Sistema\Base</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Sistema\Base</Filter>
     </ClCompile>

@@ -275,7 +275,7 @@ namespace DWL {
 		size_t										   _TotalAnchoVisible;
 														// Total de alto necesario para los nodos visibles
 		size_t										   _TotalAltoVisible;
-														// Maximo de altura para un nodo VISIBLE (para crear el BufferDC que se usa para pintar los nodos individualmente)
+														// Máximo de altura para un nodo VISIBLE (para crear el BufferDC que se usa para pintar los nodos individualmente)
 		size_t                                         _MaxAltoNodo;
 
 														// Raiz que contiene todos los nodos

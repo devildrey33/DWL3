@@ -13,7 +13,7 @@ namespace DWL {
 	//! Clase que contiene los parametros de un evento de la rueda del mouse, para pasarlos a la función de su ventana padre.
 
 	class DEventoMouseRueda	{
-	  public:
+	  public: //////////////////////////// Constructor por defecto
 										DEventoMouseRueda(void) : wParam(0), lParam(0), Wnd(NULL), MousePosCliente({0, 0}) { };
 										//! Constructor que define todos los valores
 										/*!	Constructor asignador de datos.
@@ -28,6 +28,7 @@ namespace DWL {
 											ScreenToClient(Wnd->hWnd(), &MousePosCliente);
 										};
 
+										// Destructor
 		                               ~DEventoMouseRueda() { };
 
 										//! Función que devuelve la coordenada X de este evento relativa al área del cliente.

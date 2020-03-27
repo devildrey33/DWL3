@@ -102,11 +102,11 @@
 			static std::wstring& FormatoBytes(const unsigned long long nBytes, std::wstring& OUT_StrBytes);
 
 			// Devuelve un string con el nombre de archivo sin el resto del path
-			static std::wstring& Path_BaseName(const wchar_t* nPath, const BOOL Extension = FALSE);
+			static std::wstring& Path_BaseName(const wchar_t *nPath, const BOOL Extension = FALSE);
 
 			// Devuelve un string con el path sin el nombre de archivo
 			// Puedes hacer que devuelva uno o varios directorios inferiores si ajustas la variable BajarPaths
-			static std::wstring& Path_DirName(const wchar_t* nPath, const UINT BajarPaths = 0);
+			static std::wstring& Path_DirName(const wchar_t *nPath, const UINT BajarPaths = 0);
 		};
 	};
 #endif

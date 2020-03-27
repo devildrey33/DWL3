@@ -13,8 +13,9 @@ namespace DWL {
 	   protected:
 		    // Datos para una fuente
 			class DFuente_Datos {
-			  public :
+			  public : /////////////// Constructor por defecto
 									DFuente_Datos(void) : Tam(0), Negrita(FALSE), Cursiva(FALSE), Subrayado(FALSE), Tachado(FALSE), Fuente(NULL), Alto(0) { }
+									// Constructopr que inicia los datos de la fuente con los parámetros especificados
 									DFuente_Datos(const int nTam, std::wstring &nNombre, const BOOL nNegrita, const BOOL nCursiva, const BOOL nSubrayado, const BOOL nTachado, HFONT nFuente) : Tam(nTam), Nombre(nNombre), Negrita(nNegrita), Cursiva(nCursiva), Subrayado(nSubrayado), Tachado(nTachado), Fuente(nFuente), Alto(0) {
 										Alto = ObtenerTamTexto(L"W").cy;
 									}
@@ -26,19 +27,28 @@ namespace DWL {
 				const SIZE			ObtenerTamTexto(HDC DC, const TCHAR *nTexto);
 									// Obtiene el tamaño del string especificado. El DC especificado debe tener seleccionada esta fuente.
 				const SIZE			ObtenerTamTexto(HDC DC, std::wstring &nTexto);
-		
+									// Tamaño de la fuente
 				int					Tam;
+									// Nombre de la fuente
 				std::wstring		Nombre;
+									// Negrita
 				BOOL				Negrita;
+									// Cursiva
 				BOOL				Cursiva;
+									// Subrayado
 				BOOL				Subrayado;
+									// Tachado
 				BOOL                Tachado;
+									// Fuente cargada en memória
 				HFONT				Fuente;
+									// Altura en pixeles de la fuente
 				int                 Alto;
 			};
-	   public:	
-												DFuente(void);										
+	   public:	////////////////////////////////// Constructor
+												DFuente(void);
+												// Constructor asignador
 												DFuente(const int nTam, const wchar_t *nNombre, const BOOL nNegrita = FALSE, const BOOL nCursiva = FALSE, const BOOL nSubrayado = FALSE, const BOOL nTachado = FALSE);
+												// Destructor
 		                                       ~DFuente(void);
 												// Función que crea la fuente especificada, si no se ha creado una igual antes. Si ya existe una fuente con estas caracteristicas adopta el HFONT de ella.
 		void									CrearFuente(const int nTam, const wchar_t *nNombre, const BOOL nNegrita = FALSE, const BOOL nCursiva = FALSE, const BOOL nSubrayado = FALSE, const BOOL nTachado = FALSE);
@@ -71,13 +81,15 @@ namespace DWL {
 												// Obtiene el tamaño del string especificado. El DC especificado debe tener seleccionada esta fuente.
 		inline const SIZE						ObtenerTamTexto(HDC DC, std::wstring &nTexto)	{ SIZE Z = { 0, 0 };  return (_Fuente == NULL) ? Z : _Fuente->ObtenerTamTexto(DC, nTexto);	};
 
-												// Elimina todas las fuentes estaticas de la memoria
+												// Elimina todas las fuentes estaticas de la memória
 		static void								EliminarFuentes(void);
 
-	  protected:								
+	  protected : ////////////////////////////////
+												// Datos de la fuente
 		DFuente_Datos                         *_Fuente;
-
+												// Función estatica que busca una fuente igual a la especificada
 		static DFuente_Datos                  *_BuscarFuente(const int nTam, std::wstring &nNombre, const BOOL nNegrita, const BOOL nCursiva, const BOOL nSubrayado, const BOOL nTachado);
+												// Vector estatico de fuentes
 		static std::vector<DFuente_Datos *>    _Fuentes;
 	};
 }

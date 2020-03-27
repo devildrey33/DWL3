@@ -23,21 +23,21 @@
         }; 
 
 		class DMouse {
-          public:
+          public: //////////////////////////// Constructor
 											DMouse(void) { };
-
+											// Función para cambiar el cursor del mouse
 			static HCURSOR					CambiarCursor(const DMouse_Cursor nCursor = DMouse_Cursor_Flecha);
-
+											// Función para cambiar el cursor del mouse por un cursor externo
 			static HCURSOR					CambiarCursor(HCURSOR nCursor);
-
+											// Función para mostrar / ocultar el cursor del mouse
 			static int						Visible(const BOOL nVisible);
-
+											// Función que obtiene las coordenadas del mouse relativas a la pantalla
 			static BOOL						ObtenerPosicion(POINT *Pos);
-
+											// Función que asigna las coordenadas del mouse 
 			static BOOL						AsignarPosicion(const int cX, const int cY);
-
+											// Función que asigna las coordenadas del mouse 
 			static BOOL						AsignarPosicion(const POINT *nPos);
-
+											// Función que delimita el área del ratón 
 			static BOOL						AreaRaton(const RECT *nArea);
         };
     };

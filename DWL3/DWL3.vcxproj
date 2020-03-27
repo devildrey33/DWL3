@@ -264,7 +264,6 @@
     <ClCompile Include="DToolTipEx.cpp" />
     <ClCompile Include="DUnidadesDisco.cpp" />
     <ClCompile Include="DVentana.cpp" />
-    <ClCompile Include="DWL3.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

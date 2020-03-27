@@ -8,9 +8,11 @@
 
 namespace DWL {
 	class DEventoTeclado {
-	  public:
+	  public: //////////////////////////// Constructor por defecto
 										DEventoTeclado(void) : wParam(0), lParam(0), Wnd(NULL) { };
+										// Constructor asignador
 										DEventoTeclado(WPARAM nwParam, LPARAM nlParam, DhWnd *Control) : wParam(nwParam), lParam(nlParam), Wnd(Control) { };
+										// Destructor
 		                               ~DEventoTeclado(void)	{ };
 									    // Contador de repeticiones para este mensaje. 
 										// MSDN : "The repeat count for the current message. The value is the number of times the keystroke is autorepeated as a result of the user holding down the key. If the keystroke is held long enough, multiple messages are sent. However, the repeat count is not cumulative."
