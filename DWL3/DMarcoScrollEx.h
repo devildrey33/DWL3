@@ -6,14 +6,15 @@
 namespace DWL {
 
 #define DMARCOSCROLLEX_MOSTRARDEBUG TRUE
-//#defien DMARCOSCROLLEX_MOSTRARDEBUG FALSE
+//#define DMARCOSCROLLEX_MOSTRARDEBUG FALSE
 
 	// Marco con barras de scroll con contenido desplazable
+	// Si tienes que crear controles dentro. debes crear-los usando hWndPagina() como padre.
 	class DMarcoScrollEx : public DBarraScrollEx {
 	  protected:
 		// Control que contiene los hijos y hace de página para poder mover todos los hijos de una tacada
 		class DMarcoScrollEx_Pagina : public DControlEx {
-		  public:
+		  public: //////////////////////// Constructor
 										DMarcoScrollEx_Pagina(void) { }
 										// Tipo de HWND
 			virtual const DhWnd_Tipo	TipoWnd(void)				{ return DhWnd_Tipo_MarcoScrollEx_Pagina; };
@@ -24,11 +25,11 @@ namespace DWL {
 
 		// Control que contiene los hijos y hace de página para poder mover todos los hijos de una tacada
 		class DMarcoScrollEx_Marco : public DControlEx {
-		  public:
+		  public: //////////////////////// Constructor
 										DMarcoScrollEx_Marco(void) { }
 										// Tipo de HWND
 			virtual const DhWnd_Tipo	TipoWnd(void)				{ return DhWnd_Tipo_MarcoScrollEx_Marco; };
-										// Gestor de mensajes para la página
+										// Gestor de mensajes para el marco
 			LRESULT CALLBACK			GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 			friend class DMarcoScrollEx;
 		};
@@ -49,7 +50,7 @@ namespace DWL {
 		void											Pintar(HDC hDC);
 														// Evento que salta cuando se crea un control dentro de este control
 		void											Evento_ControlCreado(DhWnd *nControl, const int cX, const int cY, const int cAncho, const int cAlto);
-														// Tipo de HWND
+														// Función que devuelve el tipo de DhWnd
 		virtual const DhWnd_Tipo						TipoWnd(void)										{ return DhWnd_Tipo_MarcoScrollEx; };
 														// Función que repinta el control
 		void											Repintar(void);
@@ -81,7 +82,6 @@ namespace DWL {
 
 														// Evento que salta cuando los crolls cambian de posición
 		void											Scrolls_EventoCambioPosicion(void);
-
 														// Gestor de mensages virtual para el marco
 		virtual LRESULT CALLBACK						GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	  protected: /////////////////////////////////////////

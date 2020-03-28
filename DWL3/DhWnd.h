@@ -11,7 +11,7 @@
 #include "DWL_Configuracion.h"
 
 #include <objidl.h>
-#include <gdiplus.h>
+//#include <gdiplus.h>
 //using namespace Gdiplus;
 
 #if DWL_SKIN == 0
@@ -20,11 +20,7 @@
 	#include "DWL_SkinVisualStudio.h"
 #endif
 
-//#include "DhWnd_Fuente.h"
 #include "DBarraTareas.h"
-/*#include "DEventoMouse.h"
-#include "DEventoMouseRueda.h"
-#include "DEventoTeclado.h"*/
 #include "DMensajesWnd.h"
 
 #define WPARAM_TO_HWND(WP) (HWND)WP
@@ -69,41 +65,57 @@ namespace DWL {
 
 	// Clase base para el HWND con algunas funciones
 	// - Está costruida de forma que solo se puede asignar el miembro _hWmd internamente.
+
+	// TODO : moure Minimizar, Minimizado i Maximizada a DVentana
 	class DhWnd {
 	  public: //////////////////////// Constructor
-									DhWnd(void)		 : _hWnd(nullptr), _MouseDentro(FALSE), _Padre(nullptr) { };
+									DhWnd(void)	: _hWnd(nullptr), _MouseDentro(FALSE), _Padre(nullptr)	{ };
 									// Destructor
-                                   ~DhWnd(void)							{ Destruir(); };
-		inline HWND					hWnd(void)							{ return _hWnd; };
-		inline virtual void			Activado(const BOOL nActivar)		{ EnableWindow(_hWnd, nActivar); };
-		inline virtual const BOOL	Activado(void)						{ return IsWindowEnabled(_hWnd); };
-		inline const BOOL			Minimizar(void)						{ return ShowWindow(_hWnd, SW_MINIMIZE); };
-		inline const BOOL			Minimizado(void)					{ return IsIconic(_hWnd); };
+                                   ~DhWnd(void)															{ Destruir(); };
+								    // Función que devuelve el HWND
+		inline HWND					hWnd(void)															{ return _hWnd; };
+									// Función virtual para activar / desactivar esta ventana / control
+		inline virtual void			Activado(const BOOL nActivar)										{ EnableWindow(_hWnd, nActivar); };
+									// Función que devuelve si esta ventana / control está activado
+		inline virtual const BOOL	Activado(void)														{ return IsWindowEnabled(_hWnd); };
+									// Función que minimiza esta ventana (NO VALE PARA CONTROLES)
+		inline const BOOL			Minimizar(void)														{ return ShowWindow(_hWnd, SW_MINIMIZE); };
+									// Función que devuelve si esta ventana es minimizable (NO VALE PARA CONTROLES)
+		inline const BOOL			Minimizado(void)													{ return IsIconic(_hWnd); };
+									// Función que devuelve si esta ventana está maximizada (NO VALE PARA CONTROLES)
 		const BOOL					Maximizada(void);	
-		inline const HWND			AsignarFoco(void)					{ return SetFocus(_hWnd); }; 
+									// Función que asigna el foco a esta ventana / control
+		inline const HWND			AsignarFoco(void)													{ return SetFocus(_hWnd); }; 
+									// Función que destruye esta ventana / control
 		virtual const BOOL			Destruir(void);
-		inline INT_PTR				ID(void)							{ return static_cast<INT_PTR>(GetWindowLongPtr(_hWnd, GWL_ID)); };
-		inline HWND					hWndPadre(void)						{ return GetParent(_hWnd); };
-		inline const BOOL			Visible(const BOOL nMostrar)		{ return ShowWindow(_hWnd, (nMostrar != TRUE) ? SW_HIDE : SW_SHOW); 		};
-		inline const BOOL			Visible(void)						{ return IsWindowVisible(_hWnd); };
+									// Función que devuelve la ID de esta ventana / control
+		inline INT_PTR				ID(void)															{ return static_cast<INT_PTR>(GetWindowLongPtr(_hWnd, GWL_ID)); };
+									// Función que devuelve el padre de esta ventana / control (PUEDE SER NULL)
+		inline HWND					hWndPadre(void)														{ return GetParent(_hWnd); };
+									// Función que asigna si esta ventana / control  está visible o no
+		inline const BOOL			Visible(const BOOL nMostrar)										{ return ShowWindow(_hWnd, (nMostrar != TRUE) ? SW_HIDE : SW_SHOW); 		};
+									// Función que devuelve si esta ventana / control está visible o no
+		inline const BOOL			Visible(void)														{ return IsWindowVisible(_hWnd); };
 									// Repinta la ventana
-		inline virtual void			Repintar(void)						{ RedrawWindow(hWnd(), NULL, NULL, RDW_INVALIDATE | RDW_INTERNALPAINT); };
+		inline virtual void			Repintar(void)														{ RedrawWindow(hWnd(), NULL, NULL, RDW_INVALIDATE | RDW_INTERNALPAINT); };
 									// Función que repinta la ventana si no se ha utilizado esta función hace 15 milisegundos (de esta forma aseguramos que no se repinte 1000 veces un control, pero que se repinte a 60fps)
 									// Ideal para utilizar con DAnimacion con multiples animaciones
-		inline virtual void			RepintarAni(void)					{ static ULONGLONG Tick = 0; ULONGLONG T = GetTickCount64(); if (T > Tick + 15) { Repintar();  Tick = T; } };
-
-		ATOM						RegistrarClase(const TCHAR *nNombre, WNDPROC WindowProcedureInicial, UINT Estilos = 0, const int nIconoRecursos = 0, HBRUSH nColorFondo = NULL, HINSTANCE hInstance = NULL);
-									
+		inline virtual void			RepintarAni(void)													{ static ULONGLONG Tick = 0; ULONGLONG T = GetTickCount64(); if (T > Tick + 15) { Repintar();  Tick = T; } };
+									// Función que registra una clase ventana
+		ATOM						RegistrarClase(const TCHAR *nNombre, WNDPROC WindowProcedureInicial, UINT Estilos = 0, const int nIconoRecursos = 0, HBRUSH nColorFondo = NULL, HINSTANCE hInstance = NULL);									
 									// Evento que salta cuando se crea un control dentro de este control
 		virtual void				Evento_ControlCreado(DhWnd *nControl, const int cX, const int cY, const int cAncho, const int cAlto)	{ };
 									// Devuelve el tipo de ventana / control
-		virtual const DhWnd_Tipo	TipoWnd(void)							{ return DhWnd_Tipo_INDEFINIDO; };
+		virtual const DhWnd_Tipo	TipoWnd(void)														{ return DhWnd_Tipo_INDEFINIDO; };
 									// Tiempo para animaciones / transiciones
 		static DWORD                TiempoAnimaciones;
-	  protected:
+	  protected: ///////////////////// Función que comprueba si el mouse acaba de entrar en la ventana / control (PRELUDIO PARA WM_MOUSEENTER / WM_MOUSELEAVE)
 		const BOOL                 _MouseEntrando(void);
+									// HWND de esta ventana / control
 		HWND                       _hWnd;
+									// Variable que nos dice si el mouse está dentro de esta ventana / control
 		BOOL                       _MouseDentro;
+									// Objeto DhWnd padre (PUEDE SER NULL)
 		DhWnd                     *_Padre;
 	};
 

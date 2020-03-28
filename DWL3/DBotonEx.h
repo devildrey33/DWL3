@@ -31,8 +31,9 @@ namespace DWL {
 
 	// Skin por defecto del boton
 	class DBotonEx_Skin {
-	  public :
+	  public : /////////// Constructor
 						DBotonEx_Skin(void);
+						// Destructor
 		               ~DBotonEx_Skin(void) { }
 						// Colores
 		 COLORREF		FondoNormal;
