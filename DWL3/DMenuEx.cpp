@@ -263,7 +263,7 @@ namespace DWL {
 		}
 	}
 
-	// Busca un sub-menu de este menú por su ID
+	// Busca un sub-menu de este menú por su ID (recursiva)
 	DMenuEx *DMenuEx::BuscarMenu(const INT_PTR bID) {
 		DMenuEx* TmpMenu = NULL;
 		for (size_t i = 0; i < _Menus.size(); i++) {
@@ -334,10 +334,10 @@ namespace DWL {
 		#endif
 		Ocultar();
 		EliminarTodosLosMenus();
-		_hWndDest	= NULL;
-		_Padre		= NULL;
-		_Tipo		= DMenuEx_Tipo::DMenuEx_Tipo_Raiz;
-		_ID			= 0;
+//		_hWndDest	= NULL;
+//		_Padre		= NULL;
+//		_Tipo		= DMenuEx_Tipo::DMenuEx_Tipo_Raiz;
+//		_ID			= 0;
 	}
 
 	// Función para eliminar todos los menus
@@ -620,6 +620,8 @@ namespace DWL {
 		if (_Activado == FALSE) return;
 
 		if (_hWnd == NULL) {
+
+			EventoMostrarMenu(*this);
 
 			#if DMENUEX_MOSTRARDEBUG == TRUE
 				Debug_Escribir_Varg(L"DMenuEx::_MostrarSubMenu AsignarFoco = %d\n", AsignarFoco);

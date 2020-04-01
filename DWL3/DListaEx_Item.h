@@ -13,6 +13,7 @@ namespace DWL {
 
 	class DListaEx;
 
+	// Transiciones posibles para un item de la lista extendida
 	enum DListaEx_TransicionItem {
 		DListaEx_TransicionItem_Normal,
 		DListaEx_TransicionItem_Resaltado,
@@ -24,8 +25,9 @@ namespace DWL {
 	/* Clase que engloba un item de la lista (puede tener varias columnas) 
 		NOTA : Cualquier cambio que se realize en un DListaEx_Item necesitara una llamada a la función Repintar() o a la función PintarItem() para actualizar los cambios */
 	class DListaEx_Item {
-	  public:
+	  public: //////////////////////////////// Constructor
 											DListaEx_Item(void);
+											// Destructor
 										   ~DListaEx_Item(void);
 										    // Función que devuelve una referencia al std::wstring que contiene el texto del subitem especificado 
 		inline std::wstring                &Texto(const size_t nSubItem = 0) {
@@ -36,24 +38,31 @@ namespace DWL {
 												_SubItems[nSubItem]->Texto = nTexto;
 												return _SubItems[nSubItem]->Texto;
 											};		
-
+											// Función para asignar el icono del item (tiene que ser un icono de los recursos)
 		void                                Icono(const int nIconoRecursos);
-
+											// Miembro que determina si el item está seleccionado
 		BOOL							    Seleccionado;
-	  protected : 
+	  protected : //////////////////////////// Función protegida que ejecuta la transición al estado normal											
 		void                               _TransicionNormal(void);
+											// Función protegida que ejecuta la transición al estado resaltado
 		void                               _TransicionResaltado(void);
+											// Vector de sub items 
 		std::vector<DListaEx_SubItem *>    _SubItems;
+											// Icono de la lista
 		DIcono			                   _Icono;
-
+											// Función protegida para ejecutar las transiciones
 		void                               _Transicion(const DListaEx_TransicionItem nTransicion);
-
+											// Color de texto actual para el item
 		COLORREF                           _ColorTexto;
+											// Color de la sombra del texto actual para el item
 		COLORREF                           _ColorTextoSombra;
+											// Color del fondo actual para el item
 		COLORREF                           _ColorFondo;
+											// Objeto para realizar las transiciones de color
 		DAnimacion                         _AniTransicion;
-
+											// ListaEx padre
 		DListaEx                          *_Lista;
+											// Variable que guarda la ultima transición realizada
 		DListaEx_TransicionItem		       _UltimaTransicion;
 		friend class DListaEx;
 	};

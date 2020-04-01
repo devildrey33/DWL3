@@ -5,11 +5,13 @@
 
 namespace DWL {
 	class DListaEx_SubItem	{
-	  public:
-						DListaEx_SubItem(void) { };
-						DListaEx_SubItem(const TCHAR *nTexto)  { Texto = nTexto; };
-//						DListaEx_SubItem(std::wstring &nTexto) { Texto = nTexto; };
-		               ~DListaEx_SubItem(void) { };
+	  public: //////////// Constructor vacio
+						DListaEx_SubItem(void)					{ };
+						// Constructor asignador de texto
+						DListaEx_SubItem(const TCHAR *nTexto)	{ Texto = nTexto; };
+						// Destructor
+		               ~DListaEx_SubItem(void)					{ };
+					    // Texto para el subitem
 		std::wstring	Texto;
 	};
 }
