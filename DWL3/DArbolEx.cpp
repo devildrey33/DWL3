@@ -216,20 +216,20 @@ namespace DWL {
 
 				// Agrego el nodo 
 				if (nPadre->_Hijos.size() == 0) { nPadre->_Hijos.push_back(nNodo); }
-				else { nPadre->_Hijos.insert(nPadre->_Hijos.begin() + nPos, nNodo); }
+				else							{ nPadre->_Hijos.insert(nPadre->_Hijos.begin() + nPos, nNodo); }
 				break;
 
 			// el default incluye DARBOLEX_POSICIONNODO_INICIO que es 0
 			default:
 				// enlazo el nodo anterior
 				if (nPadre->TotalHijos() > 0 && nPos > 0) { nNodo->_Anterior = nPadre->_Hijos[nPos - 1]; }
-
+				// Enlazo el nodo siguiente del nodo anterior (si la posición es 0 no hay nodo anterior)
+				if (PosicionNodo > 0)						{	nPadre->_Hijos[PosicionNodo - 1]->_Siguiente = nNodo; 			}
 				// Enlazo el nodo siguiente
-				if (PosicionNodo > 0) { nPadre->_Hijos[PosicionNodo - 1]->_Siguiente = nNodo; }
-				if (PosicionNodo + 1 > nPadre->TotalHijos()) { nNodo->_Siguiente = nPadre->_Hijos[PosicionNodo + 1]; }
+				if (PosicionNodo < nPadre->TotalHijos())	{ 	nNodo->_Siguiente = nPadre->_Hijos[PosicionNodo];				}
 				// Agrego el nodo 
 				if (nPadre->_Hijos.size() == 0) { nPadre->_Hijos.push_back(nNodo); }
-				else { nPadre->_Hijos.insert(nPadre->_Hijos.begin() + PosicionNodo, nNodo); }
+				else							{ nPadre->_Hijos.insert(nPadre->_Hijos.begin() + PosicionNodo, nNodo); }
 				break;
 
 		}
