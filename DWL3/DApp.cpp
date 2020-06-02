@@ -141,7 +141,7 @@ namespace DWL {
 	}
 
 	// Función que establece el tipo de log que se va a usar (por defecto no se usa ninguno
-	void DApp::TipoLog(DTipoLog Tipo) {
+	void DApp::LogTipo(DTipoLog Tipo) {
 		delete Log;
 		switch (Tipo) {
 			case DTipoLog::Archivo :	Log = new DLogArchivo;  break;

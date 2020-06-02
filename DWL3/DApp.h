@@ -125,7 +125,7 @@ extern DWL::DApp *_Aplicacion;
 
 
 
-#ifdef DWL_MOSTRAR_CONSOLA 
+//#ifdef DWL_MOSTRAR_CONSOLA 
 	// Macros para escribir datos en la consola de depuración 
 	// Macro que escribe datos con argumentos variables (al estilo printf), sin mostrar milisegundos (OJO! REQUIERE TERMINAR LA LÍNEA CON '\n')
 	#define Debug_EscribirSinMS_Varg(TEXTO, ...)	_Aplicacion->Log->Escribir(TEXTO, __VA_ARGS__);
@@ -140,7 +140,7 @@ extern DWL::DApp *_Aplicacion;
 	// Marco que muestra si la función WINAPI tiene un error por la consola (GetLastError)
 	#define Debug_MostrarUltimoError()				_Aplicacion->Log->MostrarUltimoError()
 	#define Debug_UltimoError(NUM)					SetLastError(NUM)
-#else
+/*#else
 	#define Debug_EscribirSinMS_Varg(TEXTO, ...)	
 	#define Debug_Escribir_Varg(TEXTO, ...)		
 	#define Debug_EscribirSinMS(TEXTO)				
@@ -149,7 +149,7 @@ extern DWL::DApp *_Aplicacion;
 	// Marco que muestra si la función WINAPI tiene un error por la consola (GetLastError)
 	#define Debug_MostrarUltimoError()				
 	#define Debug_UltimoError(NUM)					SetLastError(NUM);	
-#endif
+#endif*/
 
 
 /* --- PRINTF_BYTE_TO_BINARY macro's --- */
