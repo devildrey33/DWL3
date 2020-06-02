@@ -158,28 +158,34 @@ namespace DWL {
 		static wchar_t TmpWTxt[4096] = L"";
 		int Ret = MultiByteToWideChar(CP_UTF8, MB_PRECOMPOSED, IN_UTF8, -1, TmpWTxt, 4096);
 		OUT_Wide = TmpWTxt;
-		return (Ret > 0) ? TRUE : FALSE;
+		return Ret;
 	}
 
 	const int Strings::WideToUTF8(const wchar_t* IN_Wide, std::string& OUT_UTF8) {
 		static char TmpTxt[4096] = "";
 		int	Ret = WideCharToMultiByte(CP_UTF8, NULL, IN_Wide, -1, TmpTxt, 4096, NULL, NULL);
 		OUT_UTF8 = TmpTxt;
-		return (Ret > 0) ? TRUE : FALSE;
+		return Ret;
 	}
 
 	const int Strings::AnsiToWide(const char* IN_Ansi, std::wstring& OUT_Wide) {
 		static wchar_t TmpWTxt[4096] = L"";
 		int Ret = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, IN_Ansi, -1, TmpWTxt, 4096);
 		OUT_Wide = TmpWTxt;
-		return (Ret > 0) ? TRUE : FALSE;
+		return Ret;
+	}
+
+	
+	
+	const int Strings::WideToAnsi(const wchar_t* IN_Wide, char *OUT_Ansi, const int Tam_OUT_Ansi) {
+		return WideCharToMultiByte(CP_ACP, NULL, IN_Wide, -1, OUT_Ansi, Tam_OUT_Ansi, NULL, NULL);
 	}
 
 	const int Strings::WideToAnsi(const wchar_t* IN_Wide, std::string& OUT_Ansi) {
 		static char TmpTxt[4096] = "";
 		int	Ret = WideCharToMultiByte(CP_ACP, NULL, IN_Wide, -1, TmpTxt, 4096, NULL, NULL);
 		OUT_Ansi = TmpTxt;
-		return (Ret > 0) ? TRUE : FALSE;
+		return Ret;
 	}
 
 

@@ -97,6 +97,7 @@
 
 			// wchar_t a std::string
 			static const int WideToAnsi(const wchar_t* IN_Wide, std::string& OUT_Ansi);
+			static const int WideToAnsi(const wchar_t* IN_Wide, char *OUT_Ansi, const int Tam_OUT_Ansi);
 
 			/* Devuelve un string con el numero de bytes en formato legible (Bytes, KiloBytes, MegaBytes, GigaBytes, TeraBytes) */
 			static std::wstring& FormatoBytes(const unsigned long long nBytes, std::wstring& OUT_StrBytes);

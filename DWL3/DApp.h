@@ -2,7 +2,7 @@
 
 
 #include "DEventoTeclado.h"
-#include "DConsola.h"
+#include "DLog.h"
 #include <memory>
 
 namespace DWL {
@@ -29,9 +29,16 @@ namespace DWL {
 	class DMarcoScrollEx_Marco;
 	class DMarcoScrollEx_Pagina;
 
+	enum class DTipoLog {
+		Nada = 0,
+		Consola = 1,
+		Archivo = 2
+	};
+
 	class DApp : protected DhWnd {
 	  public : /////////////////////////// Constructor
 										DApp(void);
+									   ~DApp(void);
 										// Función que vacia la cola de mensajes de esta aplicación
 		void							Eventos_Mirar(void);
 										// Función que obtiene el sistema operativo actual y lo devuelve en un string
@@ -42,8 +49,10 @@ namespace DWL {
 		virtual void                    Evento_TeclaSoltada(DWL::DEventoTeclado& DatosTeclado)		{ };
 										// Función que devuelve la instancia de esta aplicación										
 		inline HINSTANCE				Instancia(void)												{ return GetModuleHandle(NULL);	};
-										// Ventana que muestra una consola al estilo MS-DOS para depuración
-		DConsola						ConsolaDebug;
+										// Objeto para la creación de una consola / archivo log
+		DLog						   *Log;
+										// Función que establece el tipo de log que se va a usar (por defecto no se usa ninguno
+		void							LogTipo(DTipoLog Tipo);
 										// Función que termina el bucle de mensajes y por ende termina la aplicación
 		inline void						TerminarBucleMensajes(int CodigoSalida = 0)					{ PostQuitMessage(CodigoSalida); }
 										// Función que inicia un bucle de mensajes hasta que se llama a PostQuitMessage o App.TerminarBucleMensajes()
@@ -119,17 +128,17 @@ extern DWL::DApp *_Aplicacion;
 #ifdef DWL_MOSTRAR_CONSOLA 
 	// Macros para escribir datos en la consola de depuración 
 	// Macro que escribe datos con argumentos variables (al estilo printf), sin mostrar milisegundos (OJO! REQUIERE TERMINAR LA LÍNEA CON '\n')
-	#define Debug_EscribirSinMS_Varg(TEXTO, ...)	_Aplicacion->ConsolaDebug.Escribir(TEXTO, __VA_ARGS__);
+	#define Debug_EscribirSinMS_Varg(TEXTO, ...)	_Aplicacion->Log->Escribir(TEXTO, __VA_ARGS__);
 	// Macro que escribe datos con argumentos variables (al estilo printf), mostrando los milisegundos desde el último Debug_Escribir (OJO! REQUIERE TERMINAR LA LÍNEA CON '\n')
-	#define Debug_Escribir_Varg(TEXTO, ...)			_Aplicacion->ConsolaDebug.EscribirMS(TEXTO, __VA_ARGS__);
+	#define Debug_Escribir_Varg(TEXTO, ...)			_Aplicacion->Log->EscribirMS(TEXTO, __VA_ARGS__);
 	// Macro que escribe datos, sin mostrar milisegundos (OJO! REQUIERE TERMINAR LA LÍNEA CON '\n')
-	#define Debug_EscribirSinMS(TEXTO)				_Aplicacion->ConsolaDebug.Escribir(TEXTO);
+	#define Debug_EscribirSinMS(TEXTO)				_Aplicacion->Log->Escribir(TEXTO);
 	// Macro que escribe datos, sin mostrar milisegundos, mostrando los milisegundos desde el último Debug_Escribir (OJO! REQUIERE TERMINAR LA LÍNEA CON '\n')
-	#define Debug_Escribir(TEXTO)					_Aplicacion->ConsolaDebug.EscribirMS(TEXTO);
+	#define Debug_Escribir(TEXTO)					_Aplicacion->Log->EscribirMS(TEXTO);
 	// WUT??
-	#define Debug_Leer(TEXTO)						App.ConsolaDebug.Leer(TEXTO);
+	#define Debug_Leer(TEXTO)						_Aplicacion->Log->Leer(TEXTO);
 	// Marco que muestra si la función WINAPI tiene un error por la consola (GetLastError)
-	#define Debug_MostrarUltimoError()				_Aplicacion->ConsolaDebug.MostrarUltimoError()
+	#define Debug_MostrarUltimoError()				_Aplicacion->Log->MostrarUltimoError()
 	#define Debug_UltimoError(NUM)					SetLastError(NUM)
 #else
 	#define Debug_EscribirSinMS_Varg(TEXTO, ...)	

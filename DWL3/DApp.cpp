@@ -7,6 +7,8 @@
 #include <Psapi.h>
 #include <sstream>
 #include "DStringUtils.h"
+#include "DLogArchivo.h"
+#include "DLogConsola.h"
 
 DWL::DApp *_Aplicacion = nullptr;
 
@@ -14,6 +16,9 @@ namespace DWL {
 
 	// Constructor
 	DApp::DApp(void) : _ColorFondoVentana(nullptr) {
+		// Creo el objeto vacio para el Log
+		Log = new DLog;
+
 		// Asigno esta clase al puntero global de la aplicación
 		_Aplicacion = this;
 		// Activo el _set_se_translator para poder hacer un catch a todas las excepciones
@@ -26,6 +31,11 @@ namespace DWL {
 		HRESULT CIE = CoInitializeEx(0, COINIT_MULTITHREADED | COINIT_SPEED_OVER_MEMORY);
 		// Creo el color que se usara para el fondo de las ventanas (NO BORRAR lo hace el windows)
 		_ColorFondoVentana = CreateSolidBrush(COLOR_FONDO);
+	}
+
+	DApp::~DApp(void) {
+		// Elimino el objeto log de la memória
+		delete Log;
 	}
 
 
@@ -129,6 +139,17 @@ namespace DWL {
 			default:	return "unknown";
 		}
 	}
+
+	// Función que establece el tipo de log que se va a usar (por defecto no se usa ninguno
+	void DApp::TipoLog(DTipoLog Tipo) {
+		delete Log;
+		switch (Tipo) {
+			case DTipoLog::Archivo :	Log = new DLogArchivo;  break;
+			case DTipoLog::Consola :	Log = new DLogConsola;	break;
+			case DTipoLog::Nada    :	Log = new DLog;			break;
+		}
+	}
+
 
 	// Devuelve el path de la aplicación sin el ejecutable
 	std::wstring &DApp::Path(const BOOL SinEjecutable) {

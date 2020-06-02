@@ -40,9 +40,6 @@
     <Filter Include="Ventanas\Base\Eventos">
       <UniqueIdentifier>{3164814d-9fdc-426b-90d1-39f8837fdfb8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ventanas\Consola">
-      <UniqueIdentifier>{b27ecc7a-b76f-49a5-a2f0-076cb859d113}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Ventanas\Dialogos Comunes">
       <UniqueIdentifier>{243ee0d1-29d3-4816-873c-cffdc5db83c1}</UniqueIdentifier>
     </Filter>
@@ -124,6 +121,9 @@
     <Filter Include="Sistema\EnviarCorreo">
       <UniqueIdentifier>{d6b0d9dd-b9c2-435b-bf23-a6a26f44cc10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sistema\Log">
+      <UniqueIdentifier>{b27ecc7a-b76f-49a5-a2f0-076cb859d113}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DAnimacion.h">
@@ -173,9 +173,6 @@
     </ClInclude>
     <ClInclude Include="DEventoTeclado.h">
       <Filter>Ventanas\Base\Eventos</Filter>
-    </ClInclude>
-    <ClInclude Include="DConsola.h">
-      <Filter>Ventanas\Consola</Filter>
     </ClInclude>
     <ClInclude Include="DMensajesWnd.h">
       <Filter>Ventanas\Base</Filter>
@@ -289,6 +286,15 @@
     <ClInclude Include="DEnviarCorreo.h">
       <Filter>Sistema\EnviarCorreo</Filter>
     </ClInclude>
+    <ClInclude Include="DLogConsola.h">
+      <Filter>Sistema\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="DLogArchivo.h">
+      <Filter>Sistema\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="DLog.h">
+      <Filter>Sistema\Log</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DAnimacion.cpp">
@@ -326,9 +332,6 @@
     </ClCompile>
     <ClCompile Include="DVentana.cpp">
       <Filter>Ventanas\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="DConsola.cpp">
-      <Filter>Ventanas\Consola</Filter>
     </ClCompile>
     <ClCompile Include="DDlgAbrir.cpp">
       <Filter>Ventanas\Dialogos Comunes\DlgAbrir</Filter>
@@ -425,6 +428,15 @@
     </ClCompile>
     <ClCompile Include="DEnviarCorreo.cpp">
       <Filter>Sistema\EnviarCorreo</Filter>
+    </ClCompile>
+    <ClCompile Include="DLogConsola.cpp">
+      <Filter>Sistema\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="DLogArchivo.cpp">
+      <Filter>Sistema\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="DLog.cpp">
+      <Filter>Sistema\Log</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

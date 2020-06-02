@@ -6,8 +6,9 @@
 	V Capturar violacións d'acces i demes coses extranyes amb el catch
 		- El problema es que els strings del std:::exception venen amb ansi / utf8, i s'ha de pasar a wchar_t .... i no te solució standard... osigui que s'ha de fer a cada catch...
 	V Afegir events Lambda a DMenuEx (Mostrar i Click)
-	- Fer funció DebugLvl per mostrar la consola, crear un arxiu de log, etc..
-		- I amd diferents comportaments segons si es DEBUG O RELEASE
+	V Fer funció DebugLvl per mostrar la consola, crear un arxiu de log, etc..
+		X I amd diferents comportaments segons si es DEBUG O RELEASE (això ho defineix l'aplicació com vol)
+
 	- Crear objecte per enviar correus amb TLS.
 		- https://docs.microsoft.com/en-us/windows/win32/secauthn/using-sspi-with-a-windows-sockets-client
 		- http://www.coastrd.com/c-schannel-smtp					(TLSclient.c)
