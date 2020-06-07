@@ -8,6 +8,10 @@ namespace DWL {
 	}
 
 	DLogConsola::~DLogConsola(void) {
+		Cerrar();
+	}
+
+	void DLogConsola::Cerrar(void) {
 		FreeConsole();
 	}
 

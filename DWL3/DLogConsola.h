@@ -13,6 +13,8 @@
 								   ~DLogConsola(void);
 									// Función que crea la consola
 			const BOOL				Crear(const wchar_t *Titulo);
+									// Función que cierra la consola
+			void					Cerrar(void);
 									// Función para escribir en la consola al estilo printf
 			const BOOL				Escribir(const wchar_t *Texto, ...);
 									// Función para escribir en la consola usando un std::wstring
