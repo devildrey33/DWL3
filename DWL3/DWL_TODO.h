@@ -24,4 +24,8 @@
 		- DMarcoScrollEx : 
 			- Afinar el scroll amb la rodeta... no se com ho calculo pero amb pocs items avança maça poc, i amb molts items queda mes o menys bé.
 			- S'ha de calcular un valor que quan hi hagi pocs items sigui mes gran, i que quan hi hagi molts items sigui com a maxim una cuarta part de la página.
+		- DBotonEx : (URGENT Actualització UI RAVE)
+			- Fer sistema fàcil per mostrar tooltips : (Crear funció ToolTipText que demani el texte i el temps per mostrar un tooltip
+				- El Temps es refereix al temps que fa falta mantenir el mouse a sobre del control per mostrar el tooltip
+				- Fer tooltip tambe per el label, o el que faig servir per mostrar texte estatic en el RAVE (textos del ratio, el temps actual i total, i el volum)
 */
