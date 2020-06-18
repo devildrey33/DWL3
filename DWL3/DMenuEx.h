@@ -32,7 +32,7 @@ namespace DWL {
 		BOOL			FuenteSombraTexto;
 	};
 
-	#define DMENUEX_MOSTRARDEBUG	FALSE
+	#define DMENUEX_MOSTRARDEBUG	TRUE
 
 	#define DMENUEX_TAMICONO  16	// Tamaño de los iconos
 	#define DMENUEX_MARGEN_X   6	// Margen horizontal para el texto 
@@ -89,6 +89,8 @@ namespace DWL {
 		void							Icono(const int nIconoRecursos);
 		inline void						Icono(DIcono &nIcono)	{ _Icono = nIcono; }
 
+										// Operador que devuelve la referéncia al submenu especificado (OJO no te pases de posición...)
+		inline DMenuEx				   &operator [](const size_t Pos) { return *_Menus[Pos]; }
 										// Funciones para navegar entre menus
 		inline DMenuEx                 *Menu(const size_t Pos)				{ return _Menus[Pos]; }
 		inline const size_t				TotalMenus(void)					{ return _Menus.size(); }
@@ -139,6 +141,10 @@ namespace DWL {
 										// Tipo de ventana
 		virtual const DhWnd_Tipo		TipoWnd(void) { return DhWnd_Tipo_MenuEx; };
 
+										// Devuelve si se ocultaran todos los menus al hacer click en este menú
+		inline const BOOL               OcultarEnClick(void)				{ return _OcultarEnClick;		}
+										// Asigna si se ocultaran todos los menus al hacer click en este menú (Por defecto está activada para todos los menús)
+		DMenuEx						   *OcultarEnClick(const BOOL nOcultar) { _OcultarEnClick = nOcultar;	return this;	}
 
 										// Evento virtual que se llama justo antes de mostrar este menú
 		virtual void					Evento_MostrarMenu(DMenuEx &mMenu)	{ 	};
@@ -186,6 +192,7 @@ namespace DWL {
 
 		RECT                           _Recta;
 
+		BOOL                           _OcultarEnClick;
 		
 		std::vector<DMenuEx *>         _Menus;
 		INT_PTR                        _ID;

@@ -50,6 +50,7 @@ namespace DWL {
 		Parametro(0)													,
 		EventoMostrarMenu([=](DMenuEx &e) { Evento_MostrarMenu(e);	})	,
 		EventoMouseClick([=](DMenuEx &e)  { Evento_MouseClick(e);	})	,
+		_OcultarEnClick(TRUE)											,
 		_Recta({ 0, 0, 0, 0 })											{
 			Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 	}
@@ -72,6 +73,7 @@ namespace DWL {
 		MaxOpacidad(230.0f)												,
 		EventoMostrarMenu([=](DMenuEx &e) { Evento_MostrarMenu(e);	})	,
 		EventoMouseClick([=](DMenuEx &e)  { Evento_MouseClick(e);	})	,
+		_OcultarEnClick(TRUE),
 		_Recta({ 0, 0, 0, 0 })											{
 			Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 	}
@@ -95,6 +97,7 @@ namespace DWL {
 		MaxOpacidad(230.0f)												,
 		EventoMostrarMenu([=](DMenuEx &e) { Evento_MostrarMenu(e);	})	,
 		EventoMouseClick([=](DMenuEx &e)  { Evento_MouseClick(e);	})	,
+		_OcultarEnClick(TRUE),
 		_Recta({ 0, 0, 0, 0 })											{
 			_Icono.CrearIconoRecursos(nIconoRecursos, DMENUEX_TAMICONO, DMENUEX_TAMICONO);
 			Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
@@ -119,6 +122,7 @@ namespace DWL {
 		MaxOpacidad(230.0f)												,
 		EventoMostrarMenu([=](DMenuEx &e) { Evento_MostrarMenu(e);	})	,
 		EventoMouseClick([=](DMenuEx &e)  { Evento_MouseClick(e);	})	,
+		_OcultarEnClick(TRUE),
 		_Recta({ 0, 0, 0, 0 })											{
 			_Icono.CrearIconoRecursos(nIconoRecursos, DMENUEX_TAMICONO, DMENUEX_TAMICONO);
 			_Barra._Minimo = nMinimo;
@@ -811,12 +815,30 @@ namespace DWL {
 			_ColorTexto = Datos[1].Color();
 			_Padre->Repintar();
 		});
+		#if DMENUEX_MOSTRARDEBUG == TRUE
+			Debug_Escribir(L"DMenuEx::Transición %d\n", nTransicion);
+		#endif
+
 	}
 	
 	void DMenuEx::_Evento_MouseSoltado(const int Boton, WPARAM wParam, LPARAM lParam) {
+		// Repintar;
+		BOOL Rp = FALSE;
 		ReleaseCapture();
-		
-		Ocultar(TRUE);
+		// Si existe un menu presionado		
+		if (_MenuPresionado) {
+			// Si está habilitado el OcultarEnClick, oculto todos los menus
+			if (_MenuPresionado->_OcultarEnClick == TRUE) {
+				Ocultar(TRUE);
+			}
+			else {
+				Rp = TRUE;
+			}
+		}
+		// Si no existe un menu presionado, por defecto cerramos el menú
+		else {
+			Ocultar(TRUE);
+		}
 
 		if (_MenuPresionado != NULL) {
 
@@ -840,25 +862,13 @@ namespace DWL {
 				}
 			}
 
+			if (Rp == FALSE) _MenuPresionado = NULL;
+		}
+
+		if (Rp == TRUE) { // No hace falta comprobar si _MenuPresionado es NULL, se hace arriba
+			_MenuPresionado->Transicion(DMenuEx_Transicion::DMenuEx_Transicion_Resaltado);
 			_MenuPresionado = NULL;
 		}
-		/*POINT Pt;
-		DWL::DMouse::ObtenerPosicion(&Pt);
-		HWND WFP = WindowFromPoint(Pt);
-		ScreenToClient(WFP, &Pt);
-//		RECT RV;
-//		GetWindowRect(WFP, &RV);
-		// Si la ventana debajo del mouse es un MenuEx
-		if (SendMessage(WFP, WM_ESMENUEX, 0, 0) == WM_ESMENUEX && _ResultadoModal == NULL) {
-			_ResultadoModal = (_Activado == TRUE) ? _MenuPresionado : NULL;
-			if (_ResultadoModal != NULL) {
-				if (_ResultadoModal->Activado() == TRUE) {
-					PostMessage(_hWndDest, WM_COMMAND, _ResultadoModal->ID(), 0);
-				}
-			}
-		}*/
-
-		
 	}
 
 
