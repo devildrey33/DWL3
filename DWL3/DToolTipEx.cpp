@@ -22,25 +22,29 @@ namespace DWL {
 	}
 
 
-	DToolTipEx::DToolTipEx(void) : Padre(NULL) {
+	DToolTipEx::DToolTipEx(void) /*: _TimerOcultar(0)*/  {
 	}
 
 
 	DToolTipEx::~DToolTipEx(void) {
 	}
 
-
-	HWND DToolTipEx::CrearToolTipEx(DhWnd *nPadre) {
-		_hWnd = DVentana::CrearVentana(NULL, L"DToolTipEx", L"", 0, 0, 0, 0, WS_POPUP | WS_CAPTION, WS_EX_TOPMOST | WS_EX_TOOLWINDOW);
-		Padre = nPadre->hWnd();
-		while (GetParent(Padre) != NULL) {
-			Padre = GetParent(Padre);
+	void DToolTipEx::_CrearToolTipEx(void) {
+		if (_hWnd == NULL) {
+			_hWnd = DVentana::CrearVentana(NULL, L"DToolTipEx", L"", 0, 0, 0, 0, WS_POPUP | WS_CAPTION, WS_EX_TOPMOST | WS_EX_TOOLWINDOW);
+			MARGINS Margen = { 0, 0, 0, 1 };
+			DwmExtendFrameIntoClientArea(_hWnd, &Margen);
+			_Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		}
+	}
+
+/*	HWND DToolTipEx::CrearToolTipEx(DhWnd *nPadre) {
+		_hWnd = DVentana::CrearVentana(NULL, L"DToolTipEx", L"", 0, 0, 0, 0, WS_POPUP | WS_CAPTION, WS_EX_TOPMOST | WS_EX_TOOLWINDOW);
 		MARGINS Margen = { 0, 0, 0, 1 };
 		DwmExtendFrameIntoClientArea(_hWnd, &Margen);
 		_Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 		return hWnd();
-	}
+	}*/
 
 
 	SIZE DToolTipEx::CalcularTam(std::wstring &Str) {
@@ -69,14 +73,28 @@ namespace DWL {
 	}
 
 	// Muestra el tooltip centrado horizontalmente en las coordenadas especificadas
-	void DToolTipEx::Mostrar(const int cX, const int cY, std::wstring &Str) {
+	void DToolTipEx::MostrarCentrado(const int cX, const int cY, std::wstring& Str) {
 		SIZE Ret = CalcularTam(Str);
 		_Str = Str;
-//		MoveWindow(hWnd(), cX - static_cast<int>(Ret.cx / 2), cY, Ret.cx, Ret.cy, FALSE);
+		//		MoveWindow(hWnd(), cX - static_cast<int>(Ret.cx / 2), cY, Ret.cx, Ret.cy, FALSE);
 
-//		HWND Before = GetWindow(Padre, GW_HWNDNEXT);
-		//if (Before == NULL) Before = HWND_TOP;
+		//		HWND Before = GetWindow(Padre, GW_HWNDNEXT);
+				//if (Before == NULL) Before = HWND_TOP;
 		SetWindowPos(_hWnd, HWND_TOP, cX - static_cast<int>(Ret.cx / 2), cY, Ret.cx, Ret.cy, SWP_SHOWWINDOW | SWP_NOACTIVATE);
+
+		RedrawWindow(_hWnd, NULL, NULL, RDW_INVALIDATE | RDW_INTERNALPAINT);
+
+	}
+
+	// Muestra el tooltip centrado horizontalmente en las coordenadas especificadas
+	void DToolTipEx::Mostrar(const int cX, const int cY, std::wstring& Str) {
+		SIZE Ret = CalcularTam(Str);
+		_Str = Str;
+		//		MoveWindow(hWnd(), cX - static_cast<int>(Ret.cx / 2), cY, Ret.cx, Ret.cy, FALSE);
+
+		//		HWND Before = GetWindow(Padre, GW_HWNDNEXT);
+				//if (Before == NULL) Before = HWND_TOP;
+		SetWindowPos(_hWnd, HWND_TOP, cX, cY, Ret.cx, Ret.cy, SWP_SHOWWINDOW | SWP_NOACTIVATE);
 
 		RedrawWindow(_hWnd, NULL, NULL, RDW_INVALIDATE | RDW_INTERNALPAINT);
 
@@ -89,16 +107,18 @@ namespace DWL {
 		
 		RedrawWindow(hWnd(), NULL, NULL, RDW_INVALIDATE | RDW_INTERNALPAINT);
 
-		SetTimer(_hWnd, ID_TEMPORIZADOR_OCULTAR, 5000, NULL);
+/*		if (_TimerOcultar != 0) KillTimer(_hWnd, _TimerOcultar);
+		_TimerOcultar = SetTimer(_hWnd, ID_TEMPORIZADOR_OCULTAR, 5000, NULL);*/
 	}
 
 	void DToolTipEx::Ocultar(void) {
 		ShowWindow(hWnd(), SW_HIDE);
 	}
 
+	// POT DONAR MOLTS PROBLEMES, MILLOR NO UTILITZAR DE MOMENT
 	void DToolTipEx::OcultarAnimado(void) {
 		AnimateWindow(_hWnd, 100, AW_HIDE | AW_BLEND);
-//		ShowWindow(hWnd(), SW_HIDE);
+		//		ShowWindow(hWnd(), SW_HIDE);
 	}
 
 	void DToolTipEx::Pintar(HDC DC) {
@@ -149,9 +169,9 @@ namespace DWL {
 
 	LRESULT CALLBACK DToolTipEx::GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		switch (uMsg) {
-			case WM_TIMER :
-				if (wParam == ID_TEMPORIZADOR_OCULTAR) OcultarAnimado();
-				break;
+/*			case WM_TIMER :
+				if (wParam == ID_TEMPORIZADOR_OCULTAR) Ocultar();
+				break;*/
 			case WM_MOUSEMOVE:
 				OcultarAnimado();
 				break;

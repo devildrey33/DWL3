@@ -4,6 +4,7 @@
 #include "DEventoTeclado.h"
 #include "DLog.h"
 #include <memory>
+#include "DToolTipEx.h"
 
 namespace DWL {
 
@@ -75,6 +76,8 @@ namespace DWL {
 		virtual LRESULT CALLBACK		GestorMensajes(UINT uMsg, WPARAM wParam, LPARAM lParam)		{ return DefWindowProc(_hWnd, uMsg, wParam, lParam); };
 										// Función que devuelve el HWND de la ventana para los mensajes multi thread
 		inline HWND						hWndMensajes(void)											{ return _hWnd; }
+										// Tooltip para la aplicación
+		DToolTipEx					    ToolTip;
  	  protected: ///////////////////////// Función que obtiene la linea de comandos y la almacena en el vector _LineaComandos
 		void                           _ObtenerLineaComandos(void);
 										// Gestor de mensajes predeterminado para la DWL

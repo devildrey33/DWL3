@@ -6,6 +6,8 @@
 
 namespace DWL {
 
+	#define ID_TIMER_TOOLTIP 1000
+
 	DBotonEx_Skin::DBotonEx_Skin(void) :
 		// Valores visuales por defecto del BotonEx
 		// Colores del fondo
@@ -47,6 +49,7 @@ namespace DWL {
 		_ColorBorde(Skin.BordeNormal)													,
 		_ColorTexto(Skin.TextoNormal)													,
 		_Estado(DBotonEx_Estado::DBotonEx_Estado_Normal)								,
+		_TimerToolTip(0)																,
 		// Eventos Lambda enlazados a los eventos virtuales por defecto /////////////////
 		EventoMouseMovimiento([=](DEventoMouse &e)		{ Evento_MouseMovimiento(e);	}),
 		EventoMousePresionado([=](DEventoMouse& e)		{ Evento_MousePresionado(e);	}),
@@ -196,6 +199,14 @@ namespace DWL {
 				Transicion(DBotonEx_Transicion::DBotonEx_Transicion_Resaltado);
 			}
 		}
+
+		// Timer para el tooltip
+		if (TextoToolTip.size() > 0) {
+//			if (_Aplicacion->ToolTip.Visible() == TRUE) _Aplicacion->ToolTip.OcultarAnimado();
+			if (_TimerToolTip != 0) KillTimer(_hWnd, ID_TIMER_TOOLTIP);
+			_TimerToolTip = SetTimer(_hWnd, ID_TIMER_TOOLTIP, 2500, NULL);
+		}
+
 		// Ejecuto el evento lambda, que a su vez ejecutara el evento virtual por defecto...
 		EventoMouseMovimiento(DatosMouse);
 	}
@@ -364,6 +375,27 @@ namespace DWL {
 			Transicion((_Marcado == FALSE) ? DBotonEx_Transicion::DBotonEx_Transicion_Normal : DBotonEx_Transicion::DBotonEx_Transicion_Marcado);
 			_Estado = DBotonEx_Estado::DBotonEx_Estado_Normal;
 		}
+		// Elimino el timer del tooltip
+		if (_TimerToolTip != 0) {
+			KillTimer(_hWnd, ID_TIMER_TOOLTIP);
+			_TimerToolTip = 0;
+		}
+
+		_Aplicacion->ToolTip.OcultarAnimado();
+
+	}
+
+	// Función que responde al mensaje WM_TIMER
+	void DBotonEx::_Evento_Temporizador(WPARAM wParam) {
+		
+		if (wParam == ID_TIMER_TOOLTIP) {
+			POINT Pos = { 0, 0 };
+			DMouse::ObtenerPosicion(&Pos);
+			_Aplicacion->ToolTip.Mostrar(Pos.x + GetSystemMetrics(SM_CXCURSOR) - 4, Pos.y, TextoToolTip);
+			// Limpio el timer del tooltip
+			KillTimer(_hWnd, ID_TIMER_TOOLTIP);
+			_TimerToolTip = 0;
+		}
 	}
 
 	// Gestor de mensajes virtual para este control
@@ -378,6 +410,7 @@ namespace DWL {
 			case WM_LBUTTONUP	:		_Evento_MouseSoltado(wParam, lParam, 0);			return 0;
 			case WM_RBUTTONUP	:		_Evento_MouseSoltado(wParam, lParam, 1);			return 0;
 			case WM_MBUTTONUP	:		_Evento_MouseSoltado(wParam, lParam, 2);			return 0;
+			case WM_TIMER		:		_Evento_Temporizador(wParam);						return 0;
 		}
 		// Devuelvo el gestor de mensajes por defecto
 		return DControlEx::GestorMensajes(uMsg, wParam, lParam);

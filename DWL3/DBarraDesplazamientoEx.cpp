@@ -40,7 +40,7 @@ namespace DWL {
 			EnableWindow(_hWnd, FALSE);
 		}
 
-		_ToolTip.CrearToolTipEx(nPadre);
+//		_ToolTip.CrearToolTipEx(nPadre);
 		return hWnd();
 	}
 
@@ -49,7 +49,7 @@ namespace DWL {
 	}
 
 	void DBarraDesplazamientoEx::OcultarToolTip(void) {
-		_ToolTip.Visible(FALSE);
+		_Aplicacion->ToolTip.Ocultar();
 	}
 
 	void DBarraDesplazamientoEx::Evento_PintarBarra(HDC DC, RECT &RBarra) {
@@ -97,10 +97,10 @@ namespace DWL {
 		EventoMostrarToolTip(valor, TextoToolTip);
 
 		switch (_MostrarToolTip) {
-			case DBarraEx_ToolTip_Arriba	:	_ToolTip.Mostrar(RW.left + cX, RW.top - 35, TextoToolTip);		break;
-			case DBarraEx_ToolTip_Abajo		:	_ToolTip.Mostrar(RW.left + cX, RW.bottom + 10, TextoToolTip);	break;
-			case DBarraEx_ToolTip_Izquierda	:	_ToolTip.Mostrar(RW.left -35, RW.top + cY, TextoToolTip);		break;
-			case DBarraEx_ToolTip_Derecha	:	_ToolTip.Mostrar(RW.right + 35, RW.top + cY, TextoToolTip);		break;
+			case DBarraEx_ToolTip_Arriba	:	_Aplicacion->ToolTip.MostrarCentrado(RW.left + cX, RW.top - 35, TextoToolTip);		break;
+			case DBarraEx_ToolTip_Abajo		:	_Aplicacion->ToolTip.MostrarCentrado(RW.left + cX, RW.bottom + 10, TextoToolTip);	break;
+			case DBarraEx_ToolTip_Izquierda	:	_Aplicacion->ToolTip.MostrarCentrado(RW.left -35, RW.top + cY, TextoToolTip);		break;
+			case DBarraEx_ToolTip_Derecha	:	_Aplicacion->ToolTip.MostrarCentrado(RW.right + 35, RW.top + cY, TextoToolTip);		break;
 		}
 
 		if (_Estado == DBarraEx_Estado_Presionado) {
@@ -153,7 +153,7 @@ namespace DWL {
 	}
 
 	void DBarraDesplazamientoEx::_Evento_MouseSaliendo(void) {
-		_ToolTip.Ocultar();
+		_Aplicacion->ToolTip.Ocultar();
 		_MouseDentro = FALSE;
 		if (_Estado != DBarraEx_Estado_Presionado) {
 			_Estado = DBarraEx_Estado_Normal;

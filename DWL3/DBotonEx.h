@@ -115,6 +115,8 @@ namespace DWL {
 		void								Transicion(const DBotonEx_Transicion nTransicion);
 											// Configuración visual para el botón
 		DBotonEx_Skin						Skin;
+											// Texto para el tooltip
+		std::wstring						TextoToolTip;
 	  protected: /////////////////////////////
 											// Función que responde al mensaje WM_MOUSEMOVE
 		void						       _Evento_MouseMovimiento(const WPARAM wParam, const LPARAM lParam);
@@ -126,6 +128,8 @@ namespace DWL {
 		void					           _Evento_MouseSaliendo(void);
 											// Función que responde al mensaje WM_PAINT
 		void					           _Evento_Pintar(void);
+											// Función que responde al mensaje WM_TIMER
+		void							   _Evento_Temporizador(WPARAM wParam);
 											// Función protegida para la creación del boton
 		HWND						       _CrearBotonEx(DhWnd *nPadre, const int cX, const int cY, const int cAncho, const int cAlto, const int cID, const long Estilos);
 											// Texto del botón
@@ -148,6 +152,8 @@ namespace DWL {
 		COLORREF					       _ColorFondo;
 											// Color del texto actual
 		COLORREF					       _ColorTexto;
+											// Identificador para el temporizador del tooltip
+		UINT_PTR						   _TimerToolTip;
 	};		
 
 }

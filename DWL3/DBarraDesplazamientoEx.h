@@ -75,7 +75,7 @@ namespace DWL {
 													// Variable que determina si hay que mostrar el tooltip y como alinearlo
 	    DBarraEx_ToolTip				           _MostrarToolTip;
 													// Objeto para el tooltip
-	    DToolTipEx								   _ToolTip;
+//	    DToolTipEx								   _ToolTip;
 	};
 }
 

@@ -31,6 +31,8 @@ namespace DWL {
 		HRESULT CIE = CoInitializeEx(0, COINIT_MULTITHREADED | COINIT_SPEED_OVER_MEMORY);
 		// Creo el color que se usara para el fondo de las ventanas (NO BORRAR lo hace el windows)
 		_ColorFondoVentana = CreateSolidBrush(COLOR_FONDO);
+		// Creo el tooltip para la aplicación
+		ToolTip._CrearToolTipEx();
 	}
 
 	DApp::~DApp(void) {

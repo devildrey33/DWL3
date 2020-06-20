@@ -51,6 +51,7 @@ namespace DWL {
 		EventoMostrarMenu([=](DMenuEx &e) { Evento_MostrarMenu(e);	})	,
 		EventoMouseClick([=](DMenuEx &e)  { Evento_MouseClick(e);	})	,
 		_OcultarEnClick(TRUE)											,
+		_CalcularTam(FALSE)												,
 		_Recta({ 0, 0, 0, 0 })											{
 			Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 	}
@@ -73,7 +74,8 @@ namespace DWL {
 		MaxOpacidad(230.0f)												,
 		EventoMostrarMenu([=](DMenuEx &e) { Evento_MostrarMenu(e);	})	,
 		EventoMouseClick([=](DMenuEx &e)  { Evento_MouseClick(e);	})	,
-		_OcultarEnClick(TRUE),
+		_OcultarEnClick(TRUE)											,
+		_CalcularTam(FALSE)												,
 		_Recta({ 0, 0, 0, 0 })											{
 			Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
 	}
@@ -97,7 +99,8 @@ namespace DWL {
 		MaxOpacidad(230.0f)												,
 		EventoMostrarMenu([=](DMenuEx &e) { Evento_MostrarMenu(e);	})	,
 		EventoMouseClick([=](DMenuEx &e)  { Evento_MouseClick(e);	})	,
-		_OcultarEnClick(TRUE),
+		_OcultarEnClick(TRUE)											,
+		_CalcularTam(FALSE)												,
 		_Recta({ 0, 0, 0, 0 })											{
 			_Icono.CrearIconoRecursos(nIconoRecursos, DMENUEX_TAMICONO, DMENUEX_TAMICONO);
 			Fuente.CrearFuente(Skin.FuenteTam, Skin.FuenteNombre.c_str(), Skin.FuenteNegrita, Skin.FuenteCursiva, Skin.FuenteSubrayado);
@@ -122,7 +125,8 @@ namespace DWL {
 		MaxOpacidad(230.0f)												,
 		EventoMostrarMenu([=](DMenuEx &e) { Evento_MostrarMenu(e);	})	,
 		EventoMouseClick([=](DMenuEx &e)  { Evento_MouseClick(e);	})	,
-		_OcultarEnClick(TRUE),
+		_OcultarEnClick(TRUE)											,
+		_CalcularTam(FALSE)												,
 		_Recta({ 0, 0, 0, 0 })											{
 			_Icono.CrearIconoRecursos(nIconoRecursos, DMENUEX_TAMICONO, DMENUEX_TAMICONO);
 			_Barra._Minimo = nMinimo;
@@ -382,23 +386,43 @@ namespace DWL {
 	}
 
 	// Función para asignar el texto del menú (wchar_t)
-	void DMenuEx::Texto(const wchar_t *nTxt) { 
+	// Si nRepìntar es TRUE, se re-calcula el tamaño del padre, y se repinta el padre
+	void DMenuEx::Texto(const wchar_t *nTxt, const BOOL nRepintar) {
 		_Texto = nTxt; 
 		if (_Padre != NULL) {
-			if (_Padre->_hWnd != NULL) {
-				_Padre->Repintar();
+			_Padre->_CalcularTam = TRUE;
+			if (nRepintar == TRUE) {
+				if (_Padre->_hWnd != NULL) {
+					// Hay que recalcular el tamaño del padre, y redimensionar el menú si es necesario
+					_Padre->Repintar();
+				}
 			}
 		}
 	}
 
 	// Función para asignar el texto del menú (std::wstring)
-	void DMenuEx::Texto(std::wstring &nTxt) { 
+	// Si nRepìntar es TRUE, se re-calcula el tamaño del padre, y se repinta el padre
+	void DMenuEx::Texto(std::wstring &nTxt, const BOOL nRepintar) {
 		_Texto = nTxt; 
 		if (_Padre != NULL) {
-			if (_Padre->_hWnd != NULL) {
-				_Padre->Repintar();
+			_Padre->_CalcularTam = TRUE;
+			if (nRepintar == TRUE) {
+				if (_Padre->_hWnd != NULL) {
+					_Padre->Repintar();
+				}
 			}
 		}
+	}
+
+	// Al repintar tambien miro si hay que redimensionar la ventana del menú
+	void DMenuEx::Repintar(void) {
+		// Si la ventana está visible, y se ha modificado el texto de algún menú
+		if (_hWnd != NULL && _CalcularTam == TRUE) {
+			POINT Tam;
+			Tam = CalcularEspacio();
+			SetWindowPos(_hWnd, NULL, 0, 0, Tam.x, Tam.y, SWP_NOMOVE | SWP_NOOWNERZORDER);
+		}
+		DhWnd::Repintar();
 	}
 
 
@@ -510,6 +534,7 @@ namespace DWL {
 		DeleteObject(Pluma);
 	}
 
+
 	// Fuinción que calcula el espacio necesario para mostrar este menú
 	const POINT DMenuEx::CalcularEspacio(void) {
 		LONG  TmpAncho  = 0;
@@ -614,6 +639,7 @@ namespace DWL {
 			_Menus[i]->_Recta.right = Ret.x - DMENUEX_BORDE;
 		}
 
+		_CalcularTam = FALSE;
 		// Devuelve el tamaño total con bordes incluidos
 		return Ret;
 	}
@@ -816,7 +842,7 @@ namespace DWL {
 			_Padre->Repintar();
 		});
 		#if DMENUEX_MOSTRARDEBUG == TRUE
-			Debug_Escribir(L"DMenuEx::Transición %d\n", nTransicion);
+			Debug_Escribir_Varg(L"DMenuEx::Transición %d\n", nTransicion);
 		#endif
 
 	}
@@ -865,7 +891,7 @@ namespace DWL {
 			if (Rp == FALSE) _MenuPresionado = NULL;
 		}
 
-		if (Rp == TRUE) { // No hace falta comprobar si _MenuPresionado es NULL, se hace arriba
+		if (Rp == TRUE) { // No hace falta comprobar si _MenuPresionado no es NULL, se hace arriba
 			_MenuPresionado->Transicion(DMenuEx_Transicion::DMenuEx_Transicion_Resaltado);
 			_MenuPresionado = NULL;
 		}

@@ -8,6 +8,8 @@
 #include "DIcono.h"
 
 namespace DWL {
+	// Mostrar mensajes de depuración del menú
+	#define DMENUEX_MOSTRARDEBUG	FALSE
 
 	class DMenuEx_Skin {
 	  public:
@@ -32,7 +34,6 @@ namespace DWL {
 		BOOL			FuenteSombraTexto;
 	};
 
-	#define DMENUEX_MOSTRARDEBUG	TRUE
 
 	#define DMENUEX_TAMICONO  16	// Tamaño de los iconos
 	#define DMENUEX_MARGEN_X   6	// Margen horizontal para el texto 
@@ -101,8 +102,10 @@ namespace DWL {
 										// Función para obtener el texto del menú
 		inline std::wstring		       &Texto(void)							{ return _Texto; }
 										// Funciones para asignar el texto al menú
-		void							Texto(const wchar_t *nTxt);
-		void							Texto(std::wstring &nTxt);
+		void							Texto(const wchar_t *nTxt, const BOOL nRepintar = FALSE);
+		void							Texto(std::wstring &nTxt, const BOOL nRepintar = FALSE);
+
+		virtual void					Repintar(void);
 
 										// Funciónes que devuelven/asignan si el menú está activado
 		inline const BOOL				Activado(void)						{ return _Activado; };
@@ -219,6 +222,8 @@ namespace DWL {
 
 		COLORREF                       _ColorFondo;
 		COLORREF                       _ColorTexto;
+										// Variable que determina si hay que recalcular el tamaño del menú (por si se ha modificado el texto)
+		BOOL                           _CalcularTam;
 
 //		BOOL				           _AnularMouseMove;
 										// Menu resultado para la función MostrarModal
