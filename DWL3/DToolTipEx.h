@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma comment(lib, "dwmapi")			// Librería para DwmExtendFrameIntoClientArea 
+
 #include "DVentana.h"
 #include "DControlEx.h"
 #include "DFuente.h"
