@@ -257,6 +257,8 @@ namespace DWL {
 			if (lpnrLocal) ZeroMemory(lpnrLocal, cbBuffer);
 			dwResultEnum = WNetEnumResource(hEnum, &cEntries, lpnrLocal, &cbBuffer);
 
+			std::wstring UE = _Aplicacion->UltimoError();
+
 			if (dwResultEnum == NO_ERROR) {
 				for (DWORD i = 0; i < cEntries; i++) {
 					#if DEXPLORARDIRECTORIOSEX_MOSTRARDEBUG == TRUE

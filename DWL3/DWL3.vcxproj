@@ -168,6 +168,7 @@
     <ClInclude Include="DArbolEx.h" />
     <ClInclude Include="DArbolEx_Nodo.h" />
     <ClInclude Include="DArchivoBinario.h" />
+    <ClInclude Include="DDlgDirectorios.h" />
     <ClInclude Include="DLog.h" />
     <ClInclude Include="DLogArchivo.h" />
     <ClInclude Include="DBarraDesplazamientoEx.h" />
@@ -183,7 +184,7 @@
     <ClInclude Include="DDesplegableEx_ExplorarDirectoriosEx (DEPRECATED).h" />
     <ClInclude Include="DDirectoriosWindows.h" />
     <ClInclude Include="DDlgAbrir.h" />
-    <ClInclude Include="DDlgDirectorios.h" />
+    <ClInclude Include="DDlgDirectoriosEx.h" />
     <ClInclude Include="DEdicionTextoEx.h" />
     <ClInclude Include="DEnviarCorreo.h" />
     <ClInclude Include="DEtiquetaEx.h" />
@@ -227,6 +228,7 @@
     <ClCompile Include="DArbolEx.cpp" />
     <ClCompile Include="DArbolEx_Nodo.cpp" />
     <ClCompile Include="DArchivoBinario.cpp" />
+    <ClCompile Include="DDlgDirectorios.cpp" />
     <ClCompile Include="DLog.cpp" />
     <ClCompile Include="DLogArchivo.cpp" />
     <ClCompile Include="DBarraDesplazamientoEx.cpp" />
@@ -241,7 +243,7 @@
     <ClCompile Include="DDesplegableEx (DEPRECATED).cpp" />
     <ClCompile Include="DDesplegableEx_ExplorarDirectoriosEx (DEPRECATED).cpp" />
     <ClCompile Include="DDlgAbrir.cpp" />
-    <ClCompile Include="DDlgDirectorios.cpp" />
+    <ClCompile Include="DDlgDirectoriosEx.cpp" />
     <ClCompile Include="DEdicionTextoEx.cpp" />
     <ClCompile Include="DEnviarCorreo.cpp" />
     <ClCompile Include="DEtiquetaEx.cpp" />

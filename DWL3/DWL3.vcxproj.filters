@@ -49,9 +49,6 @@
     <Filter Include="Ventanas\Dialogos Comunes\DlgAbrir">
       <UniqueIdentifier>{8ffa260d-66de-4468-941d-16dc29345af1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ventanas\Dialogos Comunes\DlgDirectorios">
-      <UniqueIdentifier>{ae1808ea-a56a-4b9c-ba96-0edfbff07ccb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Ventanas\ControlesEx\BarraProgresoEx">
       <UniqueIdentifier>{dac0bdf3-4c53-43d6-9113-e651b2078ace}</UniqueIdentifier>
     </Filter>
@@ -124,6 +121,15 @@
     <Filter Include="Sistema\Log">
       <UniqueIdentifier>{b27ecc7a-b76f-49a5-a2f0-076cb859d113}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ventanas\Dialogos Comunes Extendidos">
+      <UniqueIdentifier>{a6535e54-4c24-4d57-90f4-13956b4ca664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ventanas\Dialogos Comunes Extendidos\DlgDirectoriosEx">
+      <UniqueIdentifier>{ae1808ea-a56a-4b9c-ba96-0edfbff07ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ventanas\Dialogos Comunes\DlgDirectorios">
+      <UniqueIdentifier>{8575be8b-b9a7-4c06-a689-7197823a9fc9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DAnimacion.h">
@@ -179,9 +185,6 @@
     </ClInclude>
     <ClInclude Include="DDlgAbrir.h">
       <Filter>Ventanas\Dialogos Comunes\DlgAbrir</Filter>
-    </ClInclude>
-    <ClInclude Include="DDlgDirectorios.h">
-      <Filter>Ventanas\Dialogos Comunes\DlgDirectorios</Filter>
     </ClInclude>
     <ClInclude Include="DArbolEx.h">
       <Filter>Ventanas\ControlesEx\BarraScrollEx\ArbolEx</Filter>
@@ -295,6 +298,12 @@
     <ClInclude Include="DLog.h">
       <Filter>Sistema\Log</Filter>
     </ClInclude>
+    <ClInclude Include="DDlgDirectoriosEx.h">
+      <Filter>Ventanas\Dialogos Comunes Extendidos\DlgDirectoriosEx</Filter>
+    </ClInclude>
+    <ClInclude Include="DDlgDirectorios.h">
+      <Filter>Ventanas\Dialogos Comunes\DlgDirectorios</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DAnimacion.cpp">
@@ -335,9 +344,6 @@
     </ClCompile>
     <ClCompile Include="DDlgAbrir.cpp">
       <Filter>Ventanas\Dialogos Comunes\DlgAbrir</Filter>
-    </ClCompile>
-    <ClCompile Include="DDlgDirectorios.cpp">
-      <Filter>Ventanas\Dialogos Comunes\DlgDirectorios</Filter>
     </ClCompile>
     <ClCompile Include="DArbolEx.cpp">
       <Filter>Ventanas\ControlesEx\BarraScrollEx\ArbolEx</Filter>
@@ -437,6 +443,12 @@
     </ClCompile>
     <ClCompile Include="DLog.cpp">
       <Filter>Sistema\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="DDlgDirectoriosEx.cpp">
+      <Filter>Ventanas\Dialogos Comunes Extendidos\DlgDirectoriosEx</Filter>
+    </ClCompile>
+    <ClCompile Include="DDlgDirectorios.cpp">
+      <Filter>Ventanas\Dialogos Comunes\DlgDirectorios</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
